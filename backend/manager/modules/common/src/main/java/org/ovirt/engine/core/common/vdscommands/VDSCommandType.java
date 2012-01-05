@@ -123,7 +123,8 @@ public enum VDSCommandType {
     ResetISOPath("org.ovirt.engine.core.vdsbroker.irsbroker"),
     MarkPoolInReconstructMode("org.ovirt.engine.core.vdsbroker.irsbroker"),
     ExtendStorageDomain("org.ovirt.engine.core.vdsbroker.irsbroker"),
-    UpdateSpmHostName("org.ovirt.engine.core.vdsbroker.irsbroker");
+    UpdateSpmHostName("org.ovirt.engine.core.vdsbroker.irsbroker"),
+    CreateGlusterVolume("org.ovirt.engine.core.vdsbroker.irsbroker");
 
     String packageName;
 

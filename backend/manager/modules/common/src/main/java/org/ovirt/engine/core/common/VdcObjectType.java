@@ -26,7 +26,8 @@ public enum VdcObjectType {
     ImportExport(13, "ImportExport"),
     StoragePool(14, "Data Center"),
     User(15, "User"),
-    Role(16, "Role");
+    Role(16, "Role"),
+    GlusterVolume(17, "Volume");
 
     private int value;
     private String vdcObjectTranslationVal;

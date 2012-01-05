@@ -238,7 +238,13 @@ public enum VdcActionType {
     Monitor(1209),
 
     // Config
-    SetConfigurationValue(1300, ActionGroup.CONFIGURE_ENGINE);
+    SetConfigurationValue(1300, ActionGroup.CONFIGURE_ENGINE),
+    
+    // Gluster Volumes
+    CreateVolume(1400, ActionGroup.GLUSTER_CREATE_VOLUME),
+    StartVolume(1401, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
+    StopVolume(1401, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
+    RebalanceVolume(1401, ActionGroup.GLUSTER_VOLUME_OPERATIONS);
 
     private int intValue;
     private ActionGroup actionGroup;
