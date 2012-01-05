@@ -59,13 +59,17 @@ public enum ActionGroup {
     DELETE_STORAGE_POOL(701, RoleType.ADMIN, VdcObjectType.StoragePool),
     EDIT_STORAGE_POOL_CONFIGURATION(702, RoleType.ADMIN, VdcObjectType.StoragePool),
     CONFIGURE_STORAGE_POOL_NETWORK(703, RoleType.ADMIN, VdcObjectType.StoragePool),
-
+    
     // engine generic
     CONFIGURE_ENGINE(800, RoleType.ADMIN, VdcObjectType.System),
 
     // Quota
     CONFIGURE_QUOTA(900, RoleType.ADMIN, VdcObjectType.Quota),
     CONSUME_QUOTA(901, RoleType.USER, VdcObjectType.Quota);
+
+    // Gluster Volume Action Group
+    GLUSTER_CREATE_VOLUME(1000, RoleType.ADMIN, VdcObjectType.GlusterVolume),
+    GLUSTER_VOLUME_OPERATIONS(1001, RoleType.ADMIN, VdcObjectType.GlusterVolume);
 
     private int id;
     private RoleType roleType;

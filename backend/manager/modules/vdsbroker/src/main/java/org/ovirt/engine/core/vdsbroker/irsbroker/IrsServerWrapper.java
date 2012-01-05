@@ -268,4 +268,12 @@ public class IrsServerWrapper implements IIrsServer {
         GetVmsListReturnForXmlRpc wrapper = new GetVmsListReturnForXmlRpc(xmlRpcReturnValue);
         return wrapper;
     }
+
+	@Override
+	public StatusOnlyReturnForXmlRpc createGlusterVolume(
+			Map<String, Object> volumeData) {
+		Map<String, Object> xmlRpcReturnValue = irsServer.createGlusterVolume(volumeData);
+		StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+		return wrapper;
+	}
 }
