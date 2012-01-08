@@ -1,10 +1,13 @@
 package org.ovirt.engine.api.restapi.resource;
 
 
+import static org.ovirt.engine.api.restapi.resource.BackendClustersResource.SUB_COLLECTIONS;
+
 import org.ovirt.engine.api.model.Cluster;
 import org.ovirt.engine.api.resource.AssignedNetworksResource;
 import org.ovirt.engine.api.resource.AssignedPermissionsResource;
 import org.ovirt.engine.api.resource.ClusterResource;
+import org.ovirt.engine.api.resource.GlusterVolumesResource;
 import org.ovirt.engine.core.common.VdcObjectType;
 import org.ovirt.engine.core.common.action.VdcActionParametersBase;
 import org.ovirt.engine.core.common.action.VdcActionType;
@@ -13,8 +16,6 @@ import org.ovirt.engine.core.common.businessentities.VDSGroup;
 import org.ovirt.engine.core.common.queries.GetPermissionsForObjectParameters;
 import org.ovirt.engine.core.common.queries.GetVdsGroupByIdParameters;
 import org.ovirt.engine.core.common.queries.VdcQueryType;
-
-import static org.ovirt.engine.api.restapi.resource.BackendClustersResource.SUB_COLLECTIONS;
 
 public class BackendClusterResource extends AbstractBackendSubResource<Cluster, VDSGroup> implements
         ClusterResource {
@@ -55,5 +56,10 @@ public class BackendClusterResource extends AbstractBackendSubResource<Cluster, 
         public VdcActionParametersBase getParameters(Cluster incoming, VDSGroup entity) {
             return new VdsGroupOperationParameters(map(incoming, entity));
         }
+    }
+
+    @Override
+    public GlusterVolumesResource getGlusterVolumesResource() {
+        return inject(new BackendGlusterVolumesResource(id));
     }
 }
