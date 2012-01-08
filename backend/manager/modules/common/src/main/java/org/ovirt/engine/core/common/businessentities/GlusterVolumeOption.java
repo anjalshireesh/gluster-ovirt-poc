@@ -19,7 +19,6 @@
 package org.ovirt.engine.core.common.businessentities;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 import org.ovirt.engine.core.common.utils.StringUtil;
 
@@ -28,40 +27,40 @@ import org.ovirt.engine.core.common.utils.StringUtil;
  */
 @XmlRootElement(name = "GlusterVolumeOption")
 public class GlusterVolumeOption implements Filterable {
-	private String key;
-	private String value;
+    private String key;
+    private String value;
 
-	public GlusterVolumeOption() {
-	}
-	
-	public GlusterVolumeOption(String key, String value) {
-		this.key = key;
-		this.value = value;
-	}
+    public GlusterVolumeOption() {
+    }
 
-	public String getKey() {
-		return key;
-	}
+    public GlusterVolumeOption(String key, String value) {
+        this.key = key;
+        this.value = value;
+    }
 
-	public void setKey(String key) {
-		this.key = key;
-	}
+    public String getKey() {
+        return key;
+    }
 
-	public String getValue() {
-		return value;
-	}
+    public void setKey(String key) {
+        this.key = key;
+    }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
-	
-	@Override
-	public String toString() {
-		return key + "=" + value;
-	}
+    public String getValue() {
+        return value;
+    }
 
-	@Override
-	public boolean filter(String filterString, boolean caseSensitive) {
-		return StringUtil.filterString(getKey() + getValue(), filterString, caseSensitive);
-	}
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return key + "=" + value;
+    }
+
+    @Override
+    public boolean filter(String filterString, boolean caseSensitive) {
+        return StringUtil.filterString(getKey() + getValue(), filterString, caseSensitive);
+    }
 }

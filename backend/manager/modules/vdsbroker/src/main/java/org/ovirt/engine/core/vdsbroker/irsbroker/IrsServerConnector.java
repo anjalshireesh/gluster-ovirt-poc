@@ -109,6 +109,6 @@ public interface IrsServerConnector {
     public Map<String, Object> getVmsInfo(String storagePoolId, String storageDomainId, String[] VMIDList);
 
     public Map<String, Object> getVmsList(String storagePoolId, String storageDomainId);
-    
+
     public Map<String, Object> createGlusterVolume(Map<String, Object> volumeData);
 }

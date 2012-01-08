@@ -239,12 +239,12 @@ public enum VdcActionType {
 
     // Config
     SetConfigurationValue(1300, ActionGroup.CONFIGURE_ENGINE),
-    
+
     // Gluster Volumes
-    CreateVolume(1400, ActionGroup.GLUSTER_CREATE_VOLUME),
-    StartVolume(1401, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
-    StopVolume(1401, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
-    RebalanceVolume(1401, ActionGroup.GLUSTER_VOLUME_OPERATIONS);
+    CreateGlusterVolume(1400, ActionGroup.GLUSTER_CREATE_VOLUME),
+    StartGlusterVolume(1401, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
+    StopGlusterVolume(1401, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
+    RebalanceGlusterVolume(1401, ActionGroup.GLUSTER_VOLUME_OPERATIONS);
 
     private int intValue;
     private ActionGroup actionGroup;

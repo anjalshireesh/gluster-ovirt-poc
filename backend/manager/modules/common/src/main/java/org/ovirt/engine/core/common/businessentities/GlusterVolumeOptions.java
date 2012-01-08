@@ -29,85 +29,85 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "GlusterVolumeOptions")
 public class GlusterVolumeOptions {
-	private List<GlusterVolumeOption> options = new ArrayList<GlusterVolumeOption>();
+    private List<GlusterVolumeOption> options = new ArrayList<GlusterVolumeOption>();
 
-	public GlusterVolumeOptions() {
-	}
-	
-	public String get(String key) {
-		for(GlusterVolumeOption option : options) {
-			if(option.getKey().equals(key)) {
-				return option.getValue();
-			}
-		}
-		return null;
-	}
-	
-	public void put(String key, String value) {
-		GlusterVolumeOption option = getOption(key);
-		if(option != null) {
-			option.setValue(value);
-		} else {
-			options.add(new GlusterVolumeOption(key, value));
-		}
-	}
+    public GlusterVolumeOptions() {
+    }
 
-	@XmlElement(name="option", type=GlusterVolumeOption.class)
-	public List<GlusterVolumeOption> getOptions() {
-		return options;
-	}
-	
-	public void setOptions(List<GlusterVolumeOption> options) {
-		this.options = options;
-	}
-	
-	public void clear() {
-		options.clear();
-	}
+    public String get(String key) {
+        for (GlusterVolumeOption option : options) {
+            if (option.getKey().equals(key)) {
+                return option.getValue();
+            }
+        }
+        return null;
+    }
 
-	public boolean remove(String key) {
-		return options.remove(getOption(key));
-	}
-	
-	public GlusterVolumeOption getOption(String key) {
-		for(GlusterVolumeOption option : options) {
-			if(option.getKey().equals(key)) {
-				return option;
-			}
-		}
-		return null;
-	}
+    public void put(String key, String value) {
+        GlusterVolumeOption option = getOption(key);
+        if (option != null) {
+            option.setValue(value);
+        } else {
+            options.add(new GlusterVolumeOption(key, value));
+        }
+    }
 
-	public int size() {
-		return options.size();
-	}
+    @XmlElement(name = "option", type = GlusterVolumeOption.class)
+    public List<GlusterVolumeOption> getOptions() {
+        return options;
+    }
 
-	public boolean containsKey(String key) {
-		return get(key) != null;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if(!(obj instanceof GlusterVolumeOptions)) {
-			return false;
-		}
-		
-		GlusterVolumeOptions options = (GlusterVolumeOptions)obj;
-		if(getOptions().size() != options.size()) {
-			return false;
-		}
-		
-		for(GlusterVolumeOption option : getOptions()) {
-			if(!(option.getValue().equals(options.get(option.getKey())))) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
+    public void setOptions(List<GlusterVolumeOption> options) {
+        this.options = options;
+    }
 
-	public void copyFrom(GlusterVolumeOptions options) {
-		this.options.clear();
-		this.options.addAll(options.getOptions());
-	}
+    public void clear() {
+        options.clear();
+    }
+
+    public boolean remove(String key) {
+        return options.remove(getOption(key));
+    }
+
+    public GlusterVolumeOption getOption(String key) {
+        for (GlusterVolumeOption option : options) {
+            if (option.getKey().equals(key)) {
+                return option;
+            }
+        }
+        return null;
+    }
+
+    public int size() {
+        return options.size();
+    }
+
+    public boolean containsKey(String key) {
+        return get(key) != null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof GlusterVolumeOptions)) {
+            return false;
+        }
+
+        GlusterVolumeOptions options = (GlusterVolumeOptions) obj;
+        if (getOptions().size() != options.size()) {
+            return false;
+        }
+
+        for (GlusterVolumeOption option : getOptions()) {
+            if (!(option.getValue().equals(options.get(option.getKey())))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void copyFrom(GlusterVolumeOptions options) {
+        this.options.clear();
+        this.options.addAll(options.getOptions());
+    }
 }
