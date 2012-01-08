@@ -21,6 +21,7 @@ package org.ovirt.engine.core.common.businessentities;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -28,17 +29,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
+import org.ovirt.engine.core.common.businessentities.GlusterBrick.BRICK_STATUS;
 import org.ovirt.engine.core.common.constants.GlusterConstants;
 import org.ovirt.engine.core.common.utils.GlusterCoreUtil;
 import org.ovirt.engine.core.common.utils.StringUtil;
 
-@XmlRootElement(name = "GlusterVolume")
-public class GlusterVolume extends GlusterEntity implements BusinessEntity<String> {
+public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity<String> {
     public enum VOLUME_STATUS {
         ONLINE,
         OFFLINE
@@ -57,8 +53,8 @@ public class GlusterVolume extends GlusterEntity implements BusinessEntity<Strin
         INFINIBAND
     };
 
-    public enum NAS_PROTOCOL {
-        GLUSTERFS,
+    public enum ACCESS_PROTOCOL {
+        GLUSTER,
         NFS,
         CIFS
     };
@@ -74,7 +70,7 @@ public class GlusterVolume extends GlusterEntity implements BusinessEntity<Strin
 
     private static final String[] TRANSPORT_TYPE_STR = new String[] { "Ethernet", "Infiniband" };
     private static final String[] STATUS_STR = new String[] { "Online", "Offline" };
-    private static final String[] NAS_PROTOCOL_STR = new String[] { "Gluster", "NFS", "CIFS" };
+    private static final String[] ACCESS_PROTOCOL_STR = new String[] { "Gluster", "NFS", "CIFS" };
 
     private VOLUME_TYPE volumeType;
     private TRANSPORT_TYPE transportType;
@@ -85,12 +81,12 @@ public class GlusterVolume extends GlusterEntity implements BusinessEntity<Strin
     private List<GlusterBrick> bricks = new ArrayList<GlusterBrick>();
     private List<String> cifsUsers;
 
-    public GlusterVolume() {
+    public GlusterVolumeEntity() {
     }
 
     // Only GlusterFS is enabled
-    private Set<NAS_PROTOCOL> nasProtocols = new LinkedHashSet<NAS_PROTOCOL>(Arrays.asList(new NAS_PROTOCOL[] {
-            NAS_PROTOCOL.GLUSTERFS }));
+    private Set<ACCESS_PROTOCOL> nasProtocols = new LinkedHashSet<ACCESS_PROTOCOL>(Arrays.asList(new ACCESS_PROTOCOL[] {
+            ACCESS_PROTOCOL.GLUSTER }));
 
     public String getVolumeTypeStr() {
         return getVolumeTypeStr(getVolumeType());
@@ -126,7 +122,6 @@ public class GlusterVolume extends GlusterEntity implements BusinessEntity<Strin
 
     public void setVolumeType(VOLUME_TYPE volumeType) {
         this.volumeType = volumeType;
-        // TODO find a way to get the replica / strip count
         if (volumeType == VOLUME_TYPE.DISTRIBUTED_STRIPE) {
             setReplicaCount(0);
             setStripeCount(DEFAULT_STRIPE_COUNT);
@@ -139,12 +134,30 @@ public class GlusterVolume extends GlusterEntity implements BusinessEntity<Strin
         }
     }
 
+    public void setVolumeType(String volumeType) {
+        for(VOLUME_TYPE type : VOLUME_TYPE.values()) {
+            if(type.toString().equals(volumeType)) {
+                setVolumeType(type);
+                return;
+            }
+        }
+    }
+
     public TRANSPORT_TYPE getTransportType() {
         return transportType;
     }
 
     public void setTransportType(TRANSPORT_TYPE transportType) {
         this.transportType = transportType;
+    }
+
+    public void setTransportType(String transportType) {
+        for(TRANSPORT_TYPE type : TRANSPORT_TYPE.values()) {
+            if(type.toString().equals(transportType)) {
+                setTransportType(type);
+                return;
+            }
+        }
     }
 
     public VOLUME_STATUS getStatus() {
@@ -171,26 +184,32 @@ public class GlusterVolume extends GlusterEntity implements BusinessEntity<Strin
         this.status = status;
     }
 
-    @XmlElementWrapper(name = "nasProtocols")
-    @XmlElement(name = "nasProtocol", type = NAS_PROTOCOL.class)
-    public Set<NAS_PROTOCOL> getNASProtocols() {
+    public Set<ACCESS_PROTOCOL> getAccessProtocols() {
         return nasProtocols;
     }
 
-    public void setNASProtocols(Set<NAS_PROTOCOL> nasProtocols) {
-        this.nasProtocols = nasProtocols;
+    public void setAccessProtocols(Set<ACCESS_PROTOCOL> accessProtocols) {
+        this.nasProtocols = accessProtocols;
     }
 
-    public String getNASProtocolsStr() {
+    public String getAccessProtocolsStr() {
         String protocolsStr = "";
-        for (NAS_PROTOCOL protocol : nasProtocols) {
-            String protocolStr = NAS_PROTOCOL_STR[protocol.ordinal()];
+        for (ACCESS_PROTOCOL protocol : nasProtocols) {
+            String protocolStr = ACCESS_PROTOCOL_STR[protocol.ordinal()];
             protocolsStr += (protocolsStr.isEmpty() ? protocolStr : ", " + protocolStr);
         }
         return protocolsStr;
     }
 
-    @XmlTransient
+    public void setAccessProtocols(String accessProtocols) {
+        Set<ACCESS_PROTOCOL> protocols = new HashSet<GlusterVolumeEntity.ACCESS_PROTOCOL>();
+        String[] accessProtocolList = accessProtocols.split(",", -1);
+        for (String accessProtocol : accessProtocolList) {
+            protocols.add(ACCESS_PROTOCOL.valueOf(accessProtocol.trim()));
+        }
+        setAccessProtocols(protocols);
+    }
+
     public String getAccessControlList() {
         return options.get(OPTION_AUTH_ALLOW);
     }
@@ -199,7 +218,6 @@ public class GlusterVolume extends GlusterEntity implements BusinessEntity<Strin
         setOption(OPTION_AUTH_ALLOW, accessControlList);
     }
 
-    @XmlTransient
     public boolean isNfsEnabled() {
         String nfsDisabled = options.get(OPTION_NFS_DISABLE);
         if (nfsDisabled == null || nfsDisabled.equalsIgnoreCase(GlusterConstants.OFF)) {
@@ -209,7 +227,6 @@ public class GlusterVolume extends GlusterEntity implements BusinessEntity<Strin
         }
     }
 
-    @XmlElement(name = "options")
     public GlusterVolumeOptions getOptions() {
         return options;
     }
@@ -220,6 +237,14 @@ public class GlusterVolume extends GlusterEntity implements BusinessEntity<Strin
 
     public void setOptions(GlusterVolumeOptions options) {
         this.options = options;
+    }
+
+    public void setOptions(String options) {
+        String[] optionArr = options.split(",", -1);
+        for(String option : optionArr) {
+            String[] optionInfo = option.split("=", -1);
+            setOption(optionInfo[0], optionInfo[1]);
+        }
     }
 
     public void setOptions(LinkedHashMap<String, String> options) {
@@ -242,49 +267,66 @@ public class GlusterVolume extends GlusterEntity implements BusinessEntity<Strin
         this.bricks = bricks;
     }
 
+    public void setBricks(String bricksStr) {
+        String[] brickList = bricksStr.split(",", -1);
+        List<GlusterBrick> bricks = new ArrayList<GlusterBrick>();
+        for(String brick : brickList) {
+            String[] brickInfo = brick.split(",", -1);
+            bricks.add(new GlusterBrick(brickInfo[0], BRICK_STATUS.ONLINE, brickInfo[1]));
+        }
+        setBricks(bricks);
+    }
+
     public void removeBrick(GlusterBrick GlusterBrick) {
         bricks.remove(GlusterBrick);
     }
 
-    @XmlElementWrapper(name = "bricks")
-    @XmlElement(name = "GlusterBrick", type = GlusterBrick.class)
     public List<GlusterBrick> getBricks() {
         return bricks;
     }
 
     public void enableNFS() {
-        nasProtocols.add(NAS_PROTOCOL.NFS);
+        nasProtocols.add(ACCESS_PROTOCOL.NFS);
         setOption(OPTION_NFS_DISABLE, GlusterConstants.OFF);
     }
 
     public void disableNFS() {
-        nasProtocols.remove(NAS_PROTOCOL.NFS);
+        nasProtocols.remove(ACCESS_PROTOCOL.NFS);
         setOption(OPTION_NFS_DISABLE, GlusterConstants.ON);
     }
 
     public void enableCifs() {
-        if (!nasProtocols.contains(NAS_PROTOCOL.CIFS)) {
-            nasProtocols.add(NAS_PROTOCOL.CIFS);
+        if (!nasProtocols.contains(ACCESS_PROTOCOL.CIFS)) {
+            nasProtocols.add(ACCESS_PROTOCOL.CIFS);
         }
     }
 
     public void disableCifs() {
-        nasProtocols.remove(NAS_PROTOCOL.CIFS);
+        nasProtocols.remove(ACCESS_PROTOCOL.CIFS);
     }
 
     public boolean isCifsEnable() {
-        return nasProtocols.contains(NAS_PROTOCOL.CIFS);
+        return nasProtocols.contains(ACCESS_PROTOCOL.CIFS);
     }
 
     public void setCifsUsers(List<String> cifsUsers) {
         this.cifsUsers = cifsUsers;
     }
 
+    public void setCifsUsers(String cifsUsers) {
+        String[] userList = cifsUsers.split(",", -1);
+        List<String> users = new ArrayList<String>();
+        for(String user : userList) {
+            users.add(user.trim());
+        }
+        setCifsUsers(users);
+    }
+
     public List<String> getCifsUsers() {
         return cifsUsers;
     }
 
-    public GlusterVolume(String name,
+    public GlusterVolumeEntity(String name,
             GlusterEntity parent,
             VOLUME_TYPE volumeType,
             TRANSPORT_TYPE transportType,
@@ -315,28 +357,28 @@ public class GlusterVolume extends GlusterEntity implements BusinessEntity<Strin
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof GlusterVolume)) {
+        if (!(obj instanceof GlusterVolumeEntity)) {
             return false;
         }
 
-        GlusterVolume GlusterVolume = (GlusterVolume) obj;
+        GlusterVolumeEntity volume = (GlusterVolumeEntity) obj;
 
-        if (!(getName().equals(GlusterVolume.getName()) && getVolumeType() == GlusterVolume.getVolumeType()
-                && getTransportType() == GlusterVolume.getTransportType() && getStatus() == GlusterVolume.getStatus()
-                && getReplicaCount() == GlusterVolume.getReplicaCount()
-                && getStripeCount() == GlusterVolume.getStripeCount()
-                && getOptions().equals(GlusterVolume.getOptions()))) {
+        if (!(getName().equals(volume.getName()) && getVolumeType() == volume.getVolumeType()
+                && getTransportType() == volume.getTransportType() && getStatus() == volume.getStatus()
+                && getReplicaCount() == volume.getReplicaCount()
+                && getStripeCount() == volume.getStripeCount()
+                && getOptions().equals(volume.getOptions()))) {
             return false;
         }
 
-        for (NAS_PROTOCOL nasProtocol : getNASProtocols()) {
-            if (!(GlusterVolume.getNASProtocols().contains(nasProtocol))) {
+        for (ACCESS_PROTOCOL nasProtocol : getAccessProtocols()) {
+            if (!(volume.getAccessProtocols().contains(nasProtocol))) {
                 return false;
             }
         }
 
         List<GlusterBrick> oldBricks = getBricks();
-        List<GlusterBrick> newBricks = GlusterVolume.getBricks();
+        List<GlusterBrick> newBricks = volume.getBricks();
         if (oldBricks.size() != newBricks.size()) {
             return false;
         }
@@ -363,14 +405,14 @@ public class GlusterVolume extends GlusterEntity implements BusinessEntity<Strin
      *
      * @param newVolume
      */
-    public void copyFrom(GlusterVolume newVolume) {
+    public void copyFrom(GlusterVolumeEntity newVolume) {
         setName(newVolume.getName());
         setVolumeType(newVolume.getVolumeType());
         setTransportType(newVolume.getTransportType());
         setStatus(newVolume.getStatus());
         setReplicaCount(newVolume.getReplicaCount());
         setStripeCount(newVolume.getStripeCount());
-        setNASProtocols(newVolume.getNASProtocols());
+        setAccessProtocols(newVolume.getAccessProtocols());
         setCifsUsers(newVolume.getCifsUsers());
         getOptions().copyFrom(newVolume.getOptions());
     }
