@@ -2,9 +2,12 @@ package org.ovirt.engine.ui.webadmin.section.main.view;
 
 import javax.inject.Inject;
 
+import org.ovirt.engine.ui.webadmin.ApplicationConstants;
 import org.ovirt.engine.ui.webadmin.ApplicationMessages;
 import org.ovirt.engine.ui.webadmin.ApplicationResources;
 import org.ovirt.engine.ui.webadmin.ApplicationTemplates;
+import org.ovirt.engine.ui.webadmin.idhandler.ElementIdHandler;
+import org.ovirt.engine.ui.webadmin.idhandler.WithElementId;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.MainSectionPresenter;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.MainTabBarOffsetUiHandlers;
 import org.ovirt.engine.ui.webadmin.section.main.view.ApplicationFocusChangeEvent.ApplicationFocusChangeHandler;
@@ -44,6 +47,10 @@ public class MainSectionView extends AbstractView implements MainSectionPresente
         ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
     }
 
+    interface ViewIdHandler extends ElementIdHandler<MainSectionView> {
+        ViewIdHandler idHandler = GWT.create(ViewIdHandler.class);
+    }
+
     private MainTabBarOffsetUiHandlers uiHandlers;
 
     @UiField
@@ -63,6 +70,15 @@ public class MainSectionView extends AbstractView implements MainSectionPresente
 
     @UiField
     Label footerMessage;
+
+    @WithElementId
+    Label treeHeader;
+
+    @WithElementId
+    Label bookmarksHeader;
+
+    @WithElementId
+    Label tagsHeader;
 
     private final EventBus eventBus;
 
@@ -84,6 +100,7 @@ public class MainSectionView extends AbstractView implements MainSectionPresente
             ApplicationResources resources,
             ApplicationTemplates templates,
             ApplicationMessages messages,
+            ApplicationConstants constants,
             EventBus eventBus) {
         attachWindowFocusEvents();
         this.eventBus = eventBus;
@@ -91,7 +108,13 @@ public class MainSectionView extends AbstractView implements MainSectionPresente
         this.alertModelProvider = alertModelProvider;
         this.eventModelProvider = eventModelProvider;
         this.westStackPanel = createWestStackPanel(treeModelProvider, bookmarkModelProvider, tagModelProvider);
+
         initWidget(ViewUiBinder.uiBinder.createAndBindUi(this));
+
+        initHeaders();
+        ViewIdHandler.idHandler.generateAndSetIds(this);
+        addContentToWestPanel(treeModelProvider, bookmarkModelProvider, tagModelProvider, westStackPanel, constants);
+
         initAlertEventFooterPanel(alertModelProvider, alertFirstRowModelProvider,
                 eventModelProvider, eventFirstRowModelProvider, resources, templates);
         headerPanel.getElement().getParentElement().getStyle().setOverflow(Overflow.VISIBLE);
@@ -107,6 +130,12 @@ public class MainSectionView extends AbstractView implements MainSectionPresente
         }
     }
 
+    private void initHeaders() {
+        treeHeader = new Label("Tree");
+        bookmarksHeader = new Label("Bookmarks");
+        tagsHeader = new Label("Tags");
+    }
+
     StackLayoutPanel createWestStackPanel(SystemTreeModelProvider treeModelProvider,
             BookmarkModelProvider bookmarkModelProvider, TagModelProvider tagModelProvider) {
         final StackLayoutPanel panel = new StackLayoutPanel(Unit.PX) {
@@ -120,11 +149,16 @@ public class MainSectionView extends AbstractView implements MainSectionPresente
             }
         };
 
-        panel.add(new SystemTree(treeModelProvider), "Tree", 26);
-        panel.add(new BookmarkList(bookmarkModelProvider), "Bookmarks", 26);
-        panel.add(new TagList(tagModelProvider), "Tags", 26);
-
         return panel;
+    }
+
+    private void addContentToWestPanel(SystemTreeModelProvider treeModelProvider,
+            BookmarkModelProvider bookmarkModelProvider,
+            TagModelProvider tagModelProvider,
+            final StackLayoutPanel panel, ApplicationConstants constants) {
+        panel.insert(new SystemTree(treeModelProvider, constants), treeHeader, 26, panel.getWidgetCount());
+        panel.insert(new BookmarkList(bookmarkModelProvider), bookmarksHeader, 26, panel.getWidgetCount());
+        panel.insert(new TagList(tagModelProvider), tagsHeader, 26, panel.getWidgetCount());
     }
 
     void initAlertEventFooterPanel(AlertModelProvider alertModelProvider,
@@ -187,35 +221,35 @@ public class MainSectionView extends AbstractView implements MainSectionPresente
     }
 
     native void attachWindowFocusEvents() /*-{
-		var clientAgentType = @org.ovirt.engine.ui.webadmin.uicommon.ClientAgentType::new()();
-		var browser = clientAgentType.@org.ovirt.engine.ui.webadmin.uicommon.ClientAgentType::browser;
-		var isIE = browser.toLowerCase() == "explorer";
+                                          var clientAgentType = @org.ovirt.engine.ui.webadmin.uicommon.ClientAgentType::new()();
+                                          var browser = clientAgentType.@org.ovirt.engine.ui.webadmin.uicommon.ClientAgentType::browser;
+                                          var isIE = browser.toLowerCase() == "explorer";
 
-		if (isIE) {
-			$doc.attachEvent("onfocusin", onFocus);
-			$doc.attachEvent("onfocusout", onBlur);
-		} else {
-			$wnd.addEventListener("focus", onFocus, false);
-			$wnd.addEventListener("blur", onBlur, false);
-		}
+                                          if (isIE) {
+                                          $doc.attachEvent("onfocusin", onFocus);
+                                          $doc.attachEvent("onfocusout", onBlur);
+                                          } else {
+                                          $wnd.addEventListener("focus", onFocus, false);
+                                          $wnd.addEventListener("blur", onBlur, false);
+                                          }
 
-		var context = this;
-		function onFocus() {
-			// only focus if previous event was a blur or we get lots of focus events (On IE)
-			if (context.@org.ovirt.engine.ui.webadmin.section.main.view.MainSectionView::lastEventWasBlur) {
-				context.@org.ovirt.engine.ui.webadmin.section.main.view.MainSectionView::lastEventWasBlur = false;
-				context.@org.ovirt.engine.ui.webadmin.section.main.view.MainSectionView::onWindowFocus()();
-			}
-		}
-		function onBlur() {
-			debugger;
-			if (context.@org.ovirt.engine.ui.webadmin.section.main.view.MainSectionView::activeElement != $doc.activeElement) {
-				context.@org.ovirt.engine.ui.webadmin.section.main.view.MainSectionView::activeElement = $doc.activeElement;
-			} else {
-				context.@org.ovirt.engine.ui.webadmin.section.main.view.MainSectionView::lastEventWasBlur = true;
-				context.@org.ovirt.engine.ui.webadmin.section.main.view.MainSectionView::onWindowBlur()();
-			}
-		}
-    }-*/;
+                                          var context = this;
+                                          function onFocus() {
+                                          // only focus if previous event was a blur or we get lots of focus events (On IE)
+                                          if (context.@org.ovirt.engine.ui.webadmin.section.main.view.MainSectionView::lastEventWasBlur) {
+                                          context.@org.ovirt.engine.ui.webadmin.section.main.view.MainSectionView::lastEventWasBlur = false;
+                                          context.@org.ovirt.engine.ui.webadmin.section.main.view.MainSectionView::onWindowFocus()();
+                                          }
+                                          }
+                                          function onBlur() {
+                                          debugger;
+                                          if (context.@org.ovirt.engine.ui.webadmin.section.main.view.MainSectionView::activeElement != $doc.activeElement) {
+                                          context.@org.ovirt.engine.ui.webadmin.section.main.view.MainSectionView::activeElement = $doc.activeElement;
+                                          } else {
+                                          context.@org.ovirt.engine.ui.webadmin.section.main.view.MainSectionView::lastEventWasBlur = true;
+                                          context.@org.ovirt.engine.ui.webadmin.section.main.view.MainSectionView::onWindowBlur()();
+                                          }
+                                          }
+                                          }-*/;
 
 }

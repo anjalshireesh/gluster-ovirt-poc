@@ -80,6 +80,7 @@ public class BackendStorageDomainVmsResourceTest
 
     @Test
     public void testRemove() throws Exception {
+        setUriInfo(setUpBasicUriExpectations());
         setUpQueryExpectations("", null, StorageDomainType.ImportExport, false);
         setUpGetDataCenterByStorageDomainExpectations(GUIDS[3], 2);
         org.ovirt.engine.core.common.businessentities.VM vm = new org.ovirt.engine.core.common.businessentities.VM();
@@ -87,7 +88,7 @@ public class BackendStorageDomainVmsResourceTest
         String[] names = new String[]{"Vm", "StorageDomainId", "StoragePoolId"};
         Object[] values = new Object[]{vm, GUIDS[3], DATA_CENTER_ID};
         setUpActionExpectations(VdcActionType.RemoveVmFromImportExport, RemoveVmFromImportExportParamenters.class, names, values, true, true);
-        collection.remove(GUIDS[0].toString());
+        verifyRemove(collection.remove(GUIDS[0].toString()));
     }
 
     @Override

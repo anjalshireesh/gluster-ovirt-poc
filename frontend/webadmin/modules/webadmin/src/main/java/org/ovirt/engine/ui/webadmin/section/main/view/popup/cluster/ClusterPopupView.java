@@ -10,6 +10,8 @@ import org.ovirt.engine.core.compat.Version;
 import org.ovirt.engine.ui.uicommonweb.models.clusters.ClusterModel;
 import org.ovirt.engine.ui.webadmin.ApplicationConstants;
 import org.ovirt.engine.ui.webadmin.ApplicationResources;
+import org.ovirt.engine.ui.webadmin.idhandler.ElementIdHandler;
+import org.ovirt.engine.ui.webadmin.idhandler.WithElementId;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.cluster.ClusterPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.AbstractModelBoundPopupView;
 import org.ovirt.engine.ui.webadmin.widget.dialog.SimpleDialogPanel;
@@ -38,37 +40,49 @@ public class ClusterPopupView extends AbstractModelBoundPopupView<ClusterModel> 
         ViewUiBinder uiBinder = GWT.create(ViewUiBinder.class);
     }
 
+    interface ViewIdHandler extends ElementIdHandler<ClusterPopupView> {
+        ViewIdHandler idHandler = GWT.create(ViewIdHandler.class);
+    }
+
     @UiField
     WidgetStyle style;
 
     @UiField
+    @WithElementId
     DialogTab generalTab;
 
     @UiField(provided = true)
     @Path(value = "dataCenter.selectedItem")
+    @WithElementId
     ListModelListBoxEditor<Object> dataCenterEditor;
 
     @UiField
     @Path(value = "name.entity")
+    @WithElementId
     EntityModelTextBoxEditor nameEditor;
 
     @UiField
     @Path(value = "description.entity")
+    @WithElementId
     EntityModelTextBoxEditor descriptionEditor;
 
     @UiField(provided = true)
     @Path(value = "cPU.selectedItem")
+    @WithElementId
     ListModelListBoxEditor<Object> cPUEditor;
 
     @UiField(provided = true)
     @Path(value = "version.selectedItem")
+    @WithElementId
     ListModelListBoxEditor<Object> versionEditor;
 
     @UiField
+    @WithElementId
     DialogTab memoryOptimizationTab;
 
     @UiField(provided = true)
     @Path(value = "optimizationNone_IsSelected.entity")
+    @WithElementId
     EntityModelRadioButtonEditor optimizationNoneEditor;
 
     @UiField
@@ -77,6 +91,7 @@ public class ClusterPopupView extends AbstractModelBoundPopupView<ClusterModel> 
 
     @UiField(provided = true)
     @Path(value = "optimizationForServer_IsSelected.entity")
+    @WithElementId
     EntityModelRadioButtonEditor optimizationForServerEditor;
 
     @UiField
@@ -85,6 +100,7 @@ public class ClusterPopupView extends AbstractModelBoundPopupView<ClusterModel> 
 
     @UiField(provided = true)
     @Path(value = "optimizationForDesktop_IsSelected.entity")
+    @WithElementId
     EntityModelRadioButtonEditor optimizationForDesktopEditor;
 
     @UiField
@@ -93,6 +109,7 @@ public class ClusterPopupView extends AbstractModelBoundPopupView<ClusterModel> 
 
     @UiField(provided = true)
     @Path(value = "optimizationCustom_IsSelected.entity")
+    @WithElementId
     EntityModelRadioButtonEditor optimizationCustomEditor;
 
     @UiField(provided = true)
@@ -100,18 +117,22 @@ public class ClusterPopupView extends AbstractModelBoundPopupView<ClusterModel> 
     Label optimizationCustomExplanationLabel;
 
     @UiField
+    @WithElementId
     DialogTab resiliencePolicyTab;
 
     @UiField(provided = true)
     @Path(value = "migrateOnErrorOption_YES.entity")
+    @WithElementId
     EntityModelRadioButtonEditor migrateOnErrorOption_YESEditor;
 
     @UiField(provided = true)
     @Path(value = "migrateOnErrorOption_HA_ONLY.entity")
+    @WithElementId
     EntityModelRadioButtonEditor migrateOnErrorOption_HA_ONLYEditor;
 
     @UiField(provided = true)
     @Path(value = "migrateOnErrorOption_NO.entity")
+    @WithElementId
     EntityModelRadioButtonEditor migrateOnErrorOption_NOEditor;
 
     @Inject
@@ -120,6 +141,7 @@ public class ClusterPopupView extends AbstractModelBoundPopupView<ClusterModel> 
         initListBoxEditors();
         initRadioButtonEditors();
         initWidget(ViewUiBinder.uiBinder.createAndBindUi(this));
+        ViewIdHandler.idHandler.generateAndSetIds(this);
         addStyles();
         localize(constants);
         Driver.driver.initialize(this);
