@@ -98,5 +98,5 @@ public interface IIrsServer {
 
     GetVmsListReturnForXmlRpc getVmsList(String storagePoolId, String storageDomainId);
 
-    StatusOnlyReturnForXmlRpc createGlusterVolume(Map<String, Object> volumeData);
+    StatusOnlyReturnForXmlRpc glusterVolumeCreate(Map<String, Object> volumeData);
 }
