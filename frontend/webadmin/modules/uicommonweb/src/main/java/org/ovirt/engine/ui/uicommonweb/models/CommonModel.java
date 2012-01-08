@@ -20,6 +20,7 @@ import org.ovirt.engine.ui.uicommonweb.models.common.*;
 import org.ovirt.engine.ui.uicommonweb.models.configure.*;
 import org.ovirt.engine.ui.uicommonweb.models.datacenters.*;
 import org.ovirt.engine.ui.uicommonweb.models.events.*;
+import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeListModel;
 import org.ovirt.engine.ui.uicommonweb.models.hosts.*;
 import org.ovirt.engine.ui.uicommonweb.models.pools.*;
 import org.ovirt.engine.ui.uicommonweb.models.storage.*;
@@ -623,6 +624,7 @@ public class CommonModel extends ListModel
 	private SearchableListModel userList;
 	private SearchableListModel eventList;
 	private SearchableListModel monitor;
+	private SearchableListModel volumeListModel;
 
 	private void InitItems()
 	{
@@ -655,6 +657,10 @@ public class CommonModel extends ListModel
 		JUICOMMENT_END --- */
 		eventList = new EventListModel();
 		list.add(eventList);
+		
+		volumeListModel = new VolumeListModel();
+		list.add(volumeListModel);
+		
 
 		setItems(list);
 

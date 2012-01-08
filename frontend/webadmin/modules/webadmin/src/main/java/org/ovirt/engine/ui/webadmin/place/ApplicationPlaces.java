@@ -28,7 +28,13 @@ public class ApplicationPlaces {
     public static String getHostMainTabPlace() {
         return hostMainTabPlace;
     }
+    
+    public static final String volumeMainTabPlace = "volumes";
 
+    public static String getVolumeMainTabPlace() {
+        return volumeMainTabPlace;
+    }
+    
     public static final String storageMainTabPlace = "storage";
 
     public static String getStorageMainTabPlace() {
@@ -186,4 +192,8 @@ public class ApplicationPlaces {
 
     public static final String userEventSubTabPlace = userMainTabPlace + SUB_TAB_PREFIX + "event";
 
+    
+    // Volume
+    
+    public static final String volumeGeneralSubTabPlace = volumeMainTabPlace + SUB_TAB_PREFIX + "general";
 }

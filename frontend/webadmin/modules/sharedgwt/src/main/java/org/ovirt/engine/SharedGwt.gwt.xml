@@ -8,6 +8,17 @@
 		<include name="core/common/config/**"/>
 		
 		<!-- Business entities -->
+		<include name="core/common/businessentities/GlusterVolume.java" />
+		<include name="core/common/businessentities/GlusterEntity.java" />
+		<include name="core/common/businessentities/Filterable.java" />
+		<include name="core/common/businessentities/GlusterVolumeOptions.java" />
+		<include name="core/common/businessentities/GlusterBrick.java" />
+		<include name="core/common/constants/GlusterConstants.java" />
+		<include name="core/common/businessentities/GlusterVolumeOption.java" />
+		<include name="core/common/utils/StringUtil.java" />
+		<include name="core/common/utils/GlusterCoreUtil.java" />
+
+
 		<include name="core/common/businessentities/BusinessEntity.java" />
 		<include name="core/common/businessentities/ad_groups.java" />
 		<include name="core/common/businessentities/AdRefStatus.java" />
@@ -200,6 +211,8 @@
 		<include name="core/common/action/VdsOperationActionParameters.java"/>
 		<include name="core/common/businessentities/AsyncTaskResultEnum.java"/>
 		<include name="core/common/queries/VdcQueryParametersBase.java"/>
+
+		<include name="core/common/action/CreateGlusterVolumeParameters.java"/>
 		
 		<include name="core/common/businessentities/FenceActionType.java"/>
 		<include name="core/common/businessentities/CopyVolumeType.java"/>

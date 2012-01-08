@@ -18,6 +18,7 @@ import org.ovirt.engine.ui.webadmin.gin.uicommon.StorageModule;
 import org.ovirt.engine.ui.webadmin.gin.uicommon.TemplateModule;
 import org.ovirt.engine.ui.webadmin.gin.uicommon.UserModule;
 import org.ovirt.engine.ui.webadmin.gin.uicommon.VirtualMachineModule;
+import org.ovirt.engine.ui.webadmin.gin.uicommon.VolumeModule;
 import org.ovirt.engine.ui.webadmin.uicommon.FrontendEventsHandlerImpl;
 import org.ovirt.engine.ui.webadmin.uicommon.FrontendFailureEventListener;
 import org.ovirt.engine.ui.webadmin.uicommon.LoggerImpl;
@@ -62,6 +63,7 @@ public class UiCommonModule extends AbstractGinModule {
         install(new TemplateModule());
         install(new UserModule());
         install(new EventModule());
+        install(new VolumeModule());
 
         // SystemTreeModel
         bind(SystemTreeModelProvider.class).asEagerSingleton();
