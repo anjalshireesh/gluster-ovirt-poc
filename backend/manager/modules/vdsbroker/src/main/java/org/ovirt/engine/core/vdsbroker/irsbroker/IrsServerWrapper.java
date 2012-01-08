@@ -270,9 +270,9 @@ public class IrsServerWrapper implements IIrsServer {
     }
 
     @Override
-    public StatusOnlyReturnForXmlRpc createGlusterVolume(
+    public StatusOnlyReturnForXmlRpc glusterVolumeCreate(
             Map<String, Object> volumeData) {
-        Map<String, Object> xmlRpcReturnValue = irsServer.createGlusterVolume(volumeData);
+        Map<String, Object> xmlRpcReturnValue = irsServer.glusterVolumeCreate(volumeData);
         StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
         return wrapper;
     }
