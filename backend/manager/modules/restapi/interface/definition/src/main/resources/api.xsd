@@ -2304,10 +2304,12 @@
       <xs:extension base="BaseResource">
         <xs:sequence>
           <xs:element name="volumeType" type="xs:string" minOccurs="1" maxOccurs="1"/>
+          <xs:element name="transportType" type="xs:string" minOccurs="0" maxOccurs="1"/>
           <xs:element name="replicaCount" type="xs:integer" minOccurs="0" maxOccurs="1"/>
           <xs:element name="stripeCount" type="xs:integer" minOccurs="0" maxOccurs="1"/>
           <xs:element name="bricks" type="xs:string" minOccurs="1" maxOccurs="1"/>
           <xs:element name="accessProtocols" type="xs:string" minOccurs="0" maxOccurs="1"/>
+          <xs:element name="accessControlList" type="xs:string" minOccurs="0" maxOccurs="1"/>
           <xs:element name="cifsUsers" type="xs:string" minOccurs="0" maxOccurs="1"/>
           <xs:element name="options" type="xs:string" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
