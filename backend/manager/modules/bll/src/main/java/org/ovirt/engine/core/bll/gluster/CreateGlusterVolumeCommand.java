@@ -49,7 +49,7 @@ public class CreateGlusterVolumeCommand<T extends CreateGlusterVolumeParameters>
                         .getResourceManager()
                         .RunVdsCommand(
                                 VDSCommandType.CreateGlusterVolume,
-                                new CreateGlusterVolumeVDSParameters(getStoragePoolId().getValue(),
+                                new CreateGlusterVolumeVDSParameters(getParameters().getVdsGroupId(),
                                         getParameters().getVolume()));
         setSucceeded(returnValue.getSucceeded());
     }
