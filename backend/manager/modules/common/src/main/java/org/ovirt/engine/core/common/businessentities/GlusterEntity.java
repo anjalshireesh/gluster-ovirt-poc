@@ -27,61 +27,61 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.ovirt.engine.core.common.utils.StringUtil;
 
-@XmlSeeAlso({GlusterVolume.class, GlusterBrick.class, GlusterVolumeOption.class})
+@XmlSeeAlso({ GlusterVolume.class, GlusterBrick.class, GlusterVolumeOption.class })
 @XmlRootElement
 public class GlusterEntity implements Filterable {
 
-	protected String name;
-	protected List<GlusterEntity> children = new ArrayList<GlusterEntity>();
-	private GlusterEntity parent;
+    protected String name;
+    protected List<GlusterEntity> children = new ArrayList<GlusterEntity>();
+    private GlusterEntity parent;
 
-	public GlusterEntity() {
-		
-	}
-	
-	public String getName() {
-		return name;
-	}
+    public GlusterEntity() {
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    }
 
-	@XmlTransient
-	public GlusterEntity getParent() {
-		return parent;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setParent(GlusterEntity parent) {
-		this.parent = parent;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public List<? extends GlusterEntity> getChildren() {
-		return children;
-	}
+    @XmlTransient
+    public GlusterEntity getParent() {
+        return parent;
+    }
 
-	public void setChildren(List<GlusterEntity> children) {
-		this.children = children;
-	}
+    public void setParent(GlusterEntity parent) {
+        this.parent = parent;
+    }
 
-	public GlusterEntity(String name, GlusterEntity parent) {
-		this.name = name;
-		this.parent = parent;
-	}
+    public List<? extends GlusterEntity> getChildren() {
+        return children;
+    }
 
-	public GlusterEntity(String name, GlusterEntity parent, List<GlusterEntity> children) {
-		this.name = name;
-		this.parent = parent;
-		this.children = children;
-	}
-	
-	@Override
-	public boolean filter(String filterString, boolean caseSensitive) {
-		return StringUtil.filterString(getName(), filterString, caseSensitive);
-	}
-	
-	@Override
-	public String toString() {
-		return name;
-	}
+    public void setChildren(List<GlusterEntity> children) {
+        this.children = children;
+    }
+
+    public GlusterEntity(String name, GlusterEntity parent) {
+        this.name = name;
+        this.parent = parent;
+    }
+
+    public GlusterEntity(String name, GlusterEntity parent, List<GlusterEntity> children) {
+        this.name = name;
+        this.parent = parent;
+        this.children = children;
+    }
+
+    @Override
+    public boolean filter(String filterString, boolean caseSensitive) {
+        return StringUtil.filterString(getName(), filterString, caseSensitive);
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

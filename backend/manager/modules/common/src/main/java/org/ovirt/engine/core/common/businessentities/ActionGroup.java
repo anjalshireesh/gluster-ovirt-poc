@@ -59,7 +59,7 @@ public enum ActionGroup {
     DELETE_STORAGE_POOL(701, RoleType.ADMIN, VdcObjectType.StoragePool),
     EDIT_STORAGE_POOL_CONFIGURATION(702, RoleType.ADMIN, VdcObjectType.StoragePool),
     CONFIGURE_STORAGE_POOL_NETWORK(703, RoleType.ADMIN, VdcObjectType.StoragePool),
-    
+
     // engine generic
     CONFIGURE_ENGINE(800, RoleType.ADMIN, VdcObjectType.System),
 

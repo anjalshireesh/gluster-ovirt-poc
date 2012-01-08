@@ -20,104 +20,107 @@ package org.ovirt.engine.core.common.businessentities;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
 
 import org.ovirt.engine.core.common.utils.StringUtil;
 
 @XmlRootElement(name = "Brick")
 public class GlusterBrick extends GlusterEntity {
-	public enum BRICK_STATUS {ONLINE, OFFLINE};
-	private String[] BRICK_STATUS_STR = {"Online", "Offline"};
+    public enum BRICK_STATUS {
+        ONLINE,
+        OFFLINE
+    };
 
-	private String serverName;
-	// private String deviceName;
-	private String brickDirectory;
-	private BRICK_STATUS status;
+    private String[] BRICK_STATUS_STR = { "Online", "Offline" };
 
-	public GlusterBrick() {
-	}
-	
-	@Override
-	@XmlTransient
-	public String getName() {
-		return getQualifiedName();
-	}
-	
-	public BRICK_STATUS getStatus() {
-		return status;
-	}
+    private String serverName;
+    // private String deviceName;
+    private String brickDirectory;
+    private BRICK_STATUS status;
 
-	public String getStatusStr() {
-		return BRICK_STATUS_STR[getStatus().ordinal()];
-	}
-	
-	public void setStatus(BRICK_STATUS status) {
-		this.status = status;
-	}
+    public GlusterBrick() {
+    }
 
-	public GlusterBrick(String serverName, BRICK_STATUS brickStatus, String brickDirectory) {
-		setServerName(serverName);
-		setStatus(brickStatus);
-		// setDeviceName(deviceName);
-		setBrickDirectory(brickDirectory);
-	}
+    @Override
+    @XmlTransient
+    public String getName() {
+        return getQualifiedName();
+    }
 
-	public void setServerName(String serverName) {
-		this.serverName = serverName;
-	}
+    public BRICK_STATUS getStatus() {
+        return status;
+    }
 
-	public String getServerName() {
-		return serverName;
-	}
+    public String getStatusStr() {
+        return BRICK_STATUS_STR[getStatus().ordinal()];
+    }
 
-	public void setBrickDirectory(String brickDirectory) {
-		this.brickDirectory = brickDirectory;
-	}
+    public void setStatus(BRICK_STATUS status) {
+        this.status = status;
+    }
 
-	public String getBrickDirectory() {
-		return brickDirectory;
-	}
+    public GlusterBrick(String serverName, BRICK_STATUS brickStatus, String brickDirectory) {
+        setServerName(serverName);
+        setStatus(brickStatus);
+        // setDeviceName(deviceName);
+        setBrickDirectory(brickDirectory);
+    }
 
-//	public void setDeviceName(String deviceName) {
-//		this.deviceName = deviceName;
-//	}
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
+    }
 
-//	public String getDeviceName() {
-//		return deviceName;
-//	}
+    public String getServerName() {
+        return serverName;
+    }
 
-	public String getQualifiedName() {
-		return serverName + ":" + brickDirectory;
-	}
+    public void setBrickDirectory(String brickDirectory) {
+        this.brickDirectory = brickDirectory;
+    }
 
-	public boolean filter(String filterString, boolean caseSensitive) {
-		return StringUtil.filterString(getServerName() + getBrickDirectory() + getStatusStr(), filterString,
-				caseSensitive);
-	}
-	
-	@Override
-	public String toString() {
-		return getQualifiedName();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if(!(obj instanceof GlusterBrick)) {
-			return false;
-		}
-		
-		GlusterBrick brick = (GlusterBrick)obj;
-		if(getQualifiedName().equals(brick.getQualifiedName()) && getStatus() == brick.getStatus()) {
-			return true;
-		}
-		
-		return false;
-	}
+    public String getBrickDirectory() {
+        return brickDirectory;
+    }
 
-	public void copyFrom(GlusterBrick newBrick) {
-		setServerName(newBrick.getServerName());
-		setBrickDirectory(newBrick.getBrickDirectory());
-		// setDeviceName(newBrick.getDeviceName());
-		setStatus(newBrick.getStatus());
-	}
+    // public void setDeviceName(String deviceName) {
+    // this.deviceName = deviceName;
+    // }
+
+    // public String getDeviceName() {
+    // return deviceName;
+    // }
+
+    public String getQualifiedName() {
+        return serverName + ":" + brickDirectory;
+    }
+
+    public boolean filter(String filterString, boolean caseSensitive) {
+        return StringUtil.filterString(getServerName() + getBrickDirectory() + getStatusStr(), filterString,
+                caseSensitive);
+    }
+
+    @Override
+    public String toString() {
+        return getQualifiedName();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof GlusterBrick)) {
+            return false;
+        }
+
+        GlusterBrick brick = (GlusterBrick) obj;
+        if (getQualifiedName().equals(brick.getQualifiedName()) && getStatus() == brick.getStatus()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void copyFrom(GlusterBrick newBrick) {
+        setServerName(newBrick.getServerName());
+        setBrickDirectory(newBrick.getBrickDirectory());
+        // setDeviceName(newBrick.getDeviceName());
+        setStatus(newBrick.getStatus());
+    }
 }

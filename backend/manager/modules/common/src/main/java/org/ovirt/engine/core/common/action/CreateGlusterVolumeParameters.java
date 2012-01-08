@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.ovirt.engine.core.common.action;
 
@@ -9,17 +9,18 @@ import org.ovirt.engine.core.compat.Guid;
 /**
  *
  */
-public class CreateGlusterVolumeParameters extends StoragePoolParametersBase {
+@SuppressWarnings("serial")
+public class CreateGlusterVolumeParameters extends VdsGroupParametersBase {
     private GlusterVolume volume;
 
     public CreateGlusterVolumeParameters() {
     }
-    
-    public CreateGlusterVolumeParameters(Guid storagePoolId, GlusterVolume volume) {
-        super(storagePoolId);
+
+    public CreateGlusterVolumeParameters(Guid vdsGroupId, GlusterVolume volume) {
+        super(vdsGroupId);
         setVolume(volume);
     }
-    
+
     public GlusterVolume getVolume() {
         return volume;
     }
