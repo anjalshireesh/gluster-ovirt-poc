@@ -17,6 +17,16 @@ public class ApplicationPlaces {
 
     public static final String hostMainTabPlace = "hosts";
 
+    public static String getHostMainTabPlace() {
+        return hostMainTabPlace;
+    }
+    
+    public static final String volumeMainTabPlace = "volumes";
+
+    public static String getVolumeMainTabPlace() {
+        return volumeMainTabPlace;
+    }
+    
     public static final String storageMainTabPlace = "storage";
 
     public static final String virtualMachineMainTabPlace = "vms";
@@ -222,4 +232,8 @@ public class ApplicationPlaces {
     public static final String quotaVmSubTabPlace = quotaMainTabPlace + SUB_TAB_PREFIX
             + "vms";;
 
+    
+    // Volume
+    
+    public static final String volumeGeneralSubTabPlace = volumeMainTabPlace + SUB_TAB_PREFIX + "general";
 }

@@ -1,5 +1,41 @@
 package org.ovirt.engine.ui.uicommonweb.models;
 
+import java.util.Collections;
+import org.ovirt.engine.core.compat.*;
+import org.ovirt.engine.ui.uicompat.*;
+import org.ovirt.engine.core.common.businessentities.*;
+import org.ovirt.engine.core.common.vdscommands.*;
+import org.ovirt.engine.core.common.queries.*;
+import org.ovirt.engine.core.common.action.*;
+import org.ovirt.engine.ui.frontend.*;
+import org.ovirt.engine.ui.uicommonweb.*;
+import org.ovirt.engine.ui.uicommonweb.models.*;
+import org.ovirt.engine.core.common.*;
+
+
+import org.ovirt.engine.ui.uicompat.*;
+import org.ovirt.engine.ui.uicommonweb.models.autocomplete.*;
+import org.ovirt.engine.ui.uicommonweb.models.bookmarks.*;
+import org.ovirt.engine.ui.uicommonweb.models.clusters.*;
+import org.ovirt.engine.ui.uicommonweb.models.common.*;
+import org.ovirt.engine.ui.uicommonweb.models.configure.*;
+import org.ovirt.engine.ui.uicommonweb.models.datacenters.*;
+import org.ovirt.engine.ui.uicommonweb.models.events.*;
+import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeListModel;
+import org.ovirt.engine.ui.uicommonweb.models.hosts.*;
+import org.ovirt.engine.ui.uicommonweb.models.pools.*;
+import org.ovirt.engine.ui.uicommonweb.models.storage.*;
+import org.ovirt.engine.ui.uicommonweb.models.tags.*;
+import org.ovirt.engine.ui.uicommonweb.models.templates.*;
+import org.ovirt.engine.ui.uicommonweb.models.users.*;
+import org.ovirt.engine.ui.uicommonweb.models.vms.*;
+import org.ovirt.engine.core.common.businessentities.*;
+
+import org.ovirt.engine.ui.uicommonweb.models.configure.roles_ui.*;
+import org.ovirt.engine.core.common.interfaces.*;
+import org.ovirt.engine.core.common.users.*;
+import org.ovirt.engine.ui.uicommonweb.*;
+
 import org.ovirt.engine.core.common.businessentities.AuditLog;
 import org.ovirt.engine.core.common.businessentities.StorageDomainType;
 import org.ovirt.engine.core.common.businessentities.storage_domains;
@@ -19,7 +55,6 @@ import org.ovirt.engine.ui.frontend.Frontend;
 import org.ovirt.engine.ui.frontend.INewAsyncCallback;
 import org.ovirt.engine.ui.uicommonweb.DataProvider;
 import org.ovirt.engine.ui.uicommonweb.Linq;
-import org.ovirt.engine.ui.uicommonweb.ReportInit;
 import org.ovirt.engine.ui.uicommonweb.UICommand;
 import org.ovirt.engine.ui.uicommonweb.models.autocomplete.SearchSuggestModel;
 import org.ovirt.engine.ui.uicommonweb.models.bookmarks.BookmarkEventArgs;
@@ -31,11 +66,8 @@ import org.ovirt.engine.ui.uicommonweb.models.configure.roles_ui.RoleListModel;
 import org.ovirt.engine.ui.uicommonweb.models.datacenters.DataCenterListModel;
 import org.ovirt.engine.ui.uicommonweb.models.events.AlertListModel;
 import org.ovirt.engine.ui.uicommonweb.models.events.EventListModel;
-import org.ovirt.engine.ui.uicommonweb.models.events.TaskListModel;
 import org.ovirt.engine.ui.uicommonweb.models.hosts.HostListModel;
 import org.ovirt.engine.ui.uicommonweb.models.pools.PoolListModel;
-import org.ovirt.engine.ui.uicommonweb.models.qouta.QuotaListModel;
-import org.ovirt.engine.ui.uicommonweb.models.reports.ReportsListModel;
 import org.ovirt.engine.ui.uicommonweb.models.storage.StorageListModel;
 import org.ovirt.engine.ui.uicommonweb.models.tags.TagListModel;
 import org.ovirt.engine.ui.uicommonweb.models.tags.TagModel;
@@ -190,16 +222,6 @@ public class CommonModel extends ListModel
         privateEventList = value;
     }
 
-    private TaskListModel privateTaskList;
-
-    public TaskListModel getTaskList() {
-        return privateTaskList;
-    }
-
-    public void setTaskList(TaskListModel taskList) {
-        this.privateTaskList = taskList;
-    }
-
     private AlertListModel privateAlertList;
 
     public AlertListModel getAlertList()
@@ -266,12 +288,7 @@ public class CommonModel extends ListModel
 
     public void setSearchString(String value)
     {
-        setSearchString(value, true);
-    }
-
-    public void setSearchString(String value, boolean checkIfNewValue)
-    {
-        if (!checkIfNewValue || !StringHelper.stringsEqual(searchString, value))
+        if (!StringHelper.stringsEqual(searchString, value))
         {
             searchString = value;
             SearchStringChanged();
@@ -360,17 +377,7 @@ public class CommonModel extends ListModel
         SignedOutEventDefinition = new EventDefinition("SingedOut", CommonModel.class);
     }
 
-    private static CommonModel instance = null;
-
-    public static CommonModel newInstance() {
-            instance = new CommonModel();
-        return instance;
-    }
-
-    public static CommonModel getInstance() {
-        return instance;
-    }
-    private CommonModel()
+    public CommonModel()
     {
         setSignedOutEvent(new Event(SignedOutEventDefinition));
 
@@ -399,9 +406,6 @@ public class CommonModel extends ListModel
 
         setAlertList(new AlertListModel());
         getAlertList().getSearchCommand().Execute();
-
-        setTaskList(new TaskListModel());
-        getTaskList().getSearchCommand().Execute();
 
         InitItems();
 
@@ -441,8 +445,6 @@ public class CommonModel extends ListModel
         templateList.setIsAvailable(!getHasSelectedTags());
         userList.setIsAvailable(true);
         eventList.setIsAvailable(!getHasSelectedTags());
-        reportsList.setIsAvailable(ReportInit.getInstance().isReportsEnabled() && !getHasSelectedTags());
-
         /*
          * --- JUICOMMENT_BEGIN monitor.setIsAvailable(!getHasSelectedTags()); JUICOMMENT_END ---
          */
@@ -475,12 +477,12 @@ public class CommonModel extends ListModel
 
     private void BookmarkListModel_Navigated(Object sender, BookmarkEventArgs e)
     {
-        // Reset tags tree to the root item.
+        //Reset tags tree to the root item.
         getTagList().getSelectedItemsChangedEvent().removeListener(this);
         getTagList().getResetCommand().Execute();
         getTagList().getSelectedItemsChangedEvent().addListener(this);
 
-        // Reset system tree to the root item.
+        //Reset system tree to the root item.
         getSystemTree().getSelectedItemChangedEvent().removeListener(this);
         getSystemTree().getResetCommand().Execute();
         getSystemTree().getSelectedItemChangedEvent().addListener(this);
@@ -502,79 +504,59 @@ public class CommonModel extends ListModel
 
     private void SystemTree_ItemChanged(Object sender, EventArgs args)
     {
-        // Reset tags tree to the root item.
+        //Reset tags tree to the root item.
         getTagList().getSelectedItemsChangedEvent().removeListener(this);
         getTagList().getResetCommand().Execute();
         UpdateHasSelectedTags();
         getTagList().getSelectedItemsChangedEvent().addListener(this);
 
-        SystemTreeItemModel model = (SystemTreeItemModel) getSystemTree().getSelectedItem();
+
+        SystemTreeItemModel model = (SystemTreeItemModel)getSystemTree().getSelectedItem();
         if (model == null)
         {
             return;
         }
 
-        // Update items availability depending on system tree selection.
-        dataCenterList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter
-                || model.getType() == SystemTreeItemType.Storage || model.getType() == SystemTreeItemType.System);
 
-        clusterList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter
-                || model.getType() == SystemTreeItemType.Clusters || model.getType() == SystemTreeItemType.Cluster
-                || model.getType() == SystemTreeItemType.Storage || model.getType() == SystemTreeItemType.System);
+        //Update items availability depending on system tree selection.
+        dataCenterList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter || model.getType() == SystemTreeItemType.Storage || model.getType() == SystemTreeItemType.System);
 
-        hostList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter
-                || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Hosts
-                || model.getType() == SystemTreeItemType.Host || model.getType() == SystemTreeItemType.Storage
-                || model.getType() == SystemTreeItemType.System);
+        clusterList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter || model.getType() == SystemTreeItemType.Clusters || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Storage || model.getType() == SystemTreeItemType.System);
 
-        storageList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter
-                || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Host
-                || model.getType() == SystemTreeItemType.Storages || model.getType() == SystemTreeItemType.Storage
-                || model.getType() == SystemTreeItemType.System);
+        hostList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Hosts || model.getType() == SystemTreeItemType.Host || model.getType() == SystemTreeItemType.Storage || model.getType() == SystemTreeItemType.System);
+
+        storageList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Host || model.getType() == SystemTreeItemType.Storages || model.getType() == SystemTreeItemType.Storage || model.getType() == SystemTreeItemType.System);
+        
+        volumeListModel.setIsAvailable(model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Volumes ? true : false);
+
 
         boolean isDataStorage = false;
         if (model.getType() == SystemTreeItemType.Storage)
         {
-            storage_domains storage = (storage_domains) model.getEntity();
-            isDataStorage =
-                    storage.getstorage_domain_type() == StorageDomainType.Data
-                            || storage.getstorage_domain_type() == StorageDomainType.Master;
+            storage_domains storage = (storage_domains)model.getEntity();
+            isDataStorage = storage.getstorage_domain_type() == StorageDomainType.Data || storage.getstorage_domain_type() == StorageDomainType.Master;
         }
 
-        vmList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter
-                || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Host
-                || isDataStorage || model.getType() == SystemTreeItemType.VMs
-                || model.getType() == SystemTreeItemType.System);
+        vmList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Host || isDataStorage || model.getType() == SystemTreeItemType.VMs || model.getType() == SystemTreeItemType.System);
 
         if (poolList != null)
         {
             poolList.setIsAvailable(model.getType() == SystemTreeItemType.System);
         }
 
-        templateList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter
-                || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Host
-                || isDataStorage || model.getType() == SystemTreeItemType.Templates
-                || model.getType() == SystemTreeItemType.System);
+        templateList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Host || isDataStorage || model.getType() == SystemTreeItemType.Templates || model.getType() == SystemTreeItemType.System);
 
         userList.setIsAvailable(model.getType() == SystemTreeItemType.System);
-        /*
-         * --- JUICOMMENT_BEGIN monitor.setIsAvailable(model.getType() == SystemTreeItemType.System); JUICOMMENT_END ---
-         */
-        eventList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter
-                || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Host
-                || model.getType() == SystemTreeItemType.Storage || model.getType() == SystemTreeItemType.System);
+        /* --- JUICOMMENT_BEGIN
+        monitor.setIsAvailable(model.getType() == SystemTreeItemType.System);
+        JUICOMMENT_END --- */
+        eventList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Host || model.getType() == SystemTreeItemType.Storage || model.getType() == SystemTreeItemType.System);
 
-        reportsList.setIsAvailable(ReportInit.getInstance().isReportsEnabled()
-                && (model.getType() == SystemTreeItemType.System
-                        || model.getType() == SystemTreeItemType.DataCenter || model.getType() == SystemTreeItemType.Clusters));
-
-        // Select a default item depending on system tree selection.
+        //Select a default item depending on system tree selection.
         ListModel oldSelectedItem = getSelectedItem();
 
-        // Do not Change Tab if the Selection is the Reports
-        if (!reportsList.getIsAvailable() || getSelectedItem() != reportsList) {
-            switch (model.getType())
-            {
+        switch (model.getType())
+        {
             case DataCenter:
                 setSelectedItem(dataCenterList);
                 break;
@@ -597,19 +579,17 @@ public class CommonModel extends ListModel
                 setSelectedItem(vmList);
                 break;
             default:
-                // webadmin: redirect to default tab in case no tab is selected.
+                //webadmin: redirect to default tab in case no tab is selected.
                 if (getSelectedItem() == null)
                 {
                     setSelectedItem(getDefaultItem());
                 }
                 break;
-            }
-        } else {
-            reportsList.refreshReportModel();
         }
 
-        // Update search string if selected item was not changed. If it is,
-        // search string will be updated in OnSelectedItemChanged method.
+
+        //Update search string if selected item was not changed. If it is,
+        //search string will be updated in OnSelectedItemChanged method.
         if (getSelectedItem() == oldSelectedItem)
         {
             String prefix = "";
@@ -625,10 +605,11 @@ public class CommonModel extends ListModel
 
             getSearchCommand().Execute();
 
+
             if (getSelectedItem() instanceof ISupportSystemTreeContext)
             {
-                ISupportSystemTreeContext treeContext = (ISupportSystemTreeContext) getSelectedItem();
-                treeContext.setSystemTreeSelectedItem((SystemTreeItemModel) getSystemTree().getSelectedItem());
+                ISupportSystemTreeContext treeContext = (ISupportSystemTreeContext)getSelectedItem();
+                treeContext.setSystemTreeSelectedItem((SystemTreeItemModel)getSystemTree().getSelectedItem());
             }
         }
     }
@@ -646,7 +627,7 @@ public class CommonModel extends ListModel
 
     private void ClearSearchString()
     {
-        setSearchString(getHasSearchStringPrefix() ? null : getSelectedItem().getDefaultSearchString(), false);
+        setSearchString(getHasSearchStringPrefix() ? null : getSelectedItem().getDefaultSearchString());
         getSearchCommand().Execute();
     }
 
@@ -672,7 +653,7 @@ public class CommonModel extends ListModel
 
     public void SignOut()
     {
-        // Stop search on all list models.
+        //Stop search on all list models.
         for (SearchableListModel listModel : getItems())
         {
             listModel.EnsureAsyncSearchStopped();
@@ -680,22 +661,18 @@ public class CommonModel extends ListModel
 
         getEventList().EnsureAsyncSearchStopped();
         getAlertList().EnsureAsyncSearchStopped();
-        getTaskList().EnsureAsyncSearchStopped();
 
         if (Frontend.getIsUserLoggedIn())
         {
             AsyncQuery _asyncQuery = new AsyncQuery();
             _asyncQuery.setHandleFailure(true);
             _asyncQuery.setModel(this);
-            _asyncQuery.asyncCallback = new INewAsyncCallback() {
-                @Override
-                public void OnSuccess(Object model, Object ReturnValue)
+            _asyncQuery.asyncCallback = new INewAsyncCallback() { public void OnSuccess(Object model, Object ReturnValue)
                 {
-                    CommonModel commonModel = (CommonModel) model;
+                    CommonModel commonModel = (CommonModel)model;
                     commonModel.setLoggedInUser(null);
                     commonModel.getSignedOutEvent().raise(commonModel, EventArgs.Empty);
-                }
-            };
+                }};
 
             Frontend.LogoffAsync(Frontend.getLoggedInUser(), _asyncQuery);
         }
@@ -713,6 +690,7 @@ public class CommonModel extends ListModel
         model.setTitle("Configure");
         model.setHashName("configure");
         model.setEntity(new Model[] { roleListModel, systemPermissionListModel });
+
 
         UICommand tempVar = new UICommand("Cancel", this);
         tempVar.setTitle("Close");
@@ -735,9 +713,8 @@ public class CommonModel extends ListModel
     private SearchableListModel templateList;
     private SearchableListModel userList;
     private SearchableListModel eventList;
-    private ReportsListModel reportsList;
-    private SearchableListModel quotaList;
     private SearchableListModel monitor;
+    private SearchableListModel volumeListModel;
 
     private void InitItems()
     {
@@ -764,27 +741,23 @@ public class CommonModel extends ListModel
         list.add(templateList);
         userList = new UserListModel();
         list.add(userList);
-        /*
-         * --- JUICOMMENT_BEGIN monitor = new MonitorModel(); list.add(monitor); JUICOMMENT_END ---
-         */
+        /* --- JUICOMMENT_BEGIN
+        monitor = new MonitorModel();
+        list.add(monitor);
+        JUICOMMENT_END --- */
         eventList = new EventListModel();
         list.add(eventList);
-
-        reportsList = new ReportsListModel(ReportInit.getInstance().getReportBaseUrl());
-        reportsList.setUser("ovirt");
-        reportsList.setPassword("1234");
-        list.add(reportsList);
-
-        reportsList.setIsAvailable(false);
-        quotaList = new QuotaListModel();
-        list.add(quotaList);
+        
+        volumeListModel = new VolumeListModel();
+        list.add(volumeListModel);
+        
 
         setItems(list);
 
         roleListModel = new RoleListModel();
         systemPermissionListModel = new SystemPermissionListModel();
 
-        // Activate the default list model.
+        //Activate the default list model.
         setSelectedItem(getDefaultItem());
     }
 
@@ -804,7 +777,7 @@ public class CommonModel extends ListModel
         }
         else if (ev.equals(BookmarkListModel.NavigatedEventDefinition) && sender == getBookmarkList())
         {
-            BookmarkListModel_Navigated(sender, (BookmarkEventArgs) args);
+            BookmarkListModel_Navigated(sender, (BookmarkEventArgs)args);
         }
         else if (ev.equals(SelectedItemChangedEventDefinition) && sender == getSystemTree())
         {
@@ -821,17 +794,16 @@ public class CommonModel extends ListModel
     {
         super.OnSelectedItemChanging(newValue, oldValue);
 
-        SearchableListModel oldModel = (SearchableListModel) oldValue;
+        SearchableListModel oldModel = (SearchableListModel)oldValue;
 
         if (oldValue != null)
         {
-            // clear the IsEmpty flag, that in the next search the flag will be initialized.
+            //clear the IsEmpty flag, that in the next search the flag will be initialized.
             oldModel.setIsEmpty(false);
 
             oldModel.setItems(null);
 
-            ListWithDetailsModel listWithDetails =
-                    (ListWithDetailsModel) ((oldValue instanceof ListWithDetailsModel) ? oldValue : null);
+            ListWithDetailsModel listWithDetails = (ListWithDetailsModel)((oldValue instanceof ListWithDetailsModel) ? oldValue : null);
             if (listWithDetails != null)
             {
                 listWithDetails.setActiveDetailModel(null);
@@ -848,7 +820,7 @@ public class CommonModel extends ListModel
 
         if (!executingSearch && getSelectedItem() != null)
         {
-            // Split search string as necessary.
+            //Split search string as necessary.
             String prefix = "";
             String search = "";
             RefObject<String> tempRef_prefix = new RefObject<String>(prefix);
@@ -865,8 +837,8 @@ public class CommonModel extends ListModel
 
             if (getSelectedItem() instanceof ISupportSystemTreeContext)
             {
-                ISupportSystemTreeContext treeContext = (ISupportSystemTreeContext) getSelectedItem();
-                treeContext.setSystemTreeSelectedItem((SystemTreeItemModel) getSystemTree().getSelectedItem());
+                ISupportSystemTreeContext treeContext = (ISupportSystemTreeContext)getSelectedItem();
+                treeContext.setSystemTreeSelectedItem((SystemTreeItemModel)getSystemTree().getSelectedItem());
             }
         }
 
@@ -877,13 +849,13 @@ public class CommonModel extends ListModel
     {
         executingSearch = true;
 
-        // Prevent from entering an empty search string.
+        //Prevent from entering an empty search string.
         if (StringHelper.isNullOrEmpty(getEffectiveSearchString()) && getSelectedItem() != null)
         {
             setSearchString(getSelectedItem().getDefaultSearchString());
         }
 
-        // Determine a list model matching the search string.
+        //Determine a list model matching the search string.
         SearchableListModel model = null;
         for (SearchableListModel a : getItems())
         {
@@ -899,13 +871,13 @@ public class CommonModel extends ListModel
             return;
         }
 
-        // Transfer a search string to the model.
+        //Transfer a search string to the model.
         model.setSearchString(getEffectiveSearchString());
 
-        // Change active list model as neccesary.
+        //Change active list model as neccesary.
         setSelectedItem(model);
 
-        // Propagate search command to a concrete list model.
+        //Propagate search command to a concrete list model.
         getSelectedItem().getSearchCommand().Execute();
 
         executingSearch = false;
@@ -943,16 +915,17 @@ public class CommonModel extends ListModel
     }
 
     /**
-     * Splits a search string into two component, the prefix and a search string itself.
-     */
+     Splits a search string into two component,
+     the prefix and a search string itself.
+    */
     private void SplitSearchString(String source, RefObject<String> prefix, RefObject<String> search)
     {
-        java.util.ArrayList<TagModel> tags = (java.util.ArrayList<TagModel>) getTagList().getSelectedItems();
-        SystemTreeItemModel model = (SystemTreeItemModel) getSystemTree().getSelectedItem();
+        java.util.ArrayList<TagModel> tags = (java.util.ArrayList<TagModel>)getTagList().getSelectedItems();
+        SystemTreeItemModel model = (SystemTreeItemModel)getSystemTree().getSelectedItem();
 
         prefix.argvalue = "";
 
-        // Split for tags.
+        //Split for tags.
         if (tags != null && tags.size() > 0)
         {
             Regex regex = new Regex("tag\\s*=\\s*(?:[\\w-]+)(?:\\sor\\s)?", RegexOptions.IgnoreCase);
@@ -975,161 +948,169 @@ public class CommonModel extends ListModel
 
             search.argvalue = regex.replace(searchClause, "").trim();
         }
-        // Split for system tree.
+        //Split for system tree.
         else if (model != null && model.getType() != SystemTreeItemType.System)
         {
             getAutoCompleteModel().setFilter(new String[] { "or", "and" });
 
             switch (model.getType())
             {
-            case DataCenter: {
-                if (dataCenterList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("DataCenter: name = %1$s", model.getTitle());
-                }
-                else if (clusterList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Cluster: datacenter.name = %1$s", model.getTitle());
-                }
-                else if (hostList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Host: datacenter = %1$s", model.getTitle());
-                }
-                else if (storageList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Storage: datacenter = %1$s", model.getTitle());
-                }
-                else if (vmList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Vms: datacenter = %1$s", model.getTitle());
-                }
-                else if (templateList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Template: datacenter = %1$s", model.getTitle());
-                }
-                else if (eventList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Events: event_datacenter = %1$s", model.getTitle());
-                }
-            }
-                break;
-            case Clusters: {
-                if (clusterList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue =
-                            StringFormat.format("Cluster: datacenter.name = %1$s", model.getParent().getTitle());
-                }
-            }
-                break;
-            case Cluster: {
-                if (clusterList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Cluster: name = %1$s", model.getTitle());
-                }
-                else if (hostList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Host: cluster = %1$s", model.getTitle());
-                }
-                else if (storageList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Storage: cluster.name = %1$s", model.getTitle());
-                }
-                else if (vmList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Vms: cluster = %1$s", model.getTitle());
-                }
-                else if (templateList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Template: cluster = %1$s", model.getTitle());
-                }
-                else if (eventList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Events: cluster = %1$s", model.getTitle());
-                }
-            }
-                break;
-            case Hosts: {
-                if (hostList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Host: cluster = %1$s", model.getParent().getTitle());
-                }
-            }
-                break;
-            case Host: {
-                if (hostList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Host: name = %1$s", model.getTitle());
-                }
-                else if (storageList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Storage: host.name = %1$s", model.getTitle());
-                }
-                else if (vmList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Vms: Hosts.name = %1$s", model.getTitle());
-                }
-                else if (templateList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Template: Hosts.name = %1$s", model.getTitle());
-                }
-                else if (eventList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Events: host.name = %1$s", model.getTitle());
-                }
-            }
-                break;
-            case Storages: {
-                if (storageList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Storage: datacenter = %1$s", model.getParent().getTitle());
-                }
-            }
-                break;
-            case Storage: {
-                if (dataCenterList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("DataCenter: storage.name = %1$s", model.getTitle());
-                }
-                else if (clusterList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Cluster: storage.name = %1$s", model.getTitle());
-                }
-                else if (hostList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Host: storage.name = %1$s", model.getTitle());
-                }
-                else if (storageList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Storage: name = %1$s", model.getTitle());
-                }
-                else if (vmList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Vms: storage.name = %1$s", model.getTitle());
-                }
-                else if (templateList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Templates: storage.name = %1$s", model.getTitle());
-                }
-                else if (eventList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Events: event_storage = %1$s", model.getTitle());
-                }
-            }
-                break;
-            case Templates: {
-                if (templateList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Template: datacenter = %1$s", model.getParent().getTitle());
-                }
-            }
-                break;
-            case VMs: {
-                if (vmList.IsSearchStringMatch(source))
-                {
-                    prefix.argvalue = StringFormat.format("Vms: cluster = %1$s", model.getParent().getTitle());
-                }
-            }
-                break;
+                case DataCenter:
+                    {
+                        if (dataCenterList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("DataCenter: name = %1$s", model.getTitle());
+                        }
+                        else if (clusterList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Cluster: datacenter.name = %1$s", model.getTitle());
+                        }
+                        else if (hostList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Host: datacenter = %1$s", model.getTitle());
+                        }
+                        else if (storageList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Storage: datacenter = %1$s", model.getTitle());
+                        }
+                        else if (vmList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Vms: datacenter = %1$s", model.getTitle());
+                        }
+                        else if (templateList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Template: datacenter = %1$s", model.getTitle());
+                        }
+                        else if (eventList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Events: event_datacenter = %1$s", model.getTitle());
+                        }
+                    }
+                    break;
+                case Clusters:
+                    {
+                        if (clusterList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Cluster: datacenter.name = %1$s", model.getParent().getTitle());
+                        }
+                    }
+                    break;
+                case Cluster:
+                    {
+                        if (clusterList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Cluster: name = %1$s", model.getTitle());
+                        }
+                        else if (hostList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Host: cluster = %1$s", model.getTitle());
+                        }
+                        else if (storageList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Storage: cluster.name = %1$s", model.getTitle());
+                        }
+                        else if (vmList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Vms: cluster = %1$s", model.getTitle());
+                        }
+                        else if (templateList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Template: cluster = %1$s", model.getTitle());
+                        }
+                        else if (eventList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Events: cluster = %1$s", model.getTitle());
+                        }
+                    }
+                    break;
+                case Hosts:
+                    {
+                        if (hostList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Host: cluster = %1$s", model.getParent().getTitle());
+                        }
+                    }
+                    break;
+                case Host:
+                    {
+                        if (hostList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Host: name = %1$s", model.getTitle());
+                        }
+                        else if (storageList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Storage: host.name = %1$s", model.getTitle());
+                        }
+                        else if (vmList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Vms: Hosts.name = %1$s", model.getTitle());
+                        }
+                        else if (templateList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Template: Hosts.name = %1$s", model.getTitle());
+                        }
+                        else if (eventList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Events: host.name = %1$s", model.getTitle());
+                        }
+                    }
+                    break;
+                case Storages:
+                    {
+                        if (storageList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Storage: datacenter = %1$s", model.getParent().getTitle());
+                        }
+                    }
+                    break;
+                case Storage:
+                    {
+                        if (dataCenterList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("DataCenter: storage.name = %1$s", model.getTitle());
+                        }
+                        else if (clusterList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Cluster: storage.name = %1$s", model.getTitle());
+                        }
+                        else if (hostList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Host: storage.name = %1$s", model.getTitle());
+                        }
+                        else if (storageList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Storage: name = %1$s", model.getTitle());
+                        }
+                        else if (vmList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Vms: storage.name = %1$s", model.getTitle());
+                        }
+                        else if (templateList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Templates: storage.name = %1$s", model.getTitle());
+                        }
+                        else if (eventList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Events: event_storage = %1$s", model.getTitle());
+                        }
+                    }
+                    break;
+                case Templates:
+                    {
+                        if (templateList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Template: datacenter = %1$s", model.getParent().getTitle());
+                        }
+                    }
+                    break;
+                case VMs:
+                    {
+                        if (vmList.IsSearchStringMatch(source))
+                        {
+                            prefix.argvalue = StringFormat.format("Vms: cluster = %1$s", model.getParent().getTitle());
+                        }
+                    }
+                    break;
             }
 
             prefix.argvalue = prefix.argvalue + " ";
@@ -1141,12 +1122,12 @@ public class CommonModel extends ListModel
             getAutoCompleteModel().setFilter(null);
         }
     }
-
     public RoleListModel getRoleListModel() {
         return roleListModel;
     }
-
+    
     public SystemPermissionListModel getSystemPermissionListModel() {
         return systemPermissionListModel;
     }
 }
+
