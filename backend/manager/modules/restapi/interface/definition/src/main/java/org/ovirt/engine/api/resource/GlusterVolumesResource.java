@@ -42,7 +42,7 @@ public interface GlusterVolumesResource {
 
     @DELETE
     @Path("{name}")
-    public void remove(@PathParam("name") String name);
+    public Response remove(@PathParam("name") String name);
 
     /**
      * Sub-resource locator method, returns individual GlusterVolumeResource on which the remainder of the URI is
