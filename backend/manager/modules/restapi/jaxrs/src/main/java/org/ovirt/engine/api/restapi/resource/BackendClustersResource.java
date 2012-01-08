@@ -1,5 +1,7 @@
 package org.ovirt.engine.api.restapi.resource;
 
+import static org.ovirt.engine.api.restapi.resource.BackendDataCenterResource.getStoragePool;
+
 import java.util.List;
 
 import javax.ws.rs.core.Response;
@@ -8,22 +10,19 @@ import org.ovirt.engine.api.model.Cluster;
 import org.ovirt.engine.api.model.Clusters;
 import org.ovirt.engine.api.resource.ClusterResource;
 import org.ovirt.engine.api.resource.ClustersResource;
-
+import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.action.VdsGroupOperationParameters;
 import org.ovirt.engine.core.common.action.VdsGroupParametersBase;
-import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.businessentities.VDSGroup;
 import org.ovirt.engine.core.common.businessentities.storage_pool;
 import org.ovirt.engine.core.common.interfaces.SearchType;
 import org.ovirt.engine.core.common.queries.GetVdsGroupByIdParameters;
 import org.ovirt.engine.core.common.queries.VdcQueryType;
 
-import static org.ovirt.engine.api.restapi.resource.BackendDataCenterResource.getStoragePool;
-
 public class BackendClustersResource extends AbstractBackendCollectionResource<Cluster, VDSGroup>
         implements ClustersResource {
 
-    static final String[] SUB_COLLECTIONS = { "networks", "permissions" };
+    static final String[] SUB_COLLECTIONS = { "networks", "permissions", "glusterVolumes" };
 
     public BackendClustersResource() {
         super(Cluster.class, VDSGroup.class, SUB_COLLECTIONS);
