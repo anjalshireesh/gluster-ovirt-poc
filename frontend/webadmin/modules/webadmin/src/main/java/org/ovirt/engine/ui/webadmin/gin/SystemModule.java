@@ -27,9 +27,11 @@ public class SystemModule extends BaseSystemModule {
     }
 
     void bindConfiguration() {
-        bindPlaceConfiguration(ApplicationPlaces.loginPlace, ApplicationPlaces.virtualMachineMainTabPlace);
-        bindResourceConfiguration(ApplicationConstants.class, ApplicationMessages.class,
-                ApplicationResources.class, ApplicationTemplates.class);
+        bindConstant().annotatedWith(DefaultLoginSectionPlace.class).to(ApplicationPlaces.loginPlace);
+        bindConstant().annotatedWith(DefaultMainSectionPlace.class).to(ApplicationPlaces.hostMainTabPlace);
+        bind(ApplicationConstants.class).in(Singleton.class);
+        bind(ApplicationMessages.class).in(Singleton.class);
+        bind(ApplicationResources.class).in(Singleton.class);
+        bind(ApplicationTemplates.class).in(Singleton.class);
     }
-
 }
