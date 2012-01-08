@@ -56,6 +56,11 @@ import org.ovirt.engine.ui.uicompat.IFrontendMultipleActionAsyncCallback;
 @SuppressWarnings("unused")
 public class TemplateListModel extends ListWithDetailsModel implements ISupportSystemTreeContext
 {
+    @Override
+    public boolean getIsAvailable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
     private UICommand privateEditCommand;
 

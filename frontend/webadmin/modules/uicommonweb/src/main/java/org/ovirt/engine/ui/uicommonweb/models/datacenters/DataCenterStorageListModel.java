@@ -38,7 +38,6 @@ import org.ovirt.engine.ui.uicompat.IFrontendMultipleActionAsyncCallback;
 @SuppressWarnings("unused")
 public class DataCenterStorageListModel extends SearchableListModel
 {
-
     private UICommand privateAttachStorageCommand;
 
     public UICommand getAttachStorageCommand()
@@ -231,7 +230,7 @@ public class DataCenterStorageListModel extends SearchableListModel
         java.util.ArrayList<VdcActionParametersBase> pb = new java.util.ArrayList<VdcActionParametersBase>();
         for (storage_domains a : Linq.<storage_domains> Cast(getSelectedItems()))
         {
-            pb.add(new StorageDomainPoolParametersBase(a.getId(), getEntity().getId()));
+            pb.add(new StorageDomainPoolParametersBase(a.getid(), getEntity().getId()));
         }
 
         Frontend.RunMultipleAction(VdcActionType.DeactivateStorageDomain, pb);
@@ -247,7 +246,7 @@ public class DataCenterStorageListModel extends SearchableListModel
         java.util.ArrayList<VdcActionParametersBase> pb = new java.util.ArrayList<VdcActionParametersBase>();
         for (storage_domains a : Linq.<storage_domains> Cast(getSelectedItems()))
         {
-            pb.add(new StorageDomainPoolParametersBase(a.getId(), getEntity().getId()));
+            pb.add(new StorageDomainPoolParametersBase(a.getid(), getEntity().getId()));
         }
 
         Frontend.RunMultipleAction(VdcActionType.ActivateStorageDomain, pb);
@@ -299,7 +298,7 @@ public class DataCenterStorageListModel extends SearchableListModel
                     for (storage_domains a : list)
                     {
                         // if (Linq.All<storage_domains>(items, delegate(storage_domains b) { return b.id != a.id; }))
-                        if (!Linq.IsSDItemExistInList(items, a.getId()))
+                        if (!Linq.IsSDItemExistInList(items, a.getid()))
                         {
                             EntityModel tempVar = new EntityModel();
                             tempVar.setEntity(a);
@@ -333,7 +332,7 @@ public class DataCenterStorageListModel extends SearchableListModel
                     {
                         addToList = false;
 
-                        if (!Linq.IsSDItemExistInList(items, a.getId())
+                        if (!Linq.IsSDItemExistInList(items, a.getid())
                                 && a.getstorage_domain_type() == dcStorageModel.getStorageDomainType())
                         {
                             if (dcStorageModel.getStorageDomainType() == StorageDomainType.Data
@@ -442,7 +441,7 @@ public class DataCenterStorageListModel extends SearchableListModel
             java.util.ArrayList<VdcActionParametersBase> pb = new java.util.ArrayList<VdcActionParametersBase>();
             for (storage_domains a : items)
             {
-                pb.add(new StorageDomainPoolParametersBase(a.getId(), getEntity().getId()));
+                pb.add(new StorageDomainPoolParametersBase(a.getid(), getEntity().getId()));
             }
 
             Frontend.RunMultipleAction(VdcActionType.AttachStorageDomainToPool, pb);
@@ -464,12 +463,8 @@ public class DataCenterStorageListModel extends SearchableListModel
         model.setHashName("detach_storage");
         model.setMessage("Are you sure you want to Detach the following storage(s)?");
 
-        java.util.ArrayList<String> list = new java.util.ArrayList<String>();
-        for (storage_domains item : Linq.<storage_domains> Cast(getSelectedItems()))
-        {
-            list.add(item.getstorage_name());
-        }
-        model.setItems(list);
+        // model.Items = SelectedItems.Cast<storage_domains>().Select(a => a.storage_name);
+        model.setItems(new java.util.ArrayList<String>());
 
         if (ContainsLocalStorage(model))
         {
@@ -477,6 +472,11 @@ public class DataCenterStorageListModel extends SearchableListModel
             model.getLatch().setIsChangable(true);
 
             model.setNote("Note: " + GetLocalStoragesFormattedString() + " will be removed!");
+        }
+
+        for (storage_domains a : Linq.<storage_domains> Cast(getSelectedItems()))
+        {
+            ((java.util.ArrayList<String>) model.getItems()).add(a.getstorage_name());
         }
 
         UICommand tempVar = new UICommand("OnDetach", this);
@@ -538,12 +538,12 @@ public class DataCenterStorageListModel extends SearchableListModel
             // For local storage - remove; otherwise - detach
             if (a.getstorage_type() == StorageType.LOCALFS)
             {
-                getpb_remove().add(new RemoveStorageDomainParameters(a.getId()));
+                getpb_remove().add(new RemoveStorageDomainParameters(a.getid()));
                 localStorgaeDC = a.getstorage_pool_name();
             }
             else
             {
-                getpb_detach().add(new DetachStorageDomainFromPoolParameters(a.getId(), getEntity().getId()));
+                getpb_detach().add(new DetachStorageDomainFromPoolParameters(a.getid(), getEntity().getId()));
             }
         }
 
@@ -561,7 +561,7 @@ public class DataCenterStorageListModel extends SearchableListModel
                     VDS locaVds = (VDS) result;
                     for (VdcActionParametersBase item : dataCenterStorageListModel.getpb_remove())
                     {
-                        ((RemoveStorageDomainParameters) item).setVdsId((locaVds != null ? locaVds.getId() : null));
+                        ((RemoveStorageDomainParameters) item).setVdsId((locaVds != null ? locaVds.getvds_id() : null));
                         ((RemoveStorageDomainParameters) item).setDoFormat(true);
                     }
 

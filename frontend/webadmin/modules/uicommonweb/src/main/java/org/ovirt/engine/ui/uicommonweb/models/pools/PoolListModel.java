@@ -51,6 +51,11 @@ import org.ovirt.engine.ui.uicompat.IFrontendMultipleActionAsyncCallback;
 @SuppressWarnings("unused")
 public class PoolListModel extends ListWithDetailsModel
 {
+    @Override
+    public boolean getIsAvailable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
     private UICommand privateNewCommand;
 

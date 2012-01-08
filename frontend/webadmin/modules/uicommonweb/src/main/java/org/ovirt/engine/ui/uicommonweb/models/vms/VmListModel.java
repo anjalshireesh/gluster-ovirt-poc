@@ -1,8 +1,6 @@
 package org.ovirt.engine.ui.uicommonweb.models.vms;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.Collections;
 
 import org.ovirt.engine.core.common.VdcActionUtils;
 import org.ovirt.engine.core.common.action.AddVmFromScratchParameters;
@@ -25,12 +23,10 @@ import org.ovirt.engine.core.common.action.VdcActionParametersBase;
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.action.VdcReturnValueBase;
 import org.ovirt.engine.core.common.action.VmManagementParametersBase;
-import org.ovirt.engine.core.common.action.VmOperationParameterBase;
 import org.ovirt.engine.core.common.businessentities.DiskImage;
 import org.ovirt.engine.core.common.businessentities.DiskImageBase;
 import org.ovirt.engine.core.common.businessentities.DisplayType;
 import org.ovirt.engine.core.common.businessentities.MigrationSupport;
-import org.ovirt.engine.core.common.businessentities.Quota;
 import org.ovirt.engine.core.common.businessentities.StorageDomainStatus;
 import org.ovirt.engine.core.common.businessentities.StorageDomainType;
 import org.ovirt.engine.core.common.businessentities.UsbPolicy;
@@ -70,6 +66,7 @@ import org.ovirt.engine.ui.uicommonweb.dataprovider.AsyncDataProvider;
 import org.ovirt.engine.ui.uicommonweb.models.ConfirmationModel;
 import org.ovirt.engine.ui.uicommonweb.models.EntityModel;
 import org.ovirt.engine.ui.uicommonweb.models.ISupportSystemTreeContext;
+import org.ovirt.engine.ui.uicommonweb.models.ListModel;
 import org.ovirt.engine.ui.uicommonweb.models.ListWithDetailsModel;
 import org.ovirt.engine.ui.uicommonweb.models.Model;
 import org.ovirt.engine.ui.uicommonweb.models.SystemTreeItemModel;
@@ -88,7 +85,6 @@ import org.ovirt.engine.ui.uicompat.ResourceManager;
 @SuppressWarnings("unused")
 public class VmListModel extends ListWithDetailsModel implements ISupportSystemTreeContext
 {
-
     private UICommand privateNewServerCommand;
 
     public UICommand getNewServerCommand()
@@ -183,16 +179,6 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
     private void setShutdownCommand(UICommand value)
     {
         privateShutdownCommand = value;
-    }
-
-    private UICommand privateCancelMigrateCommand;
-
-    public UICommand getCancelMigrateCommand() {
-        return privateCancelMigrateCommand;
-    }
-
-    private void setCancelMigrateCommand(UICommand value) {
-        privateCancelMigrateCommand = value;
     }
 
     private UICommand privateMigrateCommand;
@@ -395,7 +381,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         Object[] keys = new Object[getSelectedItems().size()];
         for (int i = 0; i < getSelectedItems().size(); i++)
         {
-            keys[i] = ((VM) getSelectedItems().get(i)).getId();
+            keys[i] = ((VM) getSelectedItems().get(i)).getvm_guid();
         }
 
         return keys;
@@ -425,7 +411,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         privatecurrentVm = value;
     }
 
-    private final java.util.HashMap<Guid, java.util.ArrayList<ConsoleModel>> cachedConsoleModels;
+    private java.util.HashMap<Guid, java.util.ArrayList<ConsoleModel>> cachedConsoleModels;
 
     private java.util.ArrayList<String> privateCustomPropertiesKeysList;
 
@@ -457,7 +443,6 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         setStopCommand(new UICommand("Stop", this));
         setShutdownCommand(new UICommand("Shutdown", this));
         setMigrateCommand(new UICommand("Migrate", this));
-        setCancelMigrateCommand(new UICommand("CancelMigration", this));
         setNewTemplateCommand(new UICommand("NewTemplate", this));
         setRunOnceCommand(new UICommand("RunOnce", this));
         setExportCommand(new UICommand("Export", this));
@@ -531,7 +516,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         for (Object item : getSelectedItems())
         {
             VM vm = (VM) item;
-            vmIds.add(vm.getId());
+            vmIds.add(vm.getvm_guid());
         }
 
         attachedTagsToEntities = new java.util.HashMap<Guid, Boolean>();
@@ -603,7 +588,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         for (Object item : getSelectedItems())
         {
             VM vm = (VM) item;
-            vmIds.add(vm.getId());
+            vmIds.add(vm.getvm_guid());
         }
 
         // prepare attach/detach lists
@@ -641,26 +626,13 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         model.setTitle("New Virtual Machine - Guide Me");
         model.setHashName("new_virtual_machine_-_guide_me");
 
-        if (getGuideContext() == null) {
-            VM vm = (VM) getSelectedItem();
-            setGuideContext(vm.getId());
-        }
+        model.setEntity(getGuideContext() != null ? DataProvider.GetVmById((Guid) getGuideContext()) : null);
 
-        AsyncDataProvider.GetVmById(new AsyncQuery(this,
-                new INewAsyncCallback() {
-                    @Override
-                    public void OnSuccess(Object target, Object returnValue) {
-                        VmListModel vmListModel = (VmListModel) target;
-                        VmGuideModel model = (VmGuideModel) vmListModel.getWindow();
-                        model.setEntity((VM) returnValue);
-
-                        UICommand tempVar = new UICommand("Cancel", vmListModel);
-                        tempVar.setTitle("Configure Later");
-                        tempVar.setIsDefault(true);
-                        tempVar.setIsCancel(true);
-                        model.getCommands().add(tempVar);
-                    }
-                }), (Guid) getGuideContext());
+        UICommand tempVar = new UICommand("Cancel", this);
+        tempVar.setTitle("Configure Later");
+        tempVar.setIsDefault(true);
+        tempVar.setIsCancel(true);
+        model.getCommands().add(tempVar);
     }
 
     @Override
@@ -717,19 +689,19 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         }
         else
         {
-            if (!cachedConsoleModels.containsKey(vm.getId()))
+            if (!cachedConsoleModels.containsKey(vm.getvm_guid()))
             {
                 SpiceConsoleModel spiceConsoleModel = new SpiceConsoleModel();
                 spiceConsoleModel.getErrorEvent().addListener(this);
                 VncConsoleModel vncConsoleModel = new VncConsoleModel();
                 RdpConsoleModel rdpConsoleModel = new RdpConsoleModel();
 
-                cachedConsoleModels.put(vm.getId(),
+                cachedConsoleModels.put(vm.getvm_guid(),
                         new java.util.ArrayList<ConsoleModel>(java.util.Arrays.asList(new ConsoleModel[] {
                                 spiceConsoleModel, vncConsoleModel, rdpConsoleModel })));
             }
 
-            java.util.ArrayList<ConsoleModel> cachedModels = cachedConsoleModels.get(vm.getId());
+            java.util.ArrayList<ConsoleModel> cachedModels = cachedConsoleModels.get(vm.getvm_guid());
             for (ConsoleModel a : cachedModels)
             {
                 a.setEntity(null);
@@ -797,8 +769,19 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         model.Initialize(getSystemTreeSelectedItem());
 
         // Ensures that the default provisioning is "Clone" for a new server and "Thin" for a new desktop.
+        EntityModel selectedItem = null;
         boolean selectValue = model.getVmType() == VmType.Server;
-        model.getProvisioning().setEntity(selectValue);
+
+        for (Object item : model.getProvisioning().getItems())
+        {
+            EntityModel a = (EntityModel) item;
+            if ((Boolean) a.getEntity() == selectValue)
+            {
+                selectedItem = a;
+                break;
+            }
+        }
+        model.getProvisioning().setSelectedItem(selectedItem);
 
         UICommand tempVar = new UICommand("OnSave", this);
         tempVar.setTitle("OK");
@@ -901,27 +884,196 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
             return;
         }
 
-        MoveDiskModel model = new MoveDiskModel(vm);
+        ListModel model = new ListModel();
         setWindow(model);
         model.setTitle("Move Virtual Machine");
         model.setHashName("move_virtual_machine");
-        model.setIsVolumeFormatAvailable(false);
-        model.setIsSourceStorageDomainNameAvailable(true);
-        model.setEntity(this);
+
+        java.util.ArrayList<storage_domains> storageDomains;
+        if (!vm.getvmt_guid().equals(NGuid.Empty))
+        {
+            AsyncDataProvider.GetStorageDomainListByTemplate(new AsyncQuery(this,
+                    new INewAsyncCallback() {
+                        @Override
+                        public void OnSuccess(Object target, Object returnValue) {
+                            VmListModel vmListModel = (VmListModel) target;
+                            java.util.ArrayList<storage_domains> storageDomains =
+                                    (java.util.ArrayList<storage_domains>) returnValue;
+                            vmListModel.PostMoveGetStorageDomains(storageDomains);
+                        }
+                    }), vm.getvmt_guid());
+        }
+        else
+        {
+            AsyncDataProvider.GetStorageDomainList(new AsyncQuery(this,
+                    new INewAsyncCallback() {
+                        @Override
+                        public void OnSuccess(Object target, Object returnValue) {
+                            VmListModel vmListModel = (VmListModel) target;
+                            java.util.ArrayList<storage_domains> storageDomains =
+                                    (java.util.ArrayList<storage_domains>) returnValue;
+
+                            java.util.ArrayList<storage_domains> filteredStorageDomains =
+                                    new java.util.ArrayList<storage_domains>();
+                            for (storage_domains a : storageDomains)
+                            {
+                                if (a.getstorage_domain_type() == StorageDomainType.Data
+                                        || a.getstorage_domain_type() == StorageDomainType.Master)
+                                {
+                                    filteredStorageDomains.add(a);
+                                }
+                            }
+
+                            vmListModel.PostMoveGetStorageDomains(filteredStorageDomains);
+                        }
+                    }), vm.getstorage_pool_id());
+        }
+    }
+
+    private void PostMoveGetStorageDomains(java.util.ArrayList<storage_domains> storageDomains)
+    {
+        // filter only the Active storage domains (Active regarding the relevant storage pool).
+        java.util.ArrayList<storage_domains> list = new java.util.ArrayList<storage_domains>();
+        for (storage_domains a : storageDomains)
+        {
+            if (a.getstatus() != null && a.getstatus() == StorageDomainStatus.Active)
+            {
+                list.add(a);
+            }
+        }
+        storageDomains = list;
+
+        VM vm = (VM) getSelectedItem();
+        AsyncDataProvider.GetVmDiskList(new AsyncQuery(new Object[] { this, storageDomains },
+                new INewAsyncCallback() {
+                    @Override
+                    public void OnSuccess(Object target, Object returnValue) {
+                        Object[] array = (Object[]) target;
+                        VmListModel vmListModel = (VmListModel) array[0];
+                        java.util.ArrayList<storage_domains> storageDomains =
+                                (java.util.ArrayList<storage_domains>) array[1];
+
+                        java.util.ArrayList<DiskImage> disks = new java.util.ArrayList<DiskImage>();
+                        Iterable disksEnumerable = (Iterable) returnValue;
+                        java.util.Iterator disksIterator = disksEnumerable.iterator();
+
+                        while (disksIterator.hasNext()) {
+                            disks.add((DiskImage) disksIterator.next());
+                        }
+
+                        vmListModel.PostMoveGetVmDiskList(disks, storageDomains);
+                    }
+                }), vm.getvm_guid(), true);
+    }
+
+    private void PostMoveGetVmDiskList(java.util.ArrayList<DiskImage> disks,
+            java.util.ArrayList<storage_domains> storageDomains)
+    {
+        if (disks.size() > 0)
+        {
+            java.util.ArrayList<storage_domains> list = new java.util.ArrayList<storage_domains>();
+            for (storage_domains a : storageDomains)
+            {
+                if (!a.getid().equals(disks.get(0).getstorage_id().getValue()))
+                {
+                    list.add(a);
+                }
+            }
+            storageDomains = list;
+        }
+
+        Collections.sort(storageDomains, new Linq.StorageDomainByNameComparer());
+
+        java.util.ArrayList<EntityModel> items = new java.util.ArrayList<EntityModel>();
+        for (storage_domains a : storageDomains)
+        {
+            EntityModel m = new EntityModel();
+            m.setEntity(a);
+            items.add(m);
+        }
+
+        ListModel model = (ListModel) getWindow();
+        model.setItems(items);
+        if (items.size() == 1)
+        {
+            items.get(0).setIsSelected(true);
+        }
+
+        if (items.isEmpty())
+        {
+            model.setMessage("The system could not find available target Storage Domain.\nPossible reasons:\n  - No active Storage Domain available\n  - The Template that the VM is based on does not exist on active Storage Domain");
+
+            UICommand tempVar = new UICommand("Cancel", this);
+            tempVar.setTitle("Close");
+            tempVar.setIsDefault(true);
+            tempVar.setIsCancel(true);
+            model.getCommands().add(tempVar);
+        }
+        else
+        {
+            UICommand tempVar2 = new UICommand("OnMove", this);
+            tempVar2.setTitle("OK");
+            tempVar2.setIsDefault(true);
+            model.getCommands().add(tempVar2);
+            UICommand tempVar3 = new UICommand("Cancel", this);
+            tempVar3.setTitle("Cancel");
+            tempVar3.setIsCancel(true);
+            model.getCommands().add(tempVar3);
+        }
+    }
+
+    private void OnMove()
+    {
+        VM vm = (VM) getSelectedItem();
+
+        if (vm == null)
+        {
+            Cancel();
+            return;
+        }
+
+        ListModel model = (ListModel) getWindow();
+
+        if (model.getProgress() != null)
+        {
+            return;
+        }
+
+        java.util.ArrayList<storage_domains> items = new java.util.ArrayList<storage_domains>();
+        for (Object item : model.getItems())
+        {
+            EntityModel a = (EntityModel) item;
+            if (a.getIsSelected())
+            {
+                items.add((storage_domains) a.getEntity());
+            }
+        }
+
+        // should be only one:
+        if (items.isEmpty())
+        {
+            return;
+        }
+
+        java.util.ArrayList<VdcActionParametersBase> parameters = new java.util.ArrayList<VdcActionParametersBase>();
+        for (storage_domains a : items)
+        {
+            parameters.add(new MoveVmParameters(vm.getvm_guid(), a.getid()));
+        }
+
         model.StartProgress(null);
 
-        AsyncDataProvider.GetVmDiskList(new AsyncQuery(this, new INewAsyncCallback() {
-            @Override
-            public void OnSuccess(Object target, Object returnValue) {
-                VmListModel vmListModel = (VmListModel) target;
-                MoveDiskModel moveDiskModel = (MoveDiskModel) vmListModel.getWindow();
-                LinkedList<DiskImage> disks = (LinkedList<DiskImage>) returnValue;
-                ArrayList<DiskImage> diskImages = new ArrayList<DiskImage>();
-                diskImages.addAll(disks);
+        Frontend.RunMultipleAction(VdcActionType.MoveVm, parameters,
+                new IFrontendMultipleActionAsyncCallback() {
+                    @Override
+                    public void Executed(FrontendMultipleActionAsyncResult result) {
 
-                moveDiskModel.init(diskImages);
-            }
-        }), vm.getId(), true);
+                        ListModel localModel = (ListModel) result.getState();
+                        localModel.StopProgress();
+                        Cancel();
+
+                    }
+                }, model);
     }
 
     private void Export()
@@ -1038,7 +1190,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
 
     private void showWarningOnExistingVms(ExportVmModel model)
     {
-        Guid storageDomainId = ((storage_domains) model.getStorage().getSelectedItem()).getId();
+        Guid storageDomainId = ((storage_domains) model.getStorage().getSelectedItem()).getid();
         AsyncDataProvider.GetDataCentersByStorageDomain(new AsyncQuery(new Object[] { this, model },
                 new INewAsyncCallback() {
                     @Override
@@ -1081,7 +1233,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
                             VdcQueryReturnValue returnValue = (VdcQueryReturnValue) ReturnValue;
                             for (VM a : (java.util.ArrayList<VM>) returnValue.getReturnValue())
                             {
-                                if (a.getId().equals(vm.getId()))
+                                if (a.getvm_guid().equals(vm.getvm_guid()))
                                 {
                                     foundVm = a;
                                     break;
@@ -1102,7 +1254,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
                 }
             };
 
-            Guid storageDomainId = ((storage_domains) exportModel.getStorage().getSelectedItem()).getId();
+            Guid storageDomainId = ((storage_domains) exportModel.getStorage().getSelectedItem()).getid();
             GetAllFromExportDomainQueryParamenters tempVar =
                     new GetAllFromExportDomainQueryParamenters(storagePool.getId(), storageDomainId);
             tempVar.setGetAll(true);
@@ -1137,7 +1289,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
     private void GetTemplatesNotPresentOnExportDomain()
     {
         ExportVmModel model = (ExportVmModel) getWindow();
-        Guid storageDomainId = ((storage_domains) model.getStorage().getSelectedItem()).getId();
+        Guid storageDomainId = ((storage_domains) model.getStorage().getSelectedItem()).getid();
 
         AsyncDataProvider.GetDataCentersByStorageDomain(new AsyncQuery(this,
                 new INewAsyncCallback() {
@@ -1156,7 +1308,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
     private void PostGetTemplatesNotPresentOnExportDomain(storage_pool storagePool)
     {
         ExportVmModel model = (ExportVmModel) getWindow();
-        Guid storageDomainId = ((storage_domains) model.getStorage().getSelectedItem()).getId();
+        Guid storageDomainId = ((storage_domains) model.getStorage().getSelectedItem()).getid();
 
         if (storagePool != null)
         {
@@ -1221,15 +1373,13 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
     private void PostExportGetMissingTemplates(java.util.ArrayList<String> missingTemplatesFromVms)
     {
         ExportVmModel model = (ExportVmModel) getWindow();
-        Guid storageDomainId = ((storage_domains) model.getStorage().getSelectedItem()).getId();
+        Guid storageDomainId = ((storage_domains) model.getStorage().getSelectedItem()).getid();
         java.util.ArrayList<VdcActionParametersBase> parameters = new java.util.ArrayList<VdcActionParametersBase>();
-
-        model.StopProgress();
 
         for (Object a : getSelectedItems())
         {
             VM vm = (VM) a;
-            MoveVmParameters parameter = new MoveVmParameters(vm.getId(), storageDomainId);
+            MoveVmParameters parameter = new MoveVmParameters(vm.getvm_guid(), storageDomainId);
             parameter.setForceOverride((Boolean) model.getForceOverride().getEntity());
             parameter.setCopyCollapse((Boolean) model.getCollapseSnapshots().getEntity());
             parameter.setTemplateMustExists(true);
@@ -1309,13 +1459,11 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
     public void OnExport()
     {
         ExportVmModel model = (ExportVmModel) getWindow();
-        Guid storageDomainId = ((storage_domains) model.getStorage().getSelectedItem()).getId();
+        Guid storageDomainId = ((storage_domains) model.getStorage().getSelectedItem()).getid();
         if (!model.Validate())
         {
             return;
         }
-
-        model.StartProgress(null);
 
         GetTemplatesNotPresentOnExportDomain();
     }
@@ -1323,7 +1471,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
     private void OnExportNoTemplates()
     {
         ExportVmModel model = (ExportVmModel) getWindow();
-        Guid storageDomainId = ((storage_domains) model.getStorage().getSelectedItem()).getId();
+        Guid storageDomainId = ((storage_domains) model.getStorage().getSelectedItem()).getid();
 
         if (model.getProgress() != null)
         {
@@ -1334,7 +1482,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         for (Object item : getSelectedItems())
         {
             VM a = (VM) item;
-            MoveVmParameters parameters = new MoveVmParameters(a.getId(), storageDomainId);
+            MoveVmParameters parameters = new MoveVmParameters(a.getvm_guid(), storageDomainId);
             parameters.setForceOverride((Boolean) model.getForceOverride().getEntity());
             parameters.setCopyCollapse((Boolean) model.getCollapseSnapshots().getEntity());
             parameters.setTemplateMustExists(false);
@@ -1452,7 +1600,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
             }
         };
 
-        Frontend.RunQuery(VdcQueryType.GetVmInterfacesByVmId, new GetVmByVmIdParameters(vm.getId()), _asyncQuery);
+        Frontend.RunQuery(VdcQueryType.GetVmInterfacesByVmId, new GetVmByVmIdParameters(vm.getvm_guid()), _asyncQuery);
     }
 
     private void RunOnceUpdateDomains()
@@ -1542,7 +1690,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
                             }
                         }
                     };
-                    AsyncDataProvider.GetIrsImageList(_asyncQuery1, isoDomain.getId(), false);
+                    AsyncDataProvider.GetIrsImageList(_asyncQuery1, isoDomain.getid(), false);
 
                     AsyncQuery _asyncQuery2 = new AsyncQuery();
                     _asyncQuery2.setModel(vmListModel);
@@ -1558,7 +1706,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
                             vmListModel2.RunOnceUpdateFloppy(selectedVM, images);
                         }
                     };
-                    AsyncDataProvider.GetFloppyImageList(_asyncQuery2, isoDomain.getId(), false);
+                    AsyncDataProvider.GetFloppyImageList(_asyncQuery2, isoDomain.getid(), false);
                 }
 
             }
@@ -1585,7 +1733,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         BootSequenceModel bootSequenceModel = model.getBootSequence();
 
         RunVmOnceParams tempVar = new RunVmOnceParams();
-        tempVar.setVmId(vm.getId());
+        tempVar.setVmId(vm.getvm_guid());
         tempVar.setBootSequence(bootSequenceModel.getSequence());
         tempVar.setDiskPath((Boolean) model.getAttachIso().getEntity() ? (String) model.getIsoImage().getSelectedItem()
                 : "");
@@ -1750,17 +1898,14 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         VM vm = (VM) getSelectedItem();
 
         VM tempVar = new VM();
-        tempVar.setId(vm.getId());
+        tempVar.setvm_guid(vm.getvm_guid());
         tempVar.setvm_type(model.getVmType());
-        if (model.getQuota().getSelectedItem() != null) {
-            tempVar.getStaticData().setQuotaId(((Quota) model.getQuota().getSelectedItem()).getId());
-        }
         tempVar.setvm_os((VmOsType) model.getOSType().getSelectedItem());
         tempVar.setnum_of_monitors((Integer) model.getNumOfMonitors().getSelectedItem());
         tempVar.setvm_domain(model.getDomain().getIsAvailable() ? (String) model.getDomain().getSelectedItem() : "");
         tempVar.setvm_mem_size_mb((Integer) model.getMemSize().getEntity());
         tempVar.setMinAllocatedMem((Integer) model.getMinAllocatedMemory().getEntity());
-        tempVar.setvds_group_id(((VDSGroup) model.getCluster().getSelectedItem()).getId());
+        tempVar.setvds_group_id(((VDSGroup) model.getCluster().getSelectedItem()).getID());
         tempVar.settime_zone(model.getTimeZone().getIsAvailable() && model.getTimeZone().getSelectedItem() != null ? ((java.util.Map.Entry<String, String>) model.getTimeZone()
                 .getSelectedItem()).getKey()
                 : "");
@@ -1789,17 +1934,8 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
                         (String) model.getName().getEntity(),
                         (String) model.getDescription().getEntity());
         addVmTemplateParameters.setDestinationStorageDomainId(((storage_domains) model.getStorageDomain()
-                .getSelectedItem()).getId());
+                .getSelectedItem()).getid());
         addVmTemplateParameters.setPublicUse((Boolean) model.getIsTemplatePublic().getEntity());
-
-        if ((Boolean) model.getDisksAllocationModel().getIsSingleStorageDomain().getEntity()) {
-            addVmTemplateParameters.setDestinationStorageDomainId(
-                    ((storage_domains) model.getStorageDomain().getSelectedItem()).getId());
-        }
-        else {
-            addVmTemplateParameters.setImageToDestinationDomainMap(
-                    model.getDisksAllocationModel().getImageToDestinationDomainMap());
-        }
 
         model.StartProgress(null);
 
@@ -1851,23 +1987,6 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
                 }), vm.getvds_group_name());
     }
 
-    private void CancelMigration()
-    {
-        java.util.ArrayList<VdcActionParametersBase> list = new java.util.ArrayList<VdcActionParametersBase>();
-        for (Object item : getSelectedItems()) {
-            VM a = (VM) item;
-            list.add(new VmOperationParameterBase(a.getId()));
-        }
-
-        Frontend.RunMultipleAction(VdcActionType.CancelMigrateVm, list,
-                new IFrontendMultipleActionAsyncCallback() {
-                    @Override
-                    public void Executed(
-                            FrontendMultipleActionAsyncResult result) {
-                    }
-                }, null);
-    }
-
     private void PostMigrateGetUpHosts(java.util.ArrayList<VDS> hosts)
     {
         MigrateModel model = (MigrateModel) getWindow();
@@ -1898,7 +2017,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
             VDS runOnSameVDS = null;
             for (VDS host : hosts)
             {
-                if (host.getId().equals(run_on_vds))
+                if (host.getvds_id().equals(run_on_vds))
                 {
                     runOnSameVDS = host;
                 }
@@ -1953,7 +2072,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
             for (Object item : getSelectedItems())
             {
                 VM a = (VM) item;
-                list.add(new MigrateVmParameters(true, a.getId()));
+                list.add(new MigrateVmParameters(true, a.getvm_guid()));
             }
 
             Frontend.RunMultipleAction(VdcActionType.MigrateVm, list,
@@ -1975,13 +2094,13 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
             {
                 VM a = (VM) item;
 
-                if (a.getrun_on_vds().getValue().equals(((VDS) model.getHosts().getSelectedItem()).getId()))
+                if (a.getrun_on_vds().getValue().equals(((VDS) model.getHosts().getSelectedItem()).getvds_id()))
                 {
                     continue;
                 }
 
-                list.add(new MigrateVmToServerParameters(true, a.getId(), ((VDS) model.getHosts()
-                        .getSelectedItem()).getId()));
+                list.add(new MigrateVmToServerParameters(true, a.getvm_guid(), ((VDS) model.getHosts()
+                        .getSelectedItem()).getvds_id()));
             }
 
             Frontend.RunMultipleAction(VdcActionType.MigrateVmToServer, list,
@@ -2037,7 +2156,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         for (Object item : getSelectedItems())
         {
             VM a = (VM) item;
-            list.add(new ShutdownVmParameters(a.getId(), true));
+            list.add(new ShutdownVmParameters(a.getvm_guid(), true));
         }
 
         model.StartProgress(null);
@@ -2094,7 +2213,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         for (Object item : getSelectedItems())
         {
             VM a = (VM) item;
-            list.add(new StopVmParameters(a.getId(), StopVmTypeEnum.NORMAL));
+            list.add(new StopVmParameters(a.getvm_guid(), StopVmTypeEnum.NORMAL));
         }
 
         model.StartProgress(null);
@@ -2118,7 +2237,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         for (Object item : getSelectedItems())
         {
             VM a = (VM) item;
-            list.add(new HibernateVmParameters(a.getId()));
+            list.add(new HibernateVmParameters(a.getvm_guid()));
         }
 
         Frontend.RunMultipleAction(VdcActionType.HibernateVm, list,
@@ -2138,7 +2257,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
             VM a = (VM) item;
             // use sysprep iff the vm is not initialized and vm has Win OS
             boolean reinitialize = !a.getis_initialized() && DataProvider.IsWindowsOsType(a.getvm_os());
-            RunVmParams tempVar = new RunVmParams(a.getId());
+            RunVmParams tempVar = new RunVmParams(a.getvm_guid());
             tempVar.setReinitialize(reinitialize);
             list.add(tempVar);
         }
@@ -2165,7 +2284,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         for (Object item : getSelectedItems())
         {
             VM a = (VM) item;
-            list.add(new RemoveVmParameters(a.getId(), false));
+            list.add(new RemoveVmParameters(a.getvm_guid(), false));
         }
 
         model.StartProgress(null);
@@ -2235,7 +2354,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
                             }
                         }
                     };
-                    AsyncDataProvider.GetIrsImageList(_asyncQuery2, isoDomain.getId(), false);
+                    AsyncDataProvider.GetIrsImageList(_asyncQuery2, isoDomain.getid(), false);
                 }
             }
         };
@@ -2273,7 +2392,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
 
         model.StartProgress(null);
 
-        Frontend.RunAction(VdcActionType.ChangeDisk, new ChangeDiskCommandParameters(vm.getId(), isoName),
+        Frontend.RunAction(VdcActionType.ChangeDisk, new ChangeDiskCommandParameters(vm.getvm_guid(), isoName),
                 new IFrontendActionAsyncCallback() {
                     @Override
                     public void Executed(FrontendActionAsyncResult result) {
@@ -2320,9 +2439,6 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         getcurrentVm().setvm_type(model.getVmType());
         getcurrentVm().setvmt_guid(template.getId());
         getcurrentVm().setvm_name(name);
-        if (model.getQuota().getSelectedItem() != null) {
-            getcurrentVm().getStaticData().setQuotaId(((Quota) model.getQuota().getSelectedItem()).getId());
-        }
         getcurrentVm().setvm_os((VmOsType) model.getOSType().getSelectedItem());
         getcurrentVm().setnum_of_monitors((Integer) model.getNumOfMonitors().getSelectedItem());
         getcurrentVm().setvm_description((String) model.getDescription().getEntity());
@@ -2330,7 +2446,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
                 : "");
         getcurrentVm().setvm_mem_size_mb((Integer) model.getMemSize().getEntity());
         getcurrentVm().setMinAllocatedMem((Integer) model.getMinAllocatedMemory().getEntity());
-        Guid newClusterID = ((VDSGroup) model.getCluster().getSelectedItem()).getId();
+        Guid newClusterID = ((VDSGroup) model.getCluster().getSelectedItem()).getID();
         getcurrentVm().setvds_group_id(newClusterID);
         getcurrentVm().settime_zone((model.getTimeZone().getIsAvailable() && model.getTimeZone().getSelectedItem() != null) ? ((java.util.Map.Entry<String, String>) model.getTimeZone()
                 .getSelectedItem()).getKey()
@@ -2365,7 +2481,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         }
         else
         {
-            getcurrentVm().setdedicated_vm_for_vds(defaultHost.getId());
+            getcurrentVm().setdedicated_vm_for_vds(defaultHost.getvds_id());
         }
 
         getcurrentVm().setMigrationSupport(MigrationSupport.MIGRATABLE);
@@ -2417,7 +2533,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
                     return;
                 }
 
-                if ((Boolean) model.getProvisioning().getEntity())
+                if ((Boolean) ((EntityModel) model.getProvisioning().getSelectedItem()).getEntity())
                 {
                     model.StartProgress(null);
 
@@ -2437,7 +2553,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
                             for (DiskImage templateDisk : templateDisks)
                             {
                                 DiskModel disk = null;
-                                for (DiskModel a : unitVmModel.getDisksAllocationModel().getDisks())
+                                for (DiskModel a : unitVmModel.getDisks())
                                 {
                                     if (StringHelper.stringsEqual(a.getName(), templateDisk.getinternal_drive_mapping()))
                                     {
@@ -2452,7 +2568,8 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
                                         storageDomain.getstorage_type()));
                             }
 
-                            HashMap<String, DiskImageBase> dict = new HashMap<String, DiskImageBase>();
+                            java.util.HashMap<String, DiskImageBase> dict =
+                                    new java.util.HashMap<String, DiskImageBase>();
                             for (DiskImage a : templateDisks)
                             {
                                 dict.put(a.getinternal_drive_mapping(), a);
@@ -2460,16 +2577,12 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
 
                             AddVmFromTemplateParameters parameters =
                                     new AddVmFromTemplateParameters(vmListModel.getcurrentVm(),
-                                            dict, storageDomain.getId());
+                                            dict,
+                                            storageDomain.getid());
+                            parameters.setMakeCreatorExplicitOwner(true);
 
-                            Guid destinationStorageDomainId = Guid.Empty;
-                            if (!(Boolean) unitVmModel.getDisksAllocationModel().getIsSingleStorageDomain().getEntity())
-                            {
-                                parameters.setImageToDestinationDomainMap(
-                                        unitVmModel.getDisksAllocationModel().getImageToDestinationDomainMap());
-                            }
-
-                            Frontend.RunAction(VdcActionType.AddVmFromTemplate, parameters,
+                            Frontend.RunAction(VdcActionType.AddVmFromTemplate,
+                                    new AddVmFromTemplateParameters(getcurrentVm(), dict, storageDomain.getid()),
                                     new IFrontendActionAsyncCallback() {
                                         @Override
                                         public void Executed(FrontendActionAsyncResult result) {
@@ -2502,16 +2615,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
                     storage_domains storageDomain = (storage_domains) model.getStorageDomain().getSelectedItem();
 
                     VmManagementParametersBase tempVar = new VmManagementParametersBase(getcurrentVm());
-
-                    if ((Boolean) model.getDisksAllocationModel().getIsSingleStorageDomain().getEntity()) {
-                        tempVar.setStorageDomainId(
-                                ((storage_domains) model.getStorageDomain().getSelectedItem()).getId());
-                    }
-                    else {
-                        tempVar.setImageToDestinationDomainMap(
-                                model.getDisksAllocationModel().getImageToDestinationDomainMap());
-                    }
-
+                    tempVar.setStorageDomainId(storageDomain.getid());
                     Frontend.RunAction(VdcActionType.AddVm, tempVar,
                             new IFrontendActionAsyncCallback() {
                                 @Override
@@ -2543,7 +2647,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
             if (oldClusterID.equals(newClusterID) == false)
             {
                 ChangeVMClusterParameters parameters =
-                        new ChangeVMClusterParameters(newClusterID, getcurrentVm().getId());
+                        new ChangeVMClusterParameters(newClusterID, getcurrentVm().getvm_guid());
 
                 model.StartProgress(null);
 
@@ -2672,7 +2776,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         }
 
         Frontend.RunMultipleAction(VdcActionType.ChangeDisk,
-                new java.util.ArrayList<VdcActionParametersBase>(java.util.Arrays.asList(new VdcActionParametersBase[] { new ChangeDiskCommandParameters(vm.getId(),
+                new java.util.ArrayList<VdcActionParametersBase>(java.util.Arrays.asList(new VdcActionParametersBase[] { new ChangeDiskCommandParameters(vm.getvm_guid(),
                         StringHelper.stringsEqual(isoName, ConsoleModel.EjectLabel) ? "" : isoName) })),
                 new IFrontendMultipleActionAsyncCallback() {
                     @Override
@@ -2763,8 +2867,6 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
                 && VdcActionUtils.CanExecute(items, VM.class, VdcActionType.StopVm));
         getMigrateCommand().setIsExecutionAllowed(items.size() > 0
                 && VdcActionUtils.CanExecute(items, VM.class, VdcActionType.MigrateVm));
-        getCancelMigrateCommand().setIsExecutionAllowed(items.size() > 0
-                && VdcActionUtils.CanExecute(items, VM.class, VdcActionType.CancelMigrateVm));
         getNewTemplateCommand().setIsExecutionAllowed(items.size() == 1
                 && VdcActionUtils.CanExecute(items, VM.class, VdcActionType.AddVmTemplate));
         getRunOnceCommand().setIsExecutionAllowed(items.size() == 1
@@ -2911,6 +3013,10 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         {
             OnRemove();
         }
+        else if (StringHelper.stringsEqual(command.getName(), "OnMove"))
+        {
+            OnMove();
+        }
         else if (StringHelper.stringsEqual(command.getName(), "OnExport"))
         {
             OnExport();
@@ -2938,10 +3044,6 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
         else if (StringHelper.stringsEqual(command.getName(), "OnMigrate"))
         {
             OnMigrate();
-        }
-        else if (command == getCancelMigrateCommand())
-        {
-            CancelMigration();
         }
         else if (StringHelper.stringsEqual(command.getName(), "OnShutdown"))
         {
@@ -2976,4 +3078,5 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
     protected String getListName() {
         return "VmListModel";
     }
+
 }
