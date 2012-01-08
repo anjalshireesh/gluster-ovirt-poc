@@ -23,7 +23,11 @@ import org.ovirt.engine.ui.uicommonweb.models.*;
 @SuppressWarnings("unused")
 public class DataCenterStorageListModel extends SearchableListModel
 {
-
+    @Override
+    public boolean getIsAvailable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 	private UICommand privateAttachStorageCommand;
 	public UICommand getAttachStorageCommand()
 	{

@@ -25,6 +25,11 @@ import org.ovirt.engine.ui.uicommonweb.models.*;
 @SuppressWarnings("unused")
 public class PoolListModel extends ListWithDetailsModel
 {
+    @Override
+    public boolean getIsAvailable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
 	private UICommand privateNewCommand;
 	public UICommand getNewCommand()

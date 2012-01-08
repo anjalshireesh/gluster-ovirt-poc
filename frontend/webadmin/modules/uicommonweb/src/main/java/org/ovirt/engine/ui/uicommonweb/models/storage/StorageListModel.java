@@ -27,6 +27,11 @@ import org.ovirt.engine.ui.uicommonweb.models.*;
 @SuppressWarnings("unused")
 public class StorageListModel extends ListWithDetailsModel implements ITaskTarget, ISupportSystemTreeContext
 {
+    @Override
+    public boolean getIsAvailable() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
 	private UICommand privateNewDomainCommand;
 	public UICommand getNewDomainCommand()
