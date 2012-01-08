@@ -559,22 +559,22 @@ public class VdsManager {
                 returnStatus = vds.getstatus();
             }
 
-            if (vds.getkvm_enabled() != null && vds.getkvm_enabled().equals(false)
-                    && vds.getstatus() != VDSStatus.NonOperational) {
-                if (log.isDebugEnabled()) {
-                    log.debugFormat(
-                            "refreshCapabilities:GetCapabilitiesVDSCommand vds {0} has not kvm, vds will be moved to NonOperational",
-                            vds.getStaticData().getId());
-                }
-                ResourceManager
-                        .getInstance()
-                        .getEventListener()
-                        .VdsNonOperational(vds.getvds_id(), NonOperationalReason.KVM_NOT_RUNNING, true, true,
-                                Guid.Empty);
-                vds.setstatus(VDSStatus.NonOperational);
-                returnStatus = vds.getstatus();
-                setIsSetNonOperationalExecuted(true);
-            }
+            // if (vds.getkvm_enabled() != null && vds.getkvm_enabled().equals(false)
+            // && vds.getstatus() != VDSStatus.NonOperational) {
+            // if (log.isDebugEnabled()) {
+            // log.debugFormat(
+            // "refreshCapabilities:GetCapabilitiesVDSCommand vds {0} has not kvm, vds will be moved to NonOperational",
+            // vds.getStaticData().getId());
+            // }
+            // ResourceManager
+            // .getInstance()
+            // .getEventListener()
+            // .VdsNonOperational(vds.getvds_id(), NonOperationalReason.KVM_NOT_RUNNING, true, true,
+            // Guid.Empty);
+            // vds.setstatus(VDSStatus.NonOperational);
+            // returnStatus = vds.getstatus();
+            // setIsSetNonOperationalExecuted(true);
+            // }
 
             cpuFlagsHasChanged.argvalue = (!StringHelper.EqOp(oldFlags, vds.getcpu_flags()));
             return returnStatus;

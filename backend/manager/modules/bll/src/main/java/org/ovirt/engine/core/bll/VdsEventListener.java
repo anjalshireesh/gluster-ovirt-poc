@@ -208,8 +208,8 @@ public class VdsEventListener implements IVdsEventListener {
 
     @Override
     public void ProcessOnCpuFlagsChange(Guid vdsId) {
-        Backend.getInstance().runInternalAction(VdcActionType.HandleVdsCpuFlagsOrClusterChanged,
-                new VdsActionParameters(vdsId));
+        // Backend.getInstance().runInternalAction(VdcActionType.HandleVdsCpuFlagsOrClusterChanged,
+        // new VdsActionParameters(vdsId));
         Backend.getInstance().runInternalAction(VdcActionType.HandleVdsVersion, new VdsActionParameters(vdsId));
     }
 
