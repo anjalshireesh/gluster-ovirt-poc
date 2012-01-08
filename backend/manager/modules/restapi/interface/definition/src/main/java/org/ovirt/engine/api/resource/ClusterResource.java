@@ -18,6 +18,7 @@ package org.ovirt.engine.api.resource;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+
 import org.ovirt.engine.api.model.Cluster;
 
 
@@ -26,6 +27,9 @@ public interface ClusterResource extends UpdatableResource<Cluster> {
 
     @Path("networks")
     public AssignedNetworksResource getAssignedNetworksSubResource();
+
+    @Path("glusterVolumes")
+    public GlusterVolumesResource getGlusterVolumesResource();
 
     @Path("permissions")
     public AssignedPermissionsResource getPermissionsResource();
