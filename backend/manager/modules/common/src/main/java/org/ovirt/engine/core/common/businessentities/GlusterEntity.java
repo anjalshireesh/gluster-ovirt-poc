@@ -21,14 +21,10 @@ package org.ovirt.engine.core.common.businessentities;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.ovirt.engine.core.common.utils.StringUtil;
 
-@XmlSeeAlso({ GlusterVolume.class, GlusterBrick.class, GlusterVolumeOption.class })
-@XmlRootElement
 public class GlusterEntity implements Filterable {
 
     protected String name;

@@ -6,7 +6,7 @@ package org.ovirt.engine.core.vdsbroker.irsbroker;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.ovirt.engine.core.common.businessentities.GlusterVolume;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.vdscommands.CreateGlusterVolumeVDSParameters;
 
 /**
@@ -21,7 +21,7 @@ public class CreateGlusterVolumeVDSCommand<T extends CreateGlusterVolumeVDSParam
     @Override
     protected void ExecuteIrsBrokerCommand() {
         // TODO: Prepare and pass the GlusterVolume object
-        GlusterVolume volume = getParameters().getVolume();
+        GlusterVolumeEntity volume = getParameters().getVolume();
 
         Map<String, Object> parameters = new HashMap<String, Object>();
 

@@ -3,7 +3,7 @@
  */
 package org.ovirt.engine.core.common.action;
 
-import org.ovirt.engine.core.common.businessentities.GlusterVolume;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.compat.Guid;
 
 /**
@@ -11,21 +11,21 @@ import org.ovirt.engine.core.compat.Guid;
  */
 @SuppressWarnings("serial")
 public class CreateGlusterVolumeParameters extends VdsGroupParametersBase {
-    private GlusterVolume volume;
+    private GlusterVolumeEntity volume;
 
     public CreateGlusterVolumeParameters() {
     }
 
-    public CreateGlusterVolumeParameters(Guid vdsGroupId, GlusterVolume volume) {
+    public CreateGlusterVolumeParameters(Guid vdsGroupId, GlusterVolumeEntity volume) {
         super(vdsGroupId);
         setVolume(volume);
     }
 
-    public GlusterVolume getVolume() {
+    public GlusterVolumeEntity getVolume() {
         return volume;
     }
 
-    public void setVolume(GlusterVolume volume) {
+    public void setVolume(GlusterVolumeEntity volume) {
         this.volume = volume;
     }
 }
