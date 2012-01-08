@@ -2324,7 +2324,7 @@
                 <jaxb:property name="GlusterVolumes"/>
             </xs:appinfo>
           </xs:annotation>
-          <xs:element ref="vm" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element ref="glusterVolume" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
