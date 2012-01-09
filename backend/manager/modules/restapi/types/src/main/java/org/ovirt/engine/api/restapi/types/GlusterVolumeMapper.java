@@ -14,7 +14,7 @@ public class GlusterVolumeMapper {
     public static GlusterVolumeEntity map(GlusterVolume fromVolume, GlusterVolumeEntity toVolume) {
         GlusterVolumeEntity volume = toVolume != null ? toVolume : new GlusterVolumeEntity();
         volume.setId(fromVolume.getId());
-        volume.setName(fromVolume.getName());
+        volume.setName(fromVolume.getVolumeName());
         volume.setVolumeType(fromVolume.getVolumeType());
 
         String transportType = fromVolume.getTransportType();
@@ -27,8 +27,13 @@ public class GlusterVolumeMapper {
         volume.setAccessProtocols(fromVolume.getAccessProtocols());
         volume.setAccessControlList(fromVolume.getAccessControlList());
         volume.setBricks(fromVolume.getBricks());
-        volume.setReplicaCount(fromVolume.getReplicaCount().intValue());
-        volume.setStripeCount(fromVolume.getStripeCount().intValue());
+
+        BigInteger count = fromVolume.getReplicaCount();
+        volume.setReplicaCount(count == null ? 0 : count.intValue());
+
+        count = fromVolume.getStripeCount();
+        volume.setStripeCount(count == null ? 0 : count.intValue());
+
         volume.setCifsUsers(fromVolume.getCifsUsers());
         volume.setOptions(fromVolume.getOptions());
 
@@ -39,7 +44,7 @@ public class GlusterVolumeMapper {
     public static GlusterVolume map(GlusterVolumeEntity fromVolume, GlusterVolume toVolume) {
         GlusterVolume volume = toVolume != null ? toVolume : new GlusterVolume();
         volume.setId(fromVolume.getId());
-        volume.setName(fromVolume.getName());
+        volume.setVolumeName(fromVolume.getName());
         volume.setVolumeType(fromVolume.getVolumeType().toString());
         volume.setTransportType(fromVolume.getTransportType().toString());
 
