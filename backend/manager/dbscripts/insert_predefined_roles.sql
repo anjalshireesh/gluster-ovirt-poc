@@ -127,6 +127,12 @@ INSERT INTO roles_groups(role_id,action_group_id) VALUES(v_super_user_id_0001,70
 INSERT INTO roles_groups(role_id,action_group_id) VALUES(v_super_user_id_0001,702);
 --CONFIGURE_STORAGE_POOL_NETWORK
 INSERT INTO roles_groups(role_id,action_group_id) VALUES(v_super_user_id_0001,703);
+
+--CONFIGURE_GLUSTER_CREATE_VOLUME
+INSERT INTO roles_groups(role_id,action_group_id) VALUES(v_super_user_id_0001,1000);
+--CONFIGURE_GLUSTER_VOLUME_OPERATIONS
+INSERT INTO roles_groups(role_id,action_group_id) VALUES(v_super_user_id_0001,1001);
+
 delete from roles_groups where role_id = v_user_id_1001;
 INSERT INTO roles(id,name,description,is_readonly,role_type) select v_user_id_1001,'ENGINEUser','oVirt user',true,2 where not exists (select id,name,description,is_readonly,role_type from roles where id=v_user_id_1001 and name='ENGINEUser' and description='oVirt user' and is_readonly=true and role_type=2);
 
@@ -143,7 +149,6 @@ INSERT INTO roles_groups(role_id,action_group_id) VALUES(v_user_id_1001,303);
 ---------------
 delete from roles_groups where role_id = v_power_user_id_0002;
 INSERT INTO roles(id,name,description,is_readonly,role_type) select v_power_user_id_0002,'ENGINEPowerUser','oVirt power user',true,2 where not exists (select id,name,description,is_readonly,role_type from roles where id=v_power_user_id_0002 and name='ENGINEPowerUser' and description='oVirt power user' and is_readonly=true and role_type=2);
- 
 
 ---Vm Groups
 --CREATE_VM
