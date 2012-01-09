@@ -19,7 +19,6 @@ import org.ovirt.engine.api.model.GlusterVolumes;
 /**
  *
  */
-@Path("/glusterVolumes")
 @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_X_YAML })
 public interface GlusterVolumesResource {
     @GET
