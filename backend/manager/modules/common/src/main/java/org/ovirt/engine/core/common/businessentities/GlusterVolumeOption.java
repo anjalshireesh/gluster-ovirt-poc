@@ -18,15 +18,14 @@
  *******************************************************************************/
 package org.ovirt.engine.core.common.businessentities;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 import org.ovirt.engine.core.common.utils.StringUtil;
 
 /**
  *
  */
-@XmlRootElement(name = "GlusterVolumeOption")
-public class GlusterVolumeOption implements Filterable {
+public class GlusterVolumeOption implements Filterable, Serializable {
     private String key;
     private String value;
 

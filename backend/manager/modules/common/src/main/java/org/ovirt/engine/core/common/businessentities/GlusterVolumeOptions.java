@@ -18,17 +18,16 @@
  *******************************************************************************/
 package org.ovirt.engine.core.common.businessentities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  */
-@XmlRootElement(name = "GlusterVolumeOptions")
-public class GlusterVolumeOptions {
+public class GlusterVolumeOptions implements Serializable {
     private List<GlusterVolumeOption> options = new ArrayList<GlusterVolumeOption>();
 
     public GlusterVolumeOptions() {

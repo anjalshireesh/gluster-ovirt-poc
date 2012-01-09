@@ -85,7 +85,7 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     }
 
     // Only GlusterFS is enabled
-    private Set<ACCESS_PROTOCOL> nasProtocols = new LinkedHashSet<ACCESS_PROTOCOL>(Arrays.asList(new ACCESS_PROTOCOL[] {
+    private Set<ACCESS_PROTOCOL> accessProtocols = new LinkedHashSet<ACCESS_PROTOCOL>(Arrays.asList(new ACCESS_PROTOCOL[] {
             ACCESS_PROTOCOL.GLUSTER }));
 
     public String getVolumeTypeStr() {
@@ -185,16 +185,16 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     }
 
     public Set<ACCESS_PROTOCOL> getAccessProtocols() {
-        return nasProtocols;
+        return accessProtocols;
     }
 
     public void setAccessProtocols(Set<ACCESS_PROTOCOL> accessProtocols) {
-        this.nasProtocols = accessProtocols;
+        this.accessProtocols = accessProtocols;
     }
 
     public String getAccessProtocolsStr() {
         String protocolsStr = "";
-        for (ACCESS_PROTOCOL protocol : nasProtocols) {
+        for (ACCESS_PROTOCOL protocol : accessProtocols) {
             String protocolStr = ACCESS_PROTOCOL_STR[protocol.ordinal()];
             protocolsStr += (protocolsStr.isEmpty() ? protocolStr : ", " + protocolStr);
         }
@@ -202,6 +202,11 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     }
 
     public void setAccessProtocols(String accessProtocols) {
+        if(accessProtocols == null || accessProtocols.trim().isEmpty()) {
+            this.accessProtocols = null;
+            return;
+        }
+
         Set<ACCESS_PROTOCOL> protocols = new HashSet<GlusterVolumeEntity.ACCESS_PROTOCOL>();
         String[] accessProtocolList = accessProtocols.split(",", -1);
         for (String accessProtocol : accessProtocolList) {
@@ -240,6 +245,11 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     }
 
     public void setOptions(String options) {
+        if(options == null || options.trim().isEmpty()) {
+            this.options = null;
+            return;
+        }
+
         String[] optionArr = options.split(",", -1);
         for(String option : optionArr) {
             String[] optionInfo = option.split("=", -1);
@@ -268,10 +278,15 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     }
 
     public void setBricks(String bricksStr) {
+        if(bricksStr == null || bricksStr.trim().isEmpty()) {
+            this.bricks = new ArrayList<GlusterBrick>();
+            return;
+        }
+
         String[] brickList = bricksStr.split(",", -1);
         List<GlusterBrick> bricks = new ArrayList<GlusterBrick>();
         for(String brick : brickList) {
-            String[] brickInfo = brick.split(",", -1);
+            String[] brickInfo = brick.split(":", -1);
             bricks.add(new GlusterBrick(brickInfo[0], BRICK_STATUS.ONLINE, brickInfo[1]));
         }
         setBricks(bricks);
@@ -286,27 +301,27 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     }
 
     public void enableNFS() {
-        nasProtocols.add(ACCESS_PROTOCOL.NFS);
+        accessProtocols.add(ACCESS_PROTOCOL.NFS);
         setOption(OPTION_NFS_DISABLE, GlusterConstants.OFF);
     }
 
     public void disableNFS() {
-        nasProtocols.remove(ACCESS_PROTOCOL.NFS);
+        accessProtocols.remove(ACCESS_PROTOCOL.NFS);
         setOption(OPTION_NFS_DISABLE, GlusterConstants.ON);
     }
 
     public void enableCifs() {
-        if (!nasProtocols.contains(ACCESS_PROTOCOL.CIFS)) {
-            nasProtocols.add(ACCESS_PROTOCOL.CIFS);
+        if (!accessProtocols.contains(ACCESS_PROTOCOL.CIFS)) {
+            accessProtocols.add(ACCESS_PROTOCOL.CIFS);
         }
     }
 
     public void disableCifs() {
-        nasProtocols.remove(ACCESS_PROTOCOL.CIFS);
+        accessProtocols.remove(ACCESS_PROTOCOL.CIFS);
     }
 
     public boolean isCifsEnable() {
-        return nasProtocols.contains(ACCESS_PROTOCOL.CIFS);
+        return accessProtocols.contains(ACCESS_PROTOCOL.CIFS);
     }
 
     public void setCifsUsers(List<String> cifsUsers) {
@@ -314,6 +329,11 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     }
 
     public void setCifsUsers(String cifsUsers) {
+        if(cifsUsers == null || cifsUsers.trim().isEmpty()) {
+            this.cifsUsers = new ArrayList<String>();
+            return;
+        }
+
         String[] userList = cifsUsers.split(",", -1);
         List<String> users = new ArrayList<String>();
         for(String user : userList) {
@@ -349,8 +369,8 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
 
     public List<String> getBrickDirectories() {
         List<String> brickDirectories = new ArrayList<String>();
-        for (GlusterBrick GlusterBrick : getBricks()) {
-            brickDirectories.add(GlusterBrick.getQualifiedName());
+        for (GlusterBrick brick : getBricks()) {
+            brickDirectories.add(brick.getQualifiedName());
         }
         return brickDirectories;
     }
@@ -425,5 +445,10 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     @Override
     public void setId(String id) {
         setName(id);
+    }
+
+    @Override
+    public Object getQueryableId() {
+        return getId();
     }
 }

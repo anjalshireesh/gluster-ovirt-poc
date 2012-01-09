@@ -18,6 +18,7 @@
  *******************************************************************************/
 package org.ovirt.engine.core.common.businessentities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.ovirt.engine.core.common.utils.StringUtil;
 
-public class GlusterEntity implements Filterable {
+public class GlusterEntity extends IVdcQueryable implements Filterable, Serializable {
 
     protected String name;
     protected List<GlusterEntity> children = new ArrayList<GlusterEntity>();

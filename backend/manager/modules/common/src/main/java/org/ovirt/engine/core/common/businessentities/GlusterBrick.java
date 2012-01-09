@@ -18,12 +18,10 @@
  *******************************************************************************/
 package org.ovirt.engine.core.common.businessentities;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.ovirt.engine.core.common.utils.StringUtil;
 
-@XmlRootElement(name = "Brick")
 public class GlusterBrick extends GlusterEntity {
     public enum BRICK_STATUS {
         ONLINE,
@@ -93,6 +91,7 @@ public class GlusterBrick extends GlusterEntity {
         return serverName + ":" + brickDirectory;
     }
 
+    @Override
     public boolean filter(String filterString, boolean caseSensitive) {
         return StringUtil.filterString(getServerName() + getBrickDirectory() + getStatusStr(), filterString,
                 caseSensitive);
