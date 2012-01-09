@@ -12,7 +12,6 @@ import org.ovirt.engine.api.resource.GlusterVolumesResource;
 import org.ovirt.engine.core.common.action.CreateGlusterVolumeParameters;
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
-import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_TYPE;
 import org.ovirt.engine.core.compat.Guid;
 
 /**
@@ -30,8 +29,7 @@ public class BackendGlusterVolumesResource extends AbstractBackendCollectionReso
 
     @Override
     public GlusterVolumes list() {
-        // TODO: Fetch volume list from VDSM
-        return null;
+        return new GlusterVolumes();
     }
 
     @Override
@@ -41,17 +39,11 @@ public class BackendGlusterVolumesResource extends AbstractBackendCollectionReso
     }
 
     @Override
-    public Response add(GlusterVolume vm) {
-        validateParameters(vm, "volumeName", "volumeType", "transportType", "bricks");
-
-        String volumeType = vm.getVolumeType();
-        if (volumeType.equals(VOLUME_TYPE.REPLICATE.toString())
-                || volumeType.equals(VOLUME_TYPE.DISTRIBUTED_REPLICATE.toString())) {
-
-        }
+    public Response add(GlusterVolume volume) {
+        validateParameters(volume, "volumeName", "volumeType", "bricks");
 
         try {
-            GlusterVolumeEntity volumeEntity = getMapper(GlusterVolume.class, GlusterVolumeEntity.class).map(vm, null);
+            GlusterVolumeEntity volumeEntity = getMapper(GlusterVolume.class, GlusterVolumeEntity.class).map(volume, null);
             return performAction(VdcActionType.CreateGlusterVolume,
                     new CreateGlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), volumeEntity));
         } catch (Exception e) {
