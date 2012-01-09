@@ -358,6 +358,11 @@ public enum VdcBllErrors {
     CANT_RECONSTRUCT_WHEN_A_DOMAIN_IN_POOL_IS_LOCKED(5025),
     NO_PARAMETERS_FOR_TASK(5026),
     HOST_ALREADY_EXISTS(5027),
+
+    // Gluster errors
+    VOLUME_CREATION_FAILED(6000),
+    GLUSTER_COMMAND_FAILED(6010),
+
     // error to indicate backend does not recognize the session
     SESSION_ERROR(9999), ;
 
