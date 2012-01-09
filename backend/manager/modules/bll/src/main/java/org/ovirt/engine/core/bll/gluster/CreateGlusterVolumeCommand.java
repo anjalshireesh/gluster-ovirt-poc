@@ -20,7 +20,7 @@ import org.ovirt.engine.core.dal.VdcBllMessages;
  */
 public class CreateGlusterVolumeCommand<T extends CreateGlusterVolumeParameters> extends CommandBase<CreateGlusterVolumeParameters> {
 
-    CreateGlusterVolumeCommand(T params) {
+    public CreateGlusterVolumeCommand(T params) {
         super(params);
         setVdsGroupId(params.getVdsGroupId());
     }
@@ -30,8 +30,16 @@ public class CreateGlusterVolumeCommand<T extends CreateGlusterVolumeParameters>
         boolean canDoAction = super.canDoAction();
         if (canDoAction && getVdsGroup() == null) {
             canDoAction = false;
+            addCanDoActionMessage(VdcBllMessages.VDS_CLUSTER_IS_NOT_VALID);
+            addCanDoActionMessage(VdcBllMessages.VAR__ACTION__CREATE);
+            addCanDoActionMessage(VdcBllMessages.VAR__TYPE__GLUSTER_VOLUME);
+        }
+
+        if(canDoAction && getVdsGroup().getstorage_pool_id() == null) {
+            canDoAction = false;
             addCanDoActionMessage(VdcBllMessages.ACTION_TYPE_FAILED_STORAGE_POOL_NOT_EXIST);
             addCanDoActionMessage(VdcBllMessages.VAR__ACTION__CREATE);
+            addCanDoActionMessage(VdcBllMessages.VAR__TYPE__GLUSTER_VOLUME);
         }
         return canDoAction;
     }
@@ -49,7 +57,7 @@ public class CreateGlusterVolumeCommand<T extends CreateGlusterVolumeParameters>
                         .getResourceManager()
                         .RunVdsCommand(
                                 VDSCommandType.CreateGlusterVolume,
-                                new CreateGlusterVolumeVDSParameters(getParameters().getVdsGroupId(),
+                                new CreateGlusterVolumeVDSParameters(getVdsGroup().getstorage_pool_id().getValue(),
                                         getParameters().getVolume()));
         setSucceeded(returnValue.getSucceeded());
     }
