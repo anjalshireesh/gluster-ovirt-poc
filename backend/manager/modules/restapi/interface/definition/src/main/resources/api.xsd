@@ -21,7 +21,7 @@
   </xs:complexType>
 
   <xs:element name="linkCapabilities" type="LinkCapabilities"/>
-  
+
   <xs:complexType name="LinkCapabilities">
 	<xs:sequence>
 	  <xs:element name="searchable" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
@@ -77,9 +77,9 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  
+
   <xs:element name="special_objects" type="SpecialObjects"/>
-  
+
   <xs:complexType name="SpecialObjects">
     <xs:complexContent>
       <xs:extension base="BaseResource">
@@ -260,7 +260,7 @@
           </xs:appinfo>
         </xs:annotation>
       </xs:element>
-    </xs:sequence>  
+    </xs:sequence>
   </xs:complexType>
 
   <!-- Statictics -->
@@ -366,7 +366,7 @@
       <xs:element name="topology" type="CpuTopology" minOccurs="0"/>
       <xs:element name="level" type="xs:int" minOccurs="0"/>
       <xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="speed" type="xs:decimal" minOccurs="0" maxOccurs="1"/>      
+      <xs:element name="speed" type="xs:decimal" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
     <xs:attribute name="id" type="xs:string"/>
   </xs:complexType>
@@ -419,7 +419,7 @@
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  
+
   <xs:complexType name="ErrorHandling">
     <xs:sequence>
       <xs:element name="on_error" type="xs:string" minOccurs="0" maxOccurs="1">
@@ -460,7 +460,7 @@
           <xs:element ref="disk_types" minOccurs="0"/>
           <xs:element ref="os_types" minOccurs="0"/>
           <xs:element ref="disk_formats" minOccurs="0"/>
-          <xs:element ref="disk_interfaces" minOccurs="0"/>          
+          <xs:element ref="disk_interfaces" minOccurs="0"/>
           <xs:element ref="vm_affinities" minOccurs="0"/>
           <xs:element name="custom_properties" type="CustomProperties" minOccurs="0"/>
           <xs:element ref="boot_protocols" minOccurs="0"/>
@@ -624,7 +624,7 @@
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  
+
   <xs:element name="os_types" type="OsTypes"/>
 
   <xs:complexType name="OsTypes">
@@ -666,7 +666,7 @@
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  
+
   <xs:element name="vm_affinities" type="VmAffinities"/>
 
   <xs:complexType name="VmAffinities">
@@ -680,7 +680,7 @@
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  
+
   <xs:element name="boot_protocols" type="BootProtocols"/>
 
   <xs:complexType name="BootProtocols">
@@ -693,7 +693,7 @@
         </xs:annotation>
       </xs:element>
     </xs:sequence>
-  </xs:complexType>  
+  </xs:complexType>
 
     <xs:element name="error_handling" type="ErrorHandlingOptions"/>
 
@@ -730,7 +730,7 @@
       <xs:element name="name" type="xs:string" minOccurs="0"/>
       <xs:element name="description" type="xs:string" minOccurs="0"/>
       <xs:element name="actions" type="Actions" minOccurs="0"/>
-      <xs:element name="creation_status" type="Status" minOccurs="0"/>      
+      <xs:element name="creation_status" type="Status" minOccurs="0"/>
       <!-- also rel="creation_status" link for monitoring async creation -->
       <!-- further link relation types may be defined by specific resources -->
       <xs:element ref="link" minOccurs="0" maxOccurs="unbounded">
@@ -751,7 +751,7 @@
       <xs:element name="active" type="xs:unsignedInt" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
-  
+
   <xs:complexType name="Option">
     <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="value" type="xs:string"/>
@@ -759,7 +759,7 @@
   </xs:complexType>
 
   <xs:element name="options" type="Options"/>
- 
+
   <xs:complexType name="Options">
     <xs:sequence>
       <xs:element name="option" type="Option" minOccurs="0" maxOccurs="unbounded">
@@ -819,7 +819,7 @@
           </xs:appinfo>
         </xs:annotation>
       </xs:element>
-    </xs:sequence>  
+    </xs:sequence>
   </xs:complexType>
 
   <!-- Clusters -->
@@ -868,7 +868,7 @@
           <xs:element name="scheduling_policy" type="SchedulingPolicy" minOccurs="0" maxOccurs="1"/>
           <xs:element name="version" type="Version" minOccurs="0"/>
           <xs:element name="supported_versions" type="SupportedVersions" minOccurs="0"/>
-          <xs:element name="error_handling" type="ErrorHandling" minOccurs="0" maxOccurs="1"/>          
+          <xs:element name="error_handling" type="ErrorHandling" minOccurs="0" maxOccurs="1"/>
           <!-- Also a rel="networks" link -->
         </xs:sequence>
       </xs:extension>
@@ -994,7 +994,7 @@
           </xs:appinfo>
         </xs:annotation>
       </xs:element>
-    </xs:sequence>  
+    </xs:sequence>
   </xs:complexType>
 
   <xs:element name="host_non_operational_details" type="HostNonOperationalDetails"/>
@@ -1008,7 +1008,7 @@
           </xs:appinfo>
         </xs:annotation>
       </xs:element>
-    </xs:sequence>  
+    </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="VmSummary">
@@ -1383,7 +1383,7 @@
           </xs:appinfo>
         </xs:annotation>
       </xs:element>
-    </xs:sequence>  
+    </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="Networks">
@@ -1520,7 +1520,7 @@
           </xs:appinfo>
         </xs:annotation>
       </xs:element>
-    </xs:sequence>  
+    </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="StorageDomains">
@@ -1595,7 +1595,7 @@
           </xs:appinfo>
         </xs:annotation>
       </xs:element>
-    </xs:sequence>  
+    </xs:sequence>
   </xs:complexType>
 
   <!-- Virtual Machines -->
@@ -1941,7 +1941,7 @@
           </xs:appinfo>
         </xs:annotation>
       </xs:element>
-    </xs:sequence>  
+    </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="NIC">
@@ -2022,7 +2022,7 @@
           <xs:element ref="mac" minOccurs="0"/>
           <xs:element ref="ip" minOccurs="0"/>
           <xs:element ref="vlan" minOccurs="0"/>
-          <xs:element ref="bonding" minOccurs="0" maxOccurs="1"/>                    
+          <xs:element ref="bonding" minOccurs="0" maxOccurs="1"/>
           <xs:element name="boot_protocol" type="xs:string" minOccurs="0" maxOccurs="1"/>
           <xs:element name="statistics" type="Statistics" minOccurs="0" maxOccurs="1"/>
           <xs:element name="check_connectivity" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
@@ -2061,7 +2061,7 @@
           </xs:appinfo>
         </xs:annotation>
       </xs:element>
-    </xs:sequence>  
+    </xs:sequence>
   </xs:complexType>
 
   <xs:element name="slaves" type="Slaves"/>
@@ -2149,7 +2149,7 @@
       <xs:element name="enabled" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
- 
+
 <!-- RSDL -->
 
   <xs:element name="url" type="Url"/>
@@ -2165,7 +2165,7 @@
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  
+
   <xs:element name="body" type="Body"/>
 
   <xs:complexType name="Body">
@@ -2283,7 +2283,7 @@
   <xs:complexType name="RSDL">
      <xs:sequence>
        <xs:element name="description" type="xs:string" minOccurs="0"/>
-       <xs:element ref="version" minOccurs="0" maxOccurs="1" />     
+       <xs:element ref="version" minOccurs="0" maxOccurs="1" />
        <xs:element ref="schema" minOccurs="0" maxOccurs="1" />
        <xs:element type="DetailedLinks" name="links" minOccurs="0"/>
      </xs:sequence>
@@ -2303,6 +2303,7 @@
     <xs:complexContent>
       <xs:extension base="BaseResource">
         <xs:sequence>
+          <xs:element name="volumeName" type="xs:string" minOccurs="1" maxOccurs="1"/>
           <xs:element name="volumeType" type="xs:string" minOccurs="1" maxOccurs="1"/>
           <xs:element name="transportType" type="xs:string" minOccurs="0" maxOccurs="1"/>
           <xs:element name="replicaCount" type="xs:integer" minOccurs="0" maxOccurs="1"/>
