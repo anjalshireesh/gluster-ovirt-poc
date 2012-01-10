@@ -26,7 +26,7 @@
 		
 		.logo {
 			float: left;
-			background-image: url(images/logo.png);
+			background-image: url(images/logo.gif);
 			background-repeat: no-repeat;
 			background-position: mainSectionLogoBackgroundPosition;
 			width: 255px;
