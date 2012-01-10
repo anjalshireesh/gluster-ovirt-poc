@@ -25,11 +25,9 @@ public class ListGlusterVolumesCommand extends GlusterCommandBase<VdsGroupParame
 
     @Override
     protected boolean canDoAction() {
-        boolean canDoAction = super.canDoAction();
-        if (!canDoAction) {
-            addCanDoActionMessage(VdcBllMessages.VAR__ACTION__LIST);
-        }
-        return canDoAction;
+        addCanDoActionMessage(VdcBllMessages.VAR__ACTION__LIST);
+        addCanDoActionMessage(VdcBllMessages.VAR__TYPE__GLUSTER_VOLUME);
+        return super.canDoAction();
     }
 
     /*

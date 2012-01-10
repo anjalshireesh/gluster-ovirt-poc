@@ -9,11 +9,11 @@ import org.ovirt.engine.api.model.GlusterVolume;
 import org.ovirt.engine.api.model.GlusterVolumes;
 import org.ovirt.engine.api.resource.GlusterVolumeResource;
 import org.ovirt.engine.api.resource.GlusterVolumesResource;
-import org.ovirt.engine.core.common.action.CreateGlusterVolumeParameters;
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.action.VdcReturnValueBase;
 import org.ovirt.engine.core.common.action.VdsGroupParametersBase;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
+import org.ovirt.engine.core.common.glusteractions.CreateGlusterVolumeParameters;
 import org.ovirt.engine.core.compat.Guid;
 
 /**

@@ -3,12 +3,8 @@
  */
 package org.ovirt.engine.core.bll.gluster;
 
-import java.util.Collections;
-import java.util.Map;
-
 import org.ovirt.engine.core.bll.Backend;
-import org.ovirt.engine.core.common.VdcObjectType;
-import org.ovirt.engine.core.common.action.CreateGlusterVolumeParameters;
+import org.ovirt.engine.core.common.glusteractions.CreateGlusterVolumeParameters;
 import org.ovirt.engine.core.common.glustercommands.CreateGlusterVolumeVDSParameters;
 import org.ovirt.engine.core.common.vdscommands.VDSCommandType;
 import org.ovirt.engine.core.common.vdscommands.VDSReturnValue;
@@ -25,11 +21,10 @@ public class CreateGlusterVolumeCommand extends GlusterCommandBase<CreateGluster
 
     @Override
     protected boolean canDoAction() {
-        boolean canDoAction = super.canDoAction();
-        if(!canDoAction) {
-            addCanDoActionMessage(VdcBllMessages.VAR__ACTION__CREATE);
-        }
-        return canDoAction;
+        addCanDoActionMessage(VdcBllMessages.VAR__ACTION__CREATE);
+        addCanDoActionMessage(VdcBllMessages.VAR__TYPE__GLUSTER_VOLUME);
+
+        return super.canDoAction();
     }
 
     /*
@@ -48,15 +43,5 @@ public class CreateGlusterVolumeCommand extends GlusterCommandBase<CreateGluster
                                 new CreateGlusterVolumeVDSParameters(getVdsGroup().getstorage_pool_id().getValue(),
                                         getParameters().getVolume()));
         setSucceeded(returnValue.getSucceeded());
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.ovirt.engine.core.bll.CommandBase#getPermissionCheckSubjects()
-     */
-    @Override
-    public Map getPermissionCheckSubjects() {
-        return Collections.singletonMap(getVdsGroupId(), VdcObjectType.VdsGroups);
     }
 }

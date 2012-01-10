@@ -334,4 +334,11 @@ public class IrsServerWrapper implements IIrsServer {
         GlusterVolumeListReturnForXmlRpc wrapper = new GlusterVolumeListReturnForXmlRpc(xmlRpcReturnValue);
         return wrapper;
     }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeAddBrick(String volumeName, String[] brickList) {
+        Map<String, Object> xmlRpcReturnValue = irsServer.glusterVolumeAddBrick(volumeName, brickList);
+        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+        return wrapper;
+    }
 }
