@@ -24,6 +24,7 @@ public enum VdcBllMessages {
     VAR__ACTION__ADD,
     VAR__ACTION__UPDATE,
     VAR__ACTION__CREATE,
+    VAR__ACTION__LIST,
     VAR__ACTION__MERGE,
     VAR__ACTION__PAUSE,
     VAR__ACTION__HIBERNATE,
