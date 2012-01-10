@@ -1,10 +1,11 @@
 package org.ovirt.engine.ui.uicommonweb.models.gluster;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.ovirt.engine.core.common.action.CreateGlusterVolumeParameters;
 import org.ovirt.engine.core.common.action.VdcActionType;
-import org.ovirt.engine.core.common.businessentities.GlusterVolume;
+import org.ovirt.engine.core.common.action.VdsGroupParametersBase;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_TYPE;
 import org.ovirt.engine.core.common.businessentities.VDSGroup;
@@ -21,9 +22,8 @@ import org.ovirt.engine.ui.uicommonweb.models.EntityModel;
 import org.ovirt.engine.ui.uicommonweb.models.ISupportSystemTreeContext;
 import org.ovirt.engine.ui.uicommonweb.models.ListWithDetailsModel;
 import org.ovirt.engine.ui.uicommonweb.models.SystemTreeItemModel;
+import org.ovirt.engine.ui.uicommonweb.models.SystemTreeItemType;
 import org.ovirt.engine.ui.uicommonweb.models.configure.PermissionListModel;
-import org.ovirt.engine.ui.uicommonweb.models.hosts.HostListModel;
-import org.ovirt.engine.ui.uicommonweb.models.hosts.HostModel;
 import org.ovirt.engine.ui.uicompat.FrontendActionAsyncResult;
 import org.ovirt.engine.ui.uicompat.IFrontendActionAsyncCallback;
 
@@ -146,12 +146,22 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
 	@Override
 	protected void SyncSearch() {
 		super.SyncSearch();
-		ArrayList<GlusterVolumeEntity> list = new ArrayList<GlusterVolumeEntity>();
-		GlusterVolumeEntity glusterVolume = new GlusterVolumeEntity();
-		glusterVolume.setName("Vol1");
-		glusterVolume.setId(guid);
-		list.add(glusterVolume);
-		setItems(list);
+		if(getSystemTreeSelectedItem() != null && getSystemTreeSelectedItem().getType().equals(SystemTreeItemType.Cluster)) {
+			VDSGroup cluster = (VDSGroup)getSystemTreeSelectedItem().getEntity();
+			Frontend.RunAction(VdcActionType.ListGlusterVolumes, new VdsGroupParametersBase(cluster.getID()), new IFrontendActionAsyncCallback() {
+				
+				@Override
+				public void Executed(FrontendActionAsyncResult result) {
+					if(result.getReturnValue().getActionReturnValue() != null) {
+						ArrayList<GlusterVolumeEntity> volumes =  new ArrayList<GlusterVolumeEntity>(Arrays.asList((GlusterVolumeEntity[])result.getReturnValue().getActionReturnValue()));
+						setItems(volumes);
+					} else {
+						setItems(new ArrayList<GlusterVolumeEntity>());
+					}
+				}
+			});
+		}
+		setIsQueryFirstTime(false);
 	}
 	
 	@Override
@@ -184,7 +194,14 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
 		Guid clusterId = ((VDSGroup)model.getCluster().getSelectedItem()).getID();
 		GlusterVolumeEntity volume = new GlusterVolumeEntity();
 		volume.setName((String)model.getName().getEntity());
-		volume.setVolumeType((VOLUME_TYPE)model.getTypeList().getSelectedItem());
+		VOLUME_TYPE type = (VOLUME_TYPE)model.getTypeList().getSelectedItem();
+		
+		if(type == VOLUME_TYPE.STRIPE){
+			volume.setStripeCount(4);
+		} else if(type == VOLUME_TYPE.REPLICATE) {
+			volume.setReplicaCount(2);
+		}
+		volume.setVolumeType(type);
 		volume.setBricks((String)model.getBricks().getEntity());
 		CreateGlusterVolumeParameters parameter = new CreateGlusterVolumeParameters(clusterId, volume); 
 		
