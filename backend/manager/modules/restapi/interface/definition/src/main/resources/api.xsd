@@ -2291,8 +2291,8 @@
      <xs:attribute name="rel" type="xs:string"/>
   </xs:complexType>
 
-  <xs:element name="glusterVolumes" type="GlusterVolumes"/>
-  <xs:element name="glusterVolume" type="GlusterVolume"/>
+  <xs:element name="gluster_volumes" type="GlusterVolumes"/>
+  <xs:element name="gluster_volume" type="GlusterVolume"/>
 
   <xs:complexType name="GlusterVolume">
     <xs:annotation>
@@ -2327,7 +2327,7 @@
                 <jaxb:property name="GlusterVolumes"/>
             </xs:appinfo>
           </xs:annotation>
-          <xs:element ref="glusterVolume" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element ref="gluster_volume" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

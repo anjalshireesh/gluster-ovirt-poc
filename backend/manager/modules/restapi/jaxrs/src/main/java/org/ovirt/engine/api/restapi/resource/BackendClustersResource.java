@@ -22,7 +22,7 @@ import org.ovirt.engine.core.common.queries.VdcQueryType;
 public class BackendClustersResource extends AbstractBackendCollectionResource<Cluster, VDSGroup>
         implements ClustersResource {
 
-    static final String[] SUB_COLLECTIONS = { "networks", "permissions", "glusterVolumes" };
+    static final String[] SUB_COLLECTIONS = { "networks", "permissions", "glustervolumes" };
 
     public BackendClustersResource() {
         super(Cluster.class, VDSGroup.class, SUB_COLLECTIONS);
