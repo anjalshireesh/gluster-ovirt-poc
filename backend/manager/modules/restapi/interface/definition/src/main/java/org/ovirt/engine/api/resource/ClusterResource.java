@@ -28,7 +28,7 @@ public interface ClusterResource extends UpdatableResource<Cluster> {
     @Path("networks")
     public AssignedNetworksResource getAssignedNetworksSubResource();
 
-    @Path("glusterVolumes")
+    @Path("glustervolumes")
     public GlusterVolumesResource getGlusterVolumesResource();
 
     @Path("permissions")
