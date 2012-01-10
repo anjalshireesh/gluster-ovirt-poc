@@ -1,6 +1,7 @@
 package org.ovirt.engine.ui.webadmin.section.main.view.popup.gluster;
 
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_TYPE;
+import org.ovirt.engine.core.common.businessentities.VDSGroup;
 import org.ovirt.engine.core.common.businessentities.storage_pool;
 import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeModel;
 import org.ovirt.engine.ui.webadmin.ApplicationConstants;
@@ -36,6 +37,16 @@ public class VolumePopupView extends AbstractModelBoundPopupView<VolumeModel> im
     interface ViewIdHandler extends ElementIdHandler<VolumePopupView> {
         ViewIdHandler idHandler = GWT.create(ViewIdHandler.class);
     }
+    
+    @UiField(provided = true)
+    @Path(value = "dataCenter.selectedItem")
+    @WithElementId("dataCenter")
+    ListModelListBoxEditor<Object> dataCenterEditor;
+
+    @UiField(provided = true)
+    @Path(value = "cluster.selectedItem")
+    @WithElementId("cluster")
+    ListModelListBoxEditor<Object> clusterEditor;
 
     @UiField
     @Path(value = "name.entity")
@@ -99,9 +110,25 @@ public class VolumePopupView extends AbstractModelBoundPopupView<VolumeModel> im
 //                return ((VOLUME_TYPE) object).getname();
 //            }
 //        });
+		
+		dataCenterEditor = new ListModelListBoxEditor<Object>(new NullSafeRenderer<Object>() {
+            @Override
+            public String renderNullSafe(Object object) {
+                return ((storage_pool) object).getname();
+            }
+        });
+
+        clusterEditor = new ListModelListBoxEditor<Object>(new NullSafeRenderer<Object>() {
+            @Override
+            public String renderNullSafe(Object object) {
+                return ((VDSGroup) object).getname();
+            }
+        });
 	}
 
     private void localize(ApplicationConstants constants) {
+    	dataCenterEditor.setLabel("Data Center");
+        clusterEditor.setLabel("Volume Cluster");
         nameEditor.setLabel(constants.clusterPopupNameLabel());
         typeListEditor.setLabel("Type");
         bricksEditor.setLabel("Bricks");
