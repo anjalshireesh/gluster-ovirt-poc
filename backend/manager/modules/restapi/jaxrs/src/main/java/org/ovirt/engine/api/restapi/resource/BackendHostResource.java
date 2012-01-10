@@ -20,15 +20,15 @@ import org.ovirt.engine.api.resource.AssignedPermissionsResource;
 import org.ovirt.engine.api.resource.AssignedTagsResource;
 import org.ovirt.engine.api.resource.HostResource;
 import org.ovirt.engine.api.resource.HostNicsResource;
-import org.ovirt.engine.api.resource.HostStorageResource;
+//import org.ovirt.engine.api.resource.HostStorageResource;
 import org.ovirt.engine.api.resource.StatisticsResource;
 import org.ovirt.engine.core.common.VdcObjectType;
-import org.ovirt.engine.core.common.action.ApproveVdsParameters;
+//import org.ovirt.engine.core.common.action.ApproveVdsParameters;
 import org.ovirt.engine.core.common.action.ChangeVDSClusterParameters;
 import org.ovirt.engine.core.common.action.FenceVdsActionParameters;
 import org.ovirt.engine.core.common.action.FenceVdsManualyParameters;
 import org.ovirt.engine.core.common.action.MaintananceNumberOfVdssParameters;
-import org.ovirt.engine.core.common.action.StorageServerConnectionParametersBase;
+//import org.ovirt.engine.core.common.action.StorageServerConnectionParametersBase;
 import org.ovirt.engine.core.common.action.UpdateVdsActionParameters;
 import org.ovirt.engine.core.common.action.VdsActionParameters;
 import org.ovirt.engine.core.common.action.VdcActionParametersBase;
@@ -107,17 +107,17 @@ public class BackendHostResource extends AbstractBackendActionableResource<Host,
                         action);
     }
 
-    @Override
-    public Response approve(Action action) {
-
-        if (action.isSetCluster() && (action.getCluster().isSetId() || action.getCluster().isSetName())) {
-            update(setCluster(get(), action.getCluster()));
-        }
-
-        return doAction(VdcActionType.ApproveVds,
-                        new ApproveVdsParameters(guid),
-                        action);
-    }
+//    @Override
+//    public Response approve(Action action) {
+//
+//        if (action.isSetCluster() && (action.getCluster().isSetId() || action.getCluster().isSetName())) {
+//            update(setCluster(get(), action.getCluster()));
+//        }
+//
+//        return doAction(VdcActionType.ApproveVds,
+//                        new ApproveVdsParameters(guid),
+//                        action);
+//    }
 
     private Host setCluster(Host host, Cluster cluster) {
         if (cluster.isSetId()) {
@@ -140,39 +140,39 @@ public class BackendHostResource extends AbstractBackendActionableResource<Host,
                         action);
     }
 
-    @Override
-    public Response iscsiLogin(Action action) {
-        validateParameters(action, "iscsi.address", "iscsi.target");
-        storage_server_connections cnx = new storage_server_connections();
-        IscsiDetails iscsiDetails = action.getIscsi();
-        cnx.setconnection(iscsiDetails.getAddress());
-        cnx.setiqn(iscsiDetails.getTarget());
-        cnx.setstorage_type(org.ovirt.engine.core.common.businessentities.StorageType.ISCSI);
-        if (iscsiDetails.isSetPort()) {
-            cnx.setport(iscsiDetails.getPort().toString());
-        } else {
-            cnx.setport(DEFAULT_ISCSI_PORT);
-        }
-        if (iscsiDetails.isSetUsername()) {
-            cnx.setuser_name(iscsiDetails.getUsername());
-        }
-        if (iscsiDetails.isSetPassword()) {
-            cnx.setpassword(iscsiDetails.getPassword());
-        }
-        cnx.setportal(iscsiDetails.getAddress());
-        StorageServerConnectionParametersBase connectionParms = new StorageServerConnectionParametersBase(cnx, guid);
-        return doAction(VdcActionType.ConnectStorageToVds, connectionParms, action);
-    }
-
-    public Response iscsiDiscover(Action action) {
-        validateParameters(action, "iscsi.address");
-
-        List<storage_server_connections> result = getBackendCollection(storage_server_connections.class,
-                                                                       VdcQueryType.DiscoverSendTargets,
-                                                                       createDiscoveryQueryParams(action));
-
-        return actionSuccess(mapTargets(action, result));
-    }
+//    @Override
+//    public Response iscsiLogin(Action action) {
+//        validateParameters(action, "iscsi.address", "iscsi.target");
+//        storage_server_connections cnx = new storage_server_connections();
+//        IscsiDetails iscsiDetails = action.getIscsi();
+//        cnx.setconnection(iscsiDetails.getAddress());
+//        cnx.setiqn(iscsiDetails.getTarget());
+//        cnx.setstorage_type(org.ovirt.engine.core.common.businessentities.StorageType.ISCSI);
+//        if (iscsiDetails.isSetPort()) {
+//            cnx.setport(iscsiDetails.getPort().toString());
+//        } else {
+//            cnx.setport(DEFAULT_ISCSI_PORT);
+//        }
+//        if (iscsiDetails.isSetUsername()) {
+//            cnx.setuser_name(iscsiDetails.getUsername());
+//        }
+//        if (iscsiDetails.isSetPassword()) {
+//            cnx.setpassword(iscsiDetails.getPassword());
+//        }
+//        cnx.setportal(iscsiDetails.getAddress());
+//        StorageServerConnectionParametersBase connectionParms = new StorageServerConnectionParametersBase(cnx, guid);
+//        return doAction(VdcActionType.ConnectStorageToVds, connectionParms, action);
+//    }
+//
+//    public Response iscsiDiscover(Action action) {
+//        validateParameters(action, "iscsi.address");
+//
+//        List<storage_server_connections> result = getBackendCollection(storage_server_connections.class,
+//                                                                       VdcQueryType.DiscoverSendTargets,
+//                                                                       createDiscoveryQueryParams(action));
+//
+//        return actionSuccess(mapTargets(action, result));
+//    }
 
     private Action mapTargets(Action action, List<storage_server_connections> targets) {
         if (targets != null) {
@@ -272,10 +272,10 @@ public class BackendHostResource extends AbstractBackendActionableResource<Host,
         return inject(new BackendHostNicsResource(id));
     }
 
-    @Override
-    public HostStorageResource getHostStorageResource() {
-        return inject(new BackendHostStorageResource(id));
-    }
+//    @Override
+//    public HostStorageResource getHostStorageResource() {
+//        return inject(new BackendHostStorageResource(id));
+//    }
 
     @Override
     public AssignedTagsResource getTagsResource() {

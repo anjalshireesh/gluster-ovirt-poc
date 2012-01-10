@@ -34,11 +34,11 @@ public interface HostResource extends UpdatableResource<Host>, MeasurableResourc
     @Path("{action: (approve|install|fence|activate|deactivate|commitnetconfig|iscsidiscover|iscsilogin)}/{oid}")
     public ActionResource getActionSubresource(@PathParam("action")String action, @PathParam("oid")String oid);
 
-    @POST
-    @Formatted
-    @Actionable
-    @Path("approve")
-    public Response approve(Action action);
+//    @POST
+//    @Formatted
+//    @Actionable
+//    @Path("approve")
+//    public Response approve(Action action);
 
     @POST
     @Formatted
@@ -70,23 +70,23 @@ public interface HostResource extends UpdatableResource<Host>, MeasurableResourc
     @Path("commitnetconfig")
     public Response commitNetConfig(Action action);
 
-    @POST
-    @Formatted
-    @Actionable
-    @Path("iscsidiscover")
-    public Response iscsiDiscover(Action action);
-
-    @POST
-    @Formatted
-    @Actionable
-    @Path("iscsilogin")
-    public Response iscsiLogin(Action action);
+//    @POST
+//    @Formatted
+//    @Actionable
+//    @Path("iscsidiscover")
+//    public Response iscsiDiscover(Action action);
+//
+//    @POST
+//    @Formatted
+//    @Actionable
+//    @Path("iscsilogin")
+//    public Response iscsiLogin(Action action);
 
     @Path("nics")
     public HostNicsResource getHostNicsResource();
 
-    @Path("storage")
-    public HostStorageResource getHostStorageResource();
+//    @Path("storage")
+//    public HostStorageResource getHostStorageResource();
 
     @Path("tags")
     public AssignedTagsResource getTagsResource();

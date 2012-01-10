@@ -13,6 +13,8 @@
         lazy-init="true"
         class="org.ovirt.engine.api.restapi.resource.BackendApiResource"/>
 
+<!--
+
   <bean id="backendEventsResource"
         lazy-init="true"
         class="org.ovirt.engine.api.restapi.resource.BackendEventsResource"/>
@@ -24,18 +26,6 @@
   <bean id="backendVmsResource"
         lazy-init="true"
         class="org.ovirt.engine.api.restapi.resource.BackendVmsResource"/>
-
-  <bean id="backendHostsResource"
-        lazy-init="true"
-        class="org.ovirt.engine.api.restapi.resource.BackendHostsResource"/>
-
-  <bean id="backendClustersResource"
-        lazy-init="true"
-        class="org.ovirt.engine.api.restapi.resource.BackendClustersResource"/>
-
-  <bean id="backendDataCentersResource"
-        lazy-init="true"
-        class="org.ovirt.engine.api.restapi.resource.BackendDataCentersResource"/>
 
   <bean id="backendStorageDomainsResource"
         lazy-init="true"
@@ -72,6 +62,19 @@
   <bean id="backendDomainsResource"
         lazy-init="true"
         class="org.ovirt.engine.api.restapi.resource.BackendDomainsResource"/>
+-->
+
+  <bean id="backendHostsResource"
+        lazy-init="true"
+        class="org.ovirt.engine.api.restapi.resource.BackendHostsResource"/>
+
+  <bean id="backendClustersResource"
+        lazy-init="true"
+        class="org.ovirt.engine.api.restapi.resource.BackendClustersResource"/>
+
+  <bean id="backendDataCentersResource"
+        lazy-init="true"
+        class="org.ovirt.engine.api.restapi.resource.BackendDataCentersResource"/>
 
   <!-- Dependencies (auto-wired by default) -->
 
