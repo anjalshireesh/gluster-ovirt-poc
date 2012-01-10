@@ -41,7 +41,7 @@ public class BackendGlusterVolumesResource extends AbstractBackendCollectionReso
     protected GlusterVolumes mapCollection(GlusterVolumeEntity[] entities) {
         GlusterVolumes collection = new GlusterVolumes();
         for (GlusterVolumeEntity entity : entities) {
-            collection.getGlusterVolumes().add(addLinks(populate(map(entity), entity)));
+            collection.getGlusterVolumes().add(populate(map(entity), entity));
         }
         return collection;
     }
