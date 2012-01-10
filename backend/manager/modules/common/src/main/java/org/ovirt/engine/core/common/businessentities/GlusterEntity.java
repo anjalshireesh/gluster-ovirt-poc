@@ -22,8 +22,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.ovirt.engine.core.common.utils.StringUtil;
 
 public class GlusterEntity extends IVdcQueryable implements Filterable, Serializable {
@@ -44,7 +42,6 @@ public class GlusterEntity extends IVdcQueryable implements Filterable, Serializ
         this.name = name;
     }
 
-    @XmlTransient
     public GlusterEntity getParent() {
         return parent;
     }
