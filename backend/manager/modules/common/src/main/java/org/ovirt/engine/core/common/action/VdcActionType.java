@@ -243,8 +243,9 @@ public enum VdcActionType {
     // Gluster Volumes
     CreateGlusterVolume(1400, ActionGroup.GLUSTER_CREATE_VOLUME),
     StartGlusterVolume(1401, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
-    StopGlusterVolume(1401, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
-    RebalanceGlusterVolume(1401, ActionGroup.GLUSTER_VOLUME_OPERATIONS);
+    StopGlusterVolume(1402, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
+    RebalanceGlusterVolume(1403, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
+    ListGlusterVolumes(1404);
 
     private int intValue;
     private ActionGroup actionGroup;
