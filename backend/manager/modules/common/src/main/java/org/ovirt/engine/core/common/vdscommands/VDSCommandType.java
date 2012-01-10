@@ -124,7 +124,8 @@ public enum VDSCommandType {
     HotPlugDisk("org.ovirt.engine.core.vdsbroker.vdsbroker"),
     HotUnPlugDisk("org.ovirt.engine.core.vdsbroker.vdsbroker"),
     Snapshot("org.ovirt.engine.core.vdsbroker.vdsbroker");
-    CreateGlusterVolume("org.ovirt.engine.core.vdsbroker.irsbroker");
+    CreateGlusterVolume("org.ovirt.engine.core.vdsbroker.glusterbroker"),
+    ListGlusterVolumes("org.ovirt.engine.core.vdsbroker.glusterbroker");
 
     String packageName;
 

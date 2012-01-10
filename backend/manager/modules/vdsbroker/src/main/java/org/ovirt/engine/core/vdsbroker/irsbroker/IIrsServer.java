@@ -2,6 +2,7 @@ package org.ovirt.engine.core.vdsbroker.irsbroker;
 
 import java.util.Map;
 
+import org.ovirt.engine.core.vdsbroker.glusterbroker.GlusterVolumeListReturnForXmlRpc;
 import org.ovirt.engine.core.vdsbroker.vdsbroker.StatusOnlyReturnForXmlRpc;
 import org.ovirt.engine.core.vdsbroker.vdsbroker.StorageDomainListReturnForXmlRpc;
 import org.ovirt.engine.core.vdsbroker.xmlrpc.XmlRpcStruct;
@@ -95,4 +96,6 @@ public interface IIrsServer {
     GetVmsListReturnForXmlRpc getVmsList(String storagePoolId, String storageDomainId);
 
     StatusOnlyReturnForXmlRpc glusterVolumeCreate(Map<String, Object> volumeData);
+
+    GlusterVolumeListReturnForXmlRpc glusterVolumesList();
 }

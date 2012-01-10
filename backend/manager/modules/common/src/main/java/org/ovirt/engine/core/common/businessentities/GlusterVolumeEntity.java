@@ -258,15 +258,19 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     }
 
     public void setOptions(LinkedHashMap<String, String> options) {
-        List<GlusterVolumeOption> GlusterVolumeOptions = new ArrayList<GlusterVolumeOption>();
+        List<GlusterVolumeOption> volumeOptions = new ArrayList<GlusterVolumeOption>();
         for (Entry<String, String> entry : options.entrySet()) {
-            GlusterVolumeOptions.add(new GlusterVolumeOption(entry.getKey(), entry.getValue()));
+            volumeOptions.add(new GlusterVolumeOption(entry.getKey(), entry.getValue()));
         }
-        this.options.setOptions(GlusterVolumeOptions);
+        this.options.setOptions(volumeOptions);
     }
 
     public void addBrick(GlusterBrick GlusterBrick) {
         bricks.add(GlusterBrick);
+    }
+
+    public void addBrick(String brickQualifiedName) {
+        bricks.add(new GlusterBrick(brickQualifiedName));
     }
 
     public void addBricks(Collection<GlusterBrick> bricks) {

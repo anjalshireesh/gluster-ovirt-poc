@@ -38,6 +38,22 @@ public class GlusterBrick extends GlusterEntity {
     public GlusterBrick() {
     }
 
+    private void initBrick(String serverName, String brickDirectory) {
+        setServerName(serverName);
+        setBrickDirectory(brickDirectory);
+        setStatus(BRICK_STATUS.ONLINE);
+    }
+
+    public GlusterBrick(String serverName, String brickDirectory) {
+        super();
+        initBrick(serverName, brickDirectory);
+    }
+
+    public GlusterBrick(String qualifiedName) {
+        String brickInfo[] = qualifiedName.split(":", -1);
+        initBrick(brickInfo[0], brickInfo[1]);
+    }
+
     @Override
     @XmlTransient
     public String getName() {
