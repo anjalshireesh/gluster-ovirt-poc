@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.TRANSPORT_TYPE;
 import org.ovirt.engine.core.common.glustercommands.CreateGlusterVolumeVDSParameters;
 
 /**
@@ -25,9 +26,15 @@ public class CreateGlusterVolumeVDSCommand extends GlusterBrokerCommand<CreateGl
         Map<String, Object> parameters = new HashMap<String, Object>();
 
         parameters.put("volumeName", volume.getName());
+        parameters.put("volumeType", volume.getVolumeType().toString());
         parameters.put("replicaCount", volume.getReplicaCount());
         parameters.put("stripeCount", volume.getStripeCount());
-        parameters.put("transportType", volume.getTransportType().toString());
+
+        Object transportType = volume.getTransportType();
+        if(transportType == null || transportType.toString().isEmpty()) {
+            transportType = TRANSPORT_TYPE.ETHERNET.toString();
+        }
+        parameters.put("transportType", transportType.toString());
         parameters.put("bricks", volume.getBrickDirectories().toArray());
 
         status = getIrsProxy().glusterVolumeCreate(parameters);
