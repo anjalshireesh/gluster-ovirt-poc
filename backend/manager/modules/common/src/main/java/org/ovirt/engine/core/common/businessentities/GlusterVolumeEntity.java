@@ -79,7 +79,7 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     private int stripeCount;
     private GlusterVolumeOptions options = new GlusterVolumeOptions();
     private List<GlusterBrick> bricks = new ArrayList<GlusterBrick>();
-    private List<String> cifsUsers;
+    private List<String> cifsUsers = new ArrayList<String>();
 
     public GlusterVolumeEntity() {
     }

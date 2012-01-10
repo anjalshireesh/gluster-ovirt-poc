@@ -3,11 +3,12 @@ package org.ovirt.engine.core.vdsbroker.glusterbroker;
 import java.util.Map;
 
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.TRANSPORT_TYPE;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_STATUS;
 import org.ovirt.engine.core.vdsbroker.irsbroker.StatusReturnForXmlRpc;
 
 public final class GlusterVolumeListReturnForXmlRpc extends StatusReturnForXmlRpc {
-    private static final String GLUSTER_VOLUMES = "glusterVolumes";
+    private static final String GLUSTER_VOLUMES = "volumes";
 
     // We are ignoring missing fields after the status, because on failure it is
     // not sent.
@@ -30,8 +31,16 @@ public final class GlusterVolumeListReturnForXmlRpc extends StatusReturnForXmlRp
         GlusterVolumeEntity volume = new GlusterVolumeEntity();
         volume.setName(volumeMap.get("volumeName").toString());
         volume.setVolumeType(volumeMap.get("volumeType").toString());
-        volume.setTransportType(volumeMap.get("transportType").toString());
-        volume.setStatus(VOLUME_STATUS.valueOf(volumeMap.get("status").toString()));
+
+        Object[] transportTypes = (Object[])volumeMap.get("transportType");
+        if(transportTypes != null && transportTypes.length > 0) {
+            // Though VDSM (gluster) can potentially return multiple transport types for a given volume,
+            // we are currently showing only one. This needs to be enhanced, starting with adding a list
+            // of transport types in the volume entity model instead of a single value
+            volume.setTransportType(TRANSPORT_TYPE.valueOf(transportTypes[0].toString()));
+        }
+
+        volume.setStatus(VOLUME_STATUS.valueOf(volumeMap.get("volumeStatus").toString()));
 
         switch(volume.getVolumeType()) {
         case REPLICATE:
@@ -44,10 +53,10 @@ public final class GlusterVolumeListReturnForXmlRpc extends StatusReturnForXmlRp
             break;
         }
 
-        String[] bricksData = (String[])volumeMap.get("bricks");
+        Object[] bricksData = (Object[])volumeMap.get("bricks");
         if(bricksData != null && bricksData.length > 0) {
-            for(String brickData : bricksData) {
-                volume.addBrick(brickData);
+            for(Object brickData : bricksData) {
+                volume.addBrick(brickData.toString());
             }
         }
 
