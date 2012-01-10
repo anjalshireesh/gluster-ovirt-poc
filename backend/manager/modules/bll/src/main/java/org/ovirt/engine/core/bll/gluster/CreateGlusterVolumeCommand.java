@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.ovirt.engine.core.bll.Backend;
-import org.ovirt.engine.core.bll.CommandBase;
 import org.ovirt.engine.core.common.VdcObjectType;
 import org.ovirt.engine.core.common.action.CreateGlusterVolumeParameters;
 import org.ovirt.engine.core.common.vdscommands.CreateGlusterVolumeVDSParameters;
@@ -18,28 +17,17 @@ import org.ovirt.engine.core.dal.VdcBllMessages;
 /**
  *
  */
-public class CreateGlusterVolumeCommand<T extends CreateGlusterVolumeParameters> extends CommandBase<CreateGlusterVolumeParameters> {
+public class CreateGlusterVolumeCommand extends GlusterCommandBase<CreateGlusterVolumeParameters> {
 
-    public CreateGlusterVolumeCommand(T params) {
+    public CreateGlusterVolumeCommand(CreateGlusterVolumeParameters params) {
         super(params);
-        setVdsGroupId(params.getVdsGroupId());
     }
 
     @Override
     protected boolean canDoAction() {
         boolean canDoAction = super.canDoAction();
-        if (canDoAction && getVdsGroup() == null) {
-            canDoAction = false;
-            addCanDoActionMessage(VdcBllMessages.VDS_CLUSTER_IS_NOT_VALID);
+        if(!canDoAction) {
             addCanDoActionMessage(VdcBllMessages.VAR__ACTION__CREATE);
-            addCanDoActionMessage(VdcBllMessages.VAR__TYPE__GLUSTER_VOLUME);
-        }
-
-        if(canDoAction && getVdsGroup().getstorage_pool_id() == null) {
-            canDoAction = false;
-            addCanDoActionMessage(VdcBllMessages.ACTION_TYPE_FAILED_STORAGE_POOL_NOT_EXIST);
-            addCanDoActionMessage(VdcBllMessages.VAR__ACTION__CREATE);
-            addCanDoActionMessage(VdcBllMessages.VAR__TYPE__GLUSTER_VOLUME);
         }
         return canDoAction;
     }
