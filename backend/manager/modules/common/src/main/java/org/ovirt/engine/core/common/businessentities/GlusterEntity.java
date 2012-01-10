@@ -26,6 +26,7 @@ import org.ovirt.engine.core.common.utils.StringUtil;
 
 public class GlusterEntity extends IVdcQueryable implements Filterable, Serializable {
 
+    private String id;
     protected String name;
     protected List<GlusterEntity> children = new ArrayList<GlusterEntity>();
     private GlusterEntity parent;
@@ -77,5 +78,13 @@ public class GlusterEntity extends IVdcQueryable implements Filterable, Serializ
     @Override
     public String toString() {
         return name;
+    }
+
+    public String getId() {
+        return id == null ? getName() : id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
