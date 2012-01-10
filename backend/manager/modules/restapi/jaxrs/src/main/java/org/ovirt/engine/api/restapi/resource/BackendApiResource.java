@@ -41,14 +41,14 @@ import org.ovirt.engine.api.model.Hosts;
 import org.ovirt.engine.api.model.Link;
 import org.ovirt.engine.api.model.LinkHeader;
 import org.ovirt.engine.api.model.ObjectFactory;
-import org.ovirt.engine.api.model.Parameter;
-import org.ovirt.engine.api.model.ParametersSet;
+//import org.ovirt.engine.api.model.Parameter;
+//import org.ovirt.engine.api.model.ParametersSet;
 import org.ovirt.engine.api.model.ProductInfo;
 import org.ovirt.engine.api.model.RSDL;
-import org.ovirt.engine.api.model.SpecialObjects;
-import org.ovirt.engine.api.model.StorageDomains;
+//import org.ovirt.engine.api.model.SpecialObjects;
+//import org.ovirt.engine.api.model.StorageDomains;
 import org.ovirt.engine.api.model.Users;
-import org.ovirt.engine.api.model.VMs;
+//import org.ovirt.engine.api.model.VMs;
 import org.ovirt.engine.api.resource.ApiResource;
 import org.ovirt.engine.api.common.util.FileUtils;
 import org.ovirt.engine.api.restapi.util.VersionHelper;
@@ -70,7 +70,7 @@ public class BackendApiResource
     private static final String RSDL_REL = "rsdl";
     private static final String SCHEMA_REL = "schema";
     private static final String SCHEMA_CONSTRAINT_PARAMETER = "schema";
-    private static final String RSDL_DESCRIPTION = "The oVirt RESTful API description language.";
+    private static final String RSDL_DESCRIPTION = "The Gluster RESTful API description language.";
     private static final String SCHEMA_DESCRIPTION = "oVirt API entities schema.";
     private static final String SCHEMA_NAME = "ovirt-engine-api-schema.xsd";
 
@@ -80,21 +80,21 @@ public class BackendApiResource
 
     private Collection<DetailedLink> getLinks() {
         Collection<DetailedLink> links = new LinkedList<DetailedLink>();
-        links.add(createLink("capabilities"));
+//        links.add(createLink("capabilities"));
         links.add(createLink("clusters", LinkFlags.SEARCHABLE));
         links.add(createLink("datacenters", LinkFlags.SEARCHABLE));
-        links.add(createLink("events", LinkFlags.SEARCHABLE, getEventParams()));
+//        links.add(createLink("events", LinkFlags.SEARCHABLE, getEventParams()));
         links.add(createLink("hosts", LinkFlags.SEARCHABLE));
-        links.add(createLink("networks"));
-        links.add(createLink("roles"));
-        links.add(createLink("storagedomains", LinkFlags.SEARCHABLE));
-        links.add(createLink("tags"));
-        links.add(createLink("templates", LinkFlags.SEARCHABLE));
-        links.add(createLink("users", LinkFlags.SEARCHABLE));
-        links.add(createLink("groups", LinkFlags.SEARCHABLE));
-        links.add(createLink("domains"));
-        links.add(createLink("vmpools", LinkFlags.SEARCHABLE));
-        links.add(createLink("vms", LinkFlags.SEARCHABLE));
+//        links.add(createLink("networks"));
+//        links.add(createLink("roles"));
+//        links.add(createLink("storagedomains", LinkFlags.SEARCHABLE));
+//        links.add(createLink("tags"));
+//        links.add(createLink("templates", LinkFlags.SEARCHABLE));
+//        links.add(createLink("users", LinkFlags.SEARCHABLE));
+//        links.add(createLink("groups", LinkFlags.SEARCHABLE));
+//        links.add(createLink("domains"));
+//        links.add(createLink("vmpools", LinkFlags.SEARCHABLE));
+//        links.add(createLink("vms", LinkFlags.SEARCHABLE));
         return links;
     }
 
@@ -111,14 +111,14 @@ public class BackendApiResource
         return api;
     }
 
-    private ParametersSet getEventParams() {
-        ParametersSet ps = new ParametersSet();
-        Parameter param = new Parameter();
-        param.setName("from");
-        param.setValue("event_id");
-        ps.getParameters().add(param);
-        return ps;
-    }
+//    private ParametersSet getEventParams() {
+//        ParametersSet ps = new ParametersSet();
+//        Parameter param = new Parameter();
+//        param.setName("from");
+//        param.setValue("event_id");
+//        ps.getParameters().add(param);
+//        return ps;
+//    }
 
     public List<String> getRels() {
         List<String> rels = new ArrayList<String>();
@@ -128,41 +128,41 @@ public class BackendApiResource
         return rels;
     }
 
-    private BaseResource getSpecialObjects(API api) {
-        api.setSpecialObjects(new SpecialObjects());
-        return api.getSpecialObjects();
-    }
-
-    private String getTagRootUri() {
-        return LinkHelper.combine(getUriInfo().getBaseUri().getPath(), "tags/00000000-0000-0000-0000-000000000000");
-    }
-
-    private String getTemplateBlankUri() {
-        return LinkHelper.combine(getUriInfo().getBaseUri().getPath(), "templates/00000000-0000-0000-0000-000000000000");
-    }
-
-    private void addStaticLinks(List<Link> linker, String[] rels, String[] refs) {
-        if(rels.length == refs.length){
-            for(int i = 0; i < rels.length; i++){
-                Link link = new Link();
-                link.setRel(rels[i]);
-                link.setHref(refs[i]);
-                linker.add(link);
-            }
-        }
-    }
+//    private BaseResource getSpecialObjects(API api) {
+//        api.setSpecialObjects(new SpecialObjects());
+//        return api.getSpecialObjects();
+//    }
+//
+//    private String getTagRootUri() {
+//        return LinkHelper.combine(getUriInfo().getBaseUri().getPath(), "tags/00000000-0000-0000-0000-000000000000");
+//    }
+//
+//    private String getTemplateBlankUri() {
+//        return LinkHelper.combine(getUriInfo().getBaseUri().getPath(), "templates/00000000-0000-0000-0000-000000000000");
+//    }
+//
+//    private void addStaticLinks(List<Link> linker, String[] rels, String[] refs) {
+//        if(rels.length == refs.length){
+//            for(int i = 0; i < rels.length; i++){
+//                Link link = new Link();
+//                link.setRel(rels[i]);
+//                link.setHref(refs[i]);
+//                linker.add(link);
+//            }
+//        }
+//    }
 
     private DetailedLink createLink(String rel, LinkFlags flags) {
         return LinkHelper.createLink(getUriInfo().getBaseUri().getPath(), rel, flags);
     }
 
-    private DetailedLink createLink(String rel, LinkFlags flags, ParametersSet params) {
-        return LinkHelper.createLink(getUriInfo().getBaseUri().getPath(), rel, flags, params);
-    }
-
-    private DetailedLink createLink(String rel) {
-        return LinkHelper.createLink(getUriInfo().getBaseUri().getPath(), rel, LinkFlags.NONE);
-    }
+//    private DetailedLink createLink(String rel, LinkFlags flags, ParametersSet params) {
+//        return LinkHelper.createLink(getUriInfo().getBaseUri().getPath(), rel, flags, params);
+//    }
+//
+//    private DetailedLink createLink(String rel) {
+//        return LinkHelper.createLink(getUriInfo().getBaseUri().getPath(), rel, LinkFlags.NONE);
+//    }
 
     private String addPath(UriBuilder uriBuilder, Link link) {
         String query = "";
@@ -311,9 +311,9 @@ public class BackendApiResource
 
         ApiSummary summary = new ApiSummary();
 
-        summary.setVMs(new VMs());
-        summary.getVMs().setTotal(get(stats, "total_vms"));
-        summary.getVMs().setActive(get(stats, "active_vms"));
+//        summary.setVMs(new VMs());
+//        summary.getVMs().setTotal(get(stats, "total_vms"));
+//        summary.getVMs().setActive(get(stats, "active_vms"));
 
         summary.setHosts(new Hosts());
         summary.getHosts().setTotal(get(stats, "total_vds"));
@@ -323,9 +323,9 @@ public class BackendApiResource
         summary.getUsers().setTotal(get(stats, "total_users"));
         summary.getUsers().setActive(get(stats, "active_users"));
 
-        summary.setStorageDomains(new StorageDomains());
-        summary.getStorageDomains().setTotal(get(stats, "total_storage_domains"));
-        summary.getStorageDomains().setActive(get(stats, "active_storage_domains"));
+//        summary.setStorageDomains(new StorageDomains());
+//        summary.getStorageDomains().setTotal(get(stats, "total_storage_domains"));
+//        summary.getStorageDomains().setActive(get(stats, "active_storage_domains"));
 
         api.setSummary(summary);
 

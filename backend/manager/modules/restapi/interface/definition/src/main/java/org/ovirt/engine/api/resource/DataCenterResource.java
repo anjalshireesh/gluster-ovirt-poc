@@ -24,8 +24,8 @@ import org.ovirt.engine.api.model.DataCenter;
 @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_X_YAML})
 public interface DataCenterResource extends UpdatableResource<DataCenter> {
 
-    @Path("storagedomains")
-    public AttachedStorageDomainsResource getAttachedStorageDomainsResource();
+//    @Path("storagedomains")
+//    public AttachedStorageDomainsResource getAttachedStorageDomainsResource();
 
     @Path("permissions")
     public AssignedPermissionsResource getPermissionsResource();

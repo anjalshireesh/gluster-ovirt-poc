@@ -28,7 +28,7 @@ import org.ovirt.engine.core.compat.Guid;
 public class BackendHostsResource extends AbstractBackendCollectionResource<Host, VDS> implements
         HostsResource {
 
-    static final String[] SUB_COLLECTIONS = { "storage", "nics", "tags", "permissions", "statistics" };
+    static final String[] SUB_COLLECTIONS = { /*"storage",*/ "nics", "tags", "permissions", "statistics" };
 
     public BackendHostsResource() {
         super(Host.class, VDS.class, SUB_COLLECTIONS);
