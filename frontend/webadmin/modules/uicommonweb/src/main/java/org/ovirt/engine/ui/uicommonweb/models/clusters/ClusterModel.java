@@ -28,7 +28,6 @@ import org.ovirt.engine.ui.uicommonweb.validation.RegexValidation;
 @SuppressWarnings("unused")
 public class ClusterModel extends Model
 {
-
     private int privateServerOverCommit;
 
     public int getServerOverCommit()
@@ -510,7 +509,7 @@ public class ClusterModel extends Model
             public void OnSuccess(Object model, Object result)
             {
                 ClusterModel clusterModel = (ClusterModel) model;
-                clusterModel.setDesktopOverCommit((Integer) result);
+                clusterModel.setServerOverCommit((Integer) result);
                 AsyncQuery _asyncQuery1 = new AsyncQuery();
                 _asyncQuery1.setModel(clusterModel);
                 _asyncQuery1.asyncCallback = new INewAsyncCallback() {
@@ -518,7 +517,7 @@ public class ClusterModel extends Model
                     public void OnSuccess(Object model1, Object result1)
                     {
                         ClusterModel clusterModel1 = (ClusterModel) model1;
-                        clusterModel1.setServerOverCommit((Integer) result1);
+                        clusterModel1.setDesktopOverCommit((Integer) result1);
 
                         // temp is used for conversion purposes
                         EntityModel temp;
@@ -810,3 +809,4 @@ public class ClusterModel extends Model
     }
 
 }
+
