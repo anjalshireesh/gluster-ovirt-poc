@@ -1,20 +1,20 @@
 /**
  *
  */
-package org.ovirt.engine.core.vdsbroker.irsbroker;
+package org.ovirt.engine.core.vdsbroker.glusterbroker;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
-import org.ovirt.engine.core.common.vdscommands.CreateGlusterVolumeVDSParameters;
+import org.ovirt.engine.core.common.glustercommands.CreateGlusterVolumeVDSParameters;
 
 /**
  *
  */
-public class CreateGlusterVolumeVDSCommand<T extends CreateGlusterVolumeVDSParameters> extends IrsBrokerCommand<CreateGlusterVolumeVDSParameters> {
+public class CreateGlusterVolumeVDSCommand extends GlusterBrokerCommand<CreateGlusterVolumeVDSParameters> {
 
-    public CreateGlusterVolumeVDSCommand(T parameters) {
+    public CreateGlusterVolumeVDSCommand(CreateGlusterVolumeVDSParameters parameters) {
         super(parameters);
     }
 

@@ -9,7 +9,7 @@ import java.util.Map;
 import org.ovirt.engine.core.bll.Backend;
 import org.ovirt.engine.core.common.VdcObjectType;
 import org.ovirt.engine.core.common.action.CreateGlusterVolumeParameters;
-import org.ovirt.engine.core.common.vdscommands.CreateGlusterVolumeVDSParameters;
+import org.ovirt.engine.core.common.glustercommands.CreateGlusterVolumeVDSParameters;
 import org.ovirt.engine.core.common.vdscommands.VDSCommandType;
 import org.ovirt.engine.core.common.vdscommands.VDSReturnValue;
 import org.ovirt.engine.core.dal.VdcBllMessages;

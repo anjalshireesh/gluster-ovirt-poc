@@ -124,7 +124,8 @@ public enum VDSCommandType {
     MarkPoolInReconstructMode("org.ovirt.engine.core.vdsbroker.irsbroker"),
     ExtendStorageDomain("org.ovirt.engine.core.vdsbroker.irsbroker"),
     UpdateSpmHostName("org.ovirt.engine.core.vdsbroker.irsbroker"),
-    CreateGlusterVolume("org.ovirt.engine.core.vdsbroker.irsbroker");
+    CreateGlusterVolume("org.ovirt.engine.core.vdsbroker.glusterbroker"),
+    ListGlusterVolumes("org.ovirt.engine.core.vdsbroker.glusterbroker");
 
     String packageName;
 
