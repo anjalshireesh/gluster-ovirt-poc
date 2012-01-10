@@ -11,6 +11,8 @@ import org.ovirt.engine.api.resource.GlusterVolumeResource;
 import org.ovirt.engine.api.resource.GlusterVolumesResource;
 import org.ovirt.engine.core.common.action.CreateGlusterVolumeParameters;
 import org.ovirt.engine.core.common.action.VdcActionType;
+import org.ovirt.engine.core.common.action.VdcReturnValueBase;
+import org.ovirt.engine.core.common.action.VdsGroupParametersBase;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.compat.Guid;
 
@@ -29,7 +31,19 @@ public class BackendGlusterVolumesResource extends AbstractBackendCollectionReso
 
     @Override
     public GlusterVolumes list() {
-        return new GlusterVolumes();
+        VdcReturnValueBase result =
+                backend.RunAction(VdcActionType.ListGlusterVolumes,
+                        new VdsGroupParametersBase(Guid.createGuidFromString(getClusterId())));
+        GlusterVolumeEntity[] volumes = (GlusterVolumeEntity[])result.getActionReturnValue();
+        return mapCollection(volumes);
+    }
+
+    protected GlusterVolumes mapCollection(GlusterVolumeEntity[] entities) {
+        GlusterVolumes collection = new GlusterVolumes();
+        for (GlusterVolumeEntity entity : entities) {
+            collection.getGlusterVolumes().add(addLinks(populate(map(entity), entity)));
+        }
+        return collection;
     }
 
     @Override
