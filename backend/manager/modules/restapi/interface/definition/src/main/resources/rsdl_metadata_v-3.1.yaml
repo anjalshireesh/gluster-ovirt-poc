@@ -1939,4 +1939,62 @@ actions:
         optionalArguments: {}
     urlparams: {}
     headers: {Content-Type: application/xml}
-    
+- name: /api/clusters/{cluster:id}/glustervolumes|rel=add
+  request:
+    body:
+      parameterType: GlusterVolume
+      signatures:
+      - mandatoryArguments: {glustervolume.volumeName: 'xs:string', 
+          glustervolume.volumeType: 'xs:string', 
+          glustervolume.bricks: 'xs:string'}
+        optionalArguments: {}
+    urlparams: {}
+    headers: {Content-Type: application/xml}
+- name: /api/clusters/{cluster:id}/glustervolumes/{glustervolume:id}|rel=delete
+  request:
+    body:
+      parameterType: null
+      signatures: []
+    urlparams: {}
+    headers: {}
+- name: /api/clusters/{cluster:id}/glustervolumes|rel=get
+  request:
+    body:
+      parameterType: null
+      signatures: []
+    urlparams: {}
+    headers: {}
+- name: /api/clusters/{cluster:id}/glustervolumes/{glustervolume:id}|rel=get
+  request:
+    body:
+      parameterType: null
+      signatures: []
+    urlparams: {}
+    headers: {}
+- name: /api/clusters/{cluster:id}/glustervolumes/{glustervolume:id}/start|rel=start
+  request:
+    body:
+      parameterType: Action
+      signatures:
+      - mandatoryArguments: {}
+        optionalArguments: {}
+    urlparams: {}
+    headers: {Content-Type: application/xml}
+- name: /api/clusters/{cluster:id}/glustervolumes/{glustervolume:id}/stop|rel=stop
+  request:
+    body:
+      parameterType: Action
+      signatures:
+      - mandatoryArguments: {}
+        optionalArguments: {}
+    urlparams: {}
+    headers: {Content-Type: application/xml}
+- name: /api/clusters/{cluster:id}/glustervolumes/{glustervolume:id}/rebalance|rel=rebalance
+  request:
+    body:
+      parameterType: Action
+      signatures:
+      - mandatoryArguments: {}
+        optionalArguments: {}
+    urlparams: {}
+    headers: {Content-Type: application/xml}
