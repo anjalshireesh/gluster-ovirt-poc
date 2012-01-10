@@ -3,13 +3,13 @@ package org.ovirt.engine.ui.uicommonweb.models.gluster;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.ovirt.engine.core.common.action.CreateGlusterVolumeParameters;
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.action.VdsGroupParametersBase;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_TYPE;
 import org.ovirt.engine.core.common.businessentities.VDSGroup;
 import org.ovirt.engine.core.common.businessentities.storage_pool;
+import org.ovirt.engine.core.common.glusteractions.CreateGlusterVolumeParameters;
 import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.compat.ObservableCollection;
 import org.ovirt.engine.ui.frontend.AsyncQuery;

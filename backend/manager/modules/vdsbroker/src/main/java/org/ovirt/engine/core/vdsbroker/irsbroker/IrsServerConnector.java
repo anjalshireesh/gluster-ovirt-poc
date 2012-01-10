@@ -113,4 +113,6 @@ public interface IrsServerConnector {
     public Map<String, Object> glusterVolumeCreate(Map<String, Object> volumeData);
 
     public Map<String, Object> glusterVolumesList();
+
+    public Map<String, Object> glusterVolumeAddBrick(String volumeName, String[] brickList);
 }

@@ -103,4 +103,6 @@ public interface IIrsServer {
     StatusOnlyReturnForXmlRpc glusterVolumeCreate(Map<String, Object> volumeData);
 
     GlusterVolumeListReturnForXmlRpc glusterVolumesList();
+
+    StatusOnlyReturnForXmlRpc glusterVolumeAddBrick(String volumeName, String[] brickList);
 }

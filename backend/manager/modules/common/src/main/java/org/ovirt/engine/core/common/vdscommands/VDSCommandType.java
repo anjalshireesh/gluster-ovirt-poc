@@ -125,6 +125,7 @@ public enum VDSCommandType {
     ExtendStorageDomain("org.ovirt.engine.core.vdsbroker.irsbroker"),
     UpdateSpmHostName("org.ovirt.engine.core.vdsbroker.irsbroker"),
     CreateGlusterVolume("org.ovirt.engine.core.vdsbroker.glusterbroker"),
+    AddBricksToGlusterVolume("org.ovirt.engine.core.vdsbroker.glusterbroker"),
     ListGlusterVolumes("org.ovirt.engine.core.vdsbroker.glusterbroker");
 
     String packageName;
