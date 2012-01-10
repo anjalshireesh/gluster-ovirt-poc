@@ -27,6 +27,7 @@ import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.datacenter.Data
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.datacenter.DataCenterPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.datacenter.FindMultiStoragePopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.datacenter.FindSingleStoragePopupPresenterWidget;
+import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.gluster.VolumePopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.host.HostBondPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.host.HostInstallPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.host.HostInterfacePopupPresenterWidget;
@@ -74,6 +75,12 @@ import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.datacenter.SubTab
 import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.datacenter.SubTabDataCenterNetworkPresenter;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.datacenter.SubTabDataCenterPermissionPresenter;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.datacenter.SubTabDataCenterStoragePresenter;
+import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster.SubTabVolumeBrickPresenter;
+import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster.SubTabVolumeEventPresenter;
+import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster.SubTabVolumeGeneralPresenter;
+import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster.SubTabVolumeParameterPresenter;
+import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster.SubTabVolumePermissionPresenter;
+import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster.VolumeSubTabPanelPresenter;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.host.HostSubTabPanelPresenter;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.host.SubTabHostEventPresenter;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.host.SubTabHostGeneralPresenter;
@@ -139,6 +146,7 @@ import org.ovirt.engine.ui.webadmin.section.main.view.popup.datacenter.DataCente
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.datacenter.DataCenterPopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.datacenter.FindMultiStoragePopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.datacenter.FindSingleStoragePopupView;
+import org.ovirt.engine.ui.webadmin.section.main.view.popup.gluster.VolumePopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.host.HostBondPopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.host.HostInstallPopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.host.HostInterfacePopupView;
@@ -186,6 +194,12 @@ import org.ovirt.engine.ui.webadmin.section.main.view.tab.datacenter.SubTabDataC
 import org.ovirt.engine.ui.webadmin.section.main.view.tab.datacenter.SubTabDataCenterNetworkView;
 import org.ovirt.engine.ui.webadmin.section.main.view.tab.datacenter.SubTabDataCenterPermissionView;
 import org.ovirt.engine.ui.webadmin.section.main.view.tab.datacenter.SubTabDataCenterStorageView;
+import org.ovirt.engine.ui.webadmin.section.main.view.tab.gluster.SubTabVolumeBrickView;
+import org.ovirt.engine.ui.webadmin.section.main.view.tab.gluster.SubTabVolumeEventView;
+import org.ovirt.engine.ui.webadmin.section.main.view.tab.gluster.SubTabVolumeGeneralView;
+import org.ovirt.engine.ui.webadmin.section.main.view.tab.gluster.SubTabVolumeParameterView;
+import org.ovirt.engine.ui.webadmin.section.main.view.tab.gluster.SubTabVolumePermissionView;
+import org.ovirt.engine.ui.webadmin.section.main.view.tab.gluster.VolumeSubTabPanelView;
 import org.ovirt.engine.ui.webadmin.section.main.view.tab.host.HostSubTabPanelView;
 import org.ovirt.engine.ui.webadmin.section.main.view.tab.host.SubTabHostEventView;
 import org.ovirt.engine.ui.webadmin.section.main.view.tab.host.SubTabHostGeneralView;
@@ -612,6 +626,10 @@ public class PresenterModule extends AbstractPresenterModule {
         bindPresenterWidget(ClusterPopupPresenterWidget.class,
                 ClusterPopupPresenterWidget.ViewDef.class,
                 ClusterPopupView.class);
+        
+        bindPresenterWidget(VolumePopupPresenterWidget.class,
+        		VolumePopupPresenterWidget.ViewDef.class,
+        		VolumePopupView.class);
 
         bindPresenterWidget(ClusterPolicyPopupPresenterWidget.class,
                 ClusterPolicyPopupPresenterWidget.ViewDef.class,
@@ -726,6 +744,37 @@ public class PresenterModule extends AbstractPresenterModule {
         bindPresenterWidget(TemplateInterfacePopupPresenterWidget.class,
                 TemplateInterfacePopupPresenterWidget.ViewDef.class,
                 TemplateInterfacePopupView.class);
+        
+        
+     // Volume
+        bindPresenter(VolumeSubTabPanelPresenter.class,
+        		VolumeSubTabPanelPresenter.ViewDef.class,
+        		VolumeSubTabPanelView.class,
+        		VolumeSubTabPanelPresenter.ProxyDef.class);
+        bindPresenter(SubTabVolumeGeneralPresenter.class,
+                SubTabVolumeGeneralPresenter.ViewDef.class,
+                SubTabVolumeGeneralView.class,
+                SubTabVolumeGeneralPresenter.ProxyDef.class);
+
+        bindPresenter(SubTabVolumeBrickPresenter.class,
+                SubTabVolumeBrickPresenter.ViewDef.class,
+                SubTabVolumeBrickView.class,
+                SubTabVolumeBrickPresenter.ProxyDef.class);
+        
+        bindPresenter(SubTabVolumeParameterPresenter.class,
+                SubTabVolumeParameterPresenter.ViewDef.class,
+                SubTabVolumeParameterView.class,
+                SubTabVolumeParameterPresenter.ProxyDef.class);
+        
+        bindPresenter(SubTabVolumePermissionPresenter.class,
+                SubTabVolumePermissionPresenter.ViewDef.class,
+                SubTabVolumePermissionView.class,
+                SubTabVolumePermissionPresenter.ProxyDef.class);
+        
+        bindPresenter(SubTabVolumeEventPresenter.class,
+                SubTabVolumeEventPresenter.ViewDef.class,
+                SubTabVolumeEventView.class,
+                SubTabVolumeEventPresenter.ProxyDef.class);
     }
 
 }

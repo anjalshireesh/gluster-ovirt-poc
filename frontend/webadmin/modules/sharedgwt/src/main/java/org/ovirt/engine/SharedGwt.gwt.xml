@@ -15,6 +15,7 @@
 		<include name="core/common/businessentities/GlusterBrick.java" />
 		<include name="core/common/constants/GlusterConstants.java" />
 		<include name="core/common/businessentities/GlusterVolumeOption.java" />
+		<include name="core/common/businessentities/GlusterVolumeEntity.java"/>
 		<include name="core/common/utils/StringUtil.java" />
 		<include name="core/common/utils/GlusterCoreUtil.java" />
 

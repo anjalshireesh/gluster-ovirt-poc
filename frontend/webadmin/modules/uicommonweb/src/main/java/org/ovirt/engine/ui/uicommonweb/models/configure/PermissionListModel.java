@@ -1,5 +1,7 @@
 package org.ovirt.engine.ui.uicommonweb.models.configure;
 import java.util.Collections;
+
+import org.omg.CORBA.OMGVMCID;
 import org.ovirt.engine.core.compat.*;
 import org.ovirt.engine.ui.uicompat.*;
 import org.ovirt.engine.core.common.businessentities.*;
@@ -366,6 +368,10 @@ public class PermissionListModel extends SearchableListModel
 		if (getEntity() instanceof vm_pools)
 		{
 			return VdcObjectType.VmPool;
+		}
+		if (getEntity() instanceof GlusterVolume)
+		{
+			return VdcObjectType.GlusterVolume;
 		}
 		return VdcObjectType.Unknown;
 	}
