@@ -472,6 +472,7 @@ public class ClusterModel extends Model
 		setDataCenter(new ListModel());
 		getDataCenter().getSelectedItemChangedEvent().addListener(this);
 		setCPU(new ListModel());
+		getCPU().setIsAvailable(false);
 		setVersion(new ListModel());
 		getVersion().getSelectedItemChangedEvent().addListener(this);
 		setMigrateOnErrorOption(MigrateOnErrorOptions.YES);
