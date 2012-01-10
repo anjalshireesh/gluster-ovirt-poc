@@ -55,7 +55,7 @@ public interface ApplicationConstants extends CommonApplicationConstants {
     @DefaultStringValue("Hosts")
     String hostMainTabLabel();
     
-    @DefaultStringValue("Volume")
+    @DefaultStringValue("Volumes")
     String volumeMainTabLabel();
 
     @DefaultStringValue("Storage")
@@ -787,4 +787,19 @@ public interface ApplicationConstants extends CommonApplicationConstants {
 
     @DefaultStringValue("Destination")
     String destinationStorage();
+
+    @DefaultStringValue("Summary")
+    String volumeGeneralSubTabLabel();
+
+    @DefaultStringValue("Volume Options")
+    String volumeParameterSubTabLabel();
+
+    @DefaultStringValue("Bricks")
+    String volumeBrickSubTabLabel();
+
+    @DefaultStringValue("Permissions")
+    String volumePermissionSubTabLabel();
+
+    @DefaultStringValue("Events")
+    String volumeEventSubTabLabel();
 }

@@ -5,7 +5,7 @@ import org.ovirt.engine.core.common.action.PermissionsOperationsParametes;
 import org.ovirt.engine.core.common.action.VdcActionParametersBase;
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.businessentities.DbUser;
-import org.ovirt.engine.core.common.businessentities.Quota;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.VDS;
 import org.ovirt.engine.core.common.businessentities.VDSGroup;
 import org.ovirt.engine.core.common.businessentities.VM;
@@ -28,6 +28,7 @@ import org.ovirt.engine.ui.uicommonweb.UICommand;
 import org.ovirt.engine.ui.uicommonweb.models.ConfirmationModel;
 import org.ovirt.engine.ui.uicommonweb.models.EntityModel;
 import org.ovirt.engine.ui.uicommonweb.models.SearchableListModel;
+import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeListModel;
 import org.ovirt.engine.ui.uicommonweb.models.users.AdElementListModel;
 import org.ovirt.engine.ui.uicommonweb.models.users.UserListModel;
 import org.ovirt.engine.ui.uicompat.FrontendMultipleActionAsyncResult;
@@ -36,7 +37,6 @@ import org.ovirt.engine.ui.uicompat.IFrontendMultipleActionAsyncCallback;
 @SuppressWarnings("unused")
 public class PermissionListModel extends SearchableListModel
 {
-
     private UICommand privateAddCommand;
 
     public UICommand getAddCommand()
@@ -345,12 +345,12 @@ public class PermissionListModel extends SearchableListModel
         }
     }
 
-    protected Guid getEntityGuid()
+    private Guid getEntityGuid()
     {
         return DataProvider.GetEntityGuid(getEntity());
     }
 
-    protected VdcObjectType getObjectType()
+    private VdcObjectType getObjectType()
     {
         if (getEntity() instanceof VM)
         {
@@ -379,10 +379,6 @@ public class PermissionListModel extends SearchableListModel
         if (getEntity() instanceof vm_pools)
         {
             return VdcObjectType.VmPool;
-        }
-        if (getEntity() instanceof Quota)
-        {
-            return VdcObjectType.Quota;
         }
         return VdcObjectType.Unknown;
     }

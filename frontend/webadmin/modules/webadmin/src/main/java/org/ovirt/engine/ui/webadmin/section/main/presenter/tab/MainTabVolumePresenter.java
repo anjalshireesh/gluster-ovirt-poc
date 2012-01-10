@@ -3,6 +3,7 @@ package org.ovirt.engine.ui.webadmin.section.main.presenter.tab;
 import java.util.List;
 
 import org.ovirt.engine.core.common.businessentities.GlusterVolume;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.VDS;
 import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeListModel;
 import org.ovirt.engine.ui.uicommonweb.models.hosts.HostListModel;
@@ -24,12 +25,12 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.TabContentProxyPlace;
 
-public class MainTabVolumePresenter extends AbstractMainTabWithDetailsPresenter<GlusterVolume, VolumeListModel, MainTabVolumePresenter.ViewDef, MainTabVolumePresenter.ProxyDef> {
+public class MainTabVolumePresenter extends AbstractMainTabWithDetailsPresenter<GlusterVolumeEntity, VolumeListModel, MainTabVolumePresenter.ViewDef, MainTabVolumePresenter.ProxyDef> {
 
     @GenEvent
     public static class VolumeSelectionChange {
 
-        List<GlusterVolume> selectedItems;
+        List<GlusterVolumeEntity> selectedItems;
 
     }
 
@@ -38,7 +39,7 @@ public class MainTabVolumePresenter extends AbstractMainTabWithDetailsPresenter<
     public interface ProxyDef extends TabContentProxyPlace<MainTabVolumePresenter> {
     }
 
-    public interface ViewDef extends AbstractMainTabWithDetailsPresenter.ViewDef<GlusterVolume> {
+    public interface ViewDef extends AbstractMainTabWithDetailsPresenter.ViewDef<GlusterVolumeEntity> {
     }
 
     @TabInfo(container = MainTabPanelPresenter.class)
@@ -49,7 +50,7 @@ public class MainTabVolumePresenter extends AbstractMainTabWithDetailsPresenter<
 
     @Inject
     public MainTabVolumePresenter(EventBus eventBus, ViewDef view, ProxyDef proxy,
-            PlaceManager placeManager, MainModelProvider<GlusterVolume, VolumeListModel> modelProvider) {
+            PlaceManager placeManager, MainModelProvider<GlusterVolumeEntity, VolumeListModel> modelProvider) {
         super(eventBus, view, proxy, placeManager, modelProvider);
     }
 
