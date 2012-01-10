@@ -29,6 +29,7 @@ public final class GlusterVolumeListReturnForXmlRpc extends StatusReturnForXmlRp
 
     private GlusterVolumeEntity prepareVolumeEntity(Map<String, Object> volumeMap) {
         GlusterVolumeEntity volume = new GlusterVolumeEntity();
+        volume.setId(volumeMap.get("uuid").toString());
         volume.setName(volumeMap.get("volumeName").toString());
         volume.setVolumeType(volumeMap.get("volumeType").toString());
 

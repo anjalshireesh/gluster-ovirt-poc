@@ -442,16 +442,6 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     }
 
     @Override
-    public String getId() {
-        return getName();
-    }
-
-    @Override
-    public void setId(String id) {
-        setName(id);
-    }
-
-    @Override
     public Object getQueryableId() {
         return getId();
     }
