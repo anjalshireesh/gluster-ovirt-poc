@@ -693,6 +693,12 @@ public interface ApplicationConstants extends CommonApplicationConstants {
 
     @DefaultStringValue("Collapse All")
     String treeCollapseAll();
+    
+    @DefaultStringValue("Mail Recipient:")
+    String manageEventsPopupEmailLabel();
+
+    @DefaultStringValue("Select the Events for Notification:")
+    String manageEventsPopupTitleLabel();
 
     @DefaultStringValue("Mail Recipient:")
     String manageEventsPopupEmailLabel();
