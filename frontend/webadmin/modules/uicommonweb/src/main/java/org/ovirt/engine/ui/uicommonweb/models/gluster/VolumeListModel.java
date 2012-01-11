@@ -13,6 +13,7 @@ import org.ovirt.engine.core.common.glusteractions.CreateGlusterVolumeParameters
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeParameters;
 import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.compat.ObservableCollection;
+import org.ovirt.engine.core.compat.PropertyChangedEventArgs;
 import org.ovirt.engine.ui.frontend.AsyncQuery;
 import org.ovirt.engine.ui.frontend.Frontend;
 import org.ovirt.engine.ui.frontend.INewAsyncCallback;
@@ -22,6 +23,7 @@ import org.ovirt.engine.ui.uicommonweb.dataprovider.AsyncDataProvider;
 import org.ovirt.engine.ui.uicommonweb.models.EntityModel;
 import org.ovirt.engine.ui.uicommonweb.models.ISupportSystemTreeContext;
 import org.ovirt.engine.ui.uicommonweb.models.ListWithDetailsModel;
+import org.ovirt.engine.ui.uicommonweb.models.Model;
 import org.ovirt.engine.ui.uicommonweb.models.SystemTreeItemModel;
 import org.ovirt.engine.ui.uicommonweb.models.SystemTreeItemType;
 import org.ovirt.engine.ui.uicommonweb.models.configure.PermissionListModel;
@@ -32,6 +34,29 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
 	private UICommand startCommand;
 	private UICommand stopCommand;
 	private UICommand rebalanceCommand;
+	private UICommand addBricksCommand;
+	
+	private Model window2;
+	public Model getWindow2()
+	{
+		return window2;
+	}
+	public void setWindow2(Model value)
+	{
+		if (window2 != value)
+		{
+			window2 = value;
+			OnPropertyChanged(new PropertyChangedEventArgs("Window2"));
+		}
+	}
+	
+	public UICommand getAddBricksCommand() {
+		return addBricksCommand;
+	}
+	public void setAddBricksCommand(UICommand addBricksCommand) {
+		this.addBricksCommand = addBricksCommand;
+	}
+	
 	public UICommand getRebalanceCommand() {
 		return rebalanceCommand;
 	}
@@ -103,7 +128,8 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
 		VolumeModel volumeModel = new VolumeModel();
 		volumeModel.setTitle("Create Volume");
 		setWindow(volumeModel);
-		
+		setAddBricksCommand(new UICommand("addBricks", this));
+		volumeModel.setAddBricksCommand(getAddBricksCommand());
 		AsyncQuery _asyncQuery = new AsyncQuery();
 		_asyncQuery.setModel(this);
 		_asyncQuery.asyncCallback = new INewAsyncCallback() { public void OnSuccess(Object model, Object result)
@@ -226,9 +252,26 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
 			stop();
 		} else if (command.equals(getRebalanceCommand())){
 			rebalance();
+		} else if(command.equals(getAddBricksCommand())){
+			addBricks();
+		} else if(command.getName().equals("CancelAddBrick")){
+			setWindow2(null);
 		}
 	}
 	
+	private void addBricks() {
+		AddBrickModel model = new AddBrickModel();
+		setWindow2(model);
+		UICommand command = new UICommand("CancelAddBrick", this);
+		command.setTitle("OK");
+		command.setIsDefault(true);
+		model.getCommands().add(command);
+		command = new UICommand("CancelAddBrick", this);
+		command.setTitle("Cancel");
+		command.setIsDefault(true);
+		model.getCommands().add(command);
+		
+	}
 	private void rebalance() {
 		if(getSelectedItem() == null) {
 			return;

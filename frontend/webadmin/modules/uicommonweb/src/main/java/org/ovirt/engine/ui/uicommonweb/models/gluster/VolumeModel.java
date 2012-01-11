@@ -13,6 +13,7 @@ import org.ovirt.engine.core.compat.IEventListener;
 import org.ovirt.engine.ui.frontend.AsyncQuery;
 import org.ovirt.engine.ui.frontend.INewAsyncCallback;
 import org.ovirt.engine.ui.uicommonweb.Linq;
+import org.ovirt.engine.ui.uicommonweb.UICommand;
 import org.ovirt.engine.ui.uicommonweb.dataprovider.AsyncDataProvider;
 import org.ovirt.engine.ui.uicommonweb.models.EntityModel;
 import org.ovirt.engine.ui.uicommonweb.models.ListModel;
@@ -31,6 +32,7 @@ public class VolumeModel extends Model{
 	EntityModel cifs_accecssProtocol;
 	EntityModel users;
 	EntityModel allowAccess;
+	private UICommand addBrickCommand;
 	
 	
 	public VolumeModel() {
@@ -190,5 +192,13 @@ public class VolumeModel extends Model{
 
 	public boolean Validate(){
 		return true;
+	}
+
+	public void setAddBricksCommand(UICommand addBricksCommand) {
+		this.addBrickCommand = addBricksCommand;
+	}
+	
+	public UICommand getAddBrickCommand(){
+		return addBrickCommand;
 	}
 }
