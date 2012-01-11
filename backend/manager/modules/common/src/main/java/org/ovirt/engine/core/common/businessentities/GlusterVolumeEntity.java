@@ -248,7 +248,7 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
 
     public void setOptions(String options) {
         if(options == null || options.trim().isEmpty()) {
-            this.options = null;
+            this.options = new GlusterVolumeOptions();
             return;
         }
 
