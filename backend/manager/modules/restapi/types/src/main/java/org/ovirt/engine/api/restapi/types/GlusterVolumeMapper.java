@@ -1,15 +1,22 @@
 package org.ovirt.engine.api.restapi.types;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
+import org.ovirt.engine.api.model.GlusterBrick;
+import org.ovirt.engine.api.model.GlusterBricks;
 import org.ovirt.engine.api.model.GlusterVolume;
+import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.ACCESS_PROTOCOL;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.TRANSPORT_TYPE;
 import org.ovirt.engine.core.common.utils.StringUtil;
 
 public class GlusterVolumeMapper {
+    private static final GlusterBrickMapper brickMapper = new GlusterBrickMapper();
+
     @Mapping(from = GlusterVolume.class, to = GlusterVolumeEntity.class)
     public static GlusterVolumeEntity map(GlusterVolume fromVolume, GlusterVolumeEntity toVolume) {
         GlusterVolumeEntity volume = toVolume != null ? toVolume : new GlusterVolumeEntity();
@@ -26,7 +33,12 @@ public class GlusterVolumeMapper {
 
         volume.setAccessProtocols(fromVolume.getAccessProtocols());
         volume.setAccessControlList(fromVolume.getAccessControlList());
-        volume.setBricks(fromVolume.getBricks());
+
+        List<GlusterBrickEntity> bricks = new ArrayList<GlusterBrickEntity>();
+        for (GlusterBrick brick : fromVolume.getGlusterBricks().getGlusterBricks()) {
+            bricks.add(brickMapper.map(brick, null));
+        }
+        volume.setBricks(bricks);
 
         BigInteger count = fromVolume.getReplicaCount();
         volume.setReplicaCount(count == null ? 0 : count.intValue());
@@ -52,7 +64,14 @@ public class GlusterVolumeMapper {
         volume.setAccessProtocols(StringUtil.collectionToString(accessProtocols, ","));
 
         volume.setAccessControlList(fromVolume.getAccessControlList());
-        volume.setBricks(StringUtil.collectionToString(fromVolume.getBricks(), ","));
+
+        GlusterBricks glusterBricks = new GlusterBricks();
+        List<GlusterBrick> bricks = glusterBricks.getGlusterBricks();
+        for (GlusterBrickEntity brick : fromVolume.getBricks()) {
+            bricks.add(brickMapper.map(brick, null));
+        }
+        volume.setGlusterBricks(glusterBricks);
+
         volume.setReplicaCount(BigInteger.valueOf(fromVolume.getReplicaCount()));
         volume.setStripeCount(BigInteger.valueOf(fromVolume.getStripeCount()));
         volume.setCifsUsers(StringUtil.collectionToString(fromVolume.getCifsUsers(), ","));

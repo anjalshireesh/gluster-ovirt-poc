@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.ovirt.engine.core.common.businessentities.GlusterBrick.BRICK_STATUS;
+import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity.BRICK_STATUS;
 import org.ovirt.engine.core.common.constants.GlusterConstants;
 import org.ovirt.engine.core.common.utils.GlusterCoreUtil;
 import org.ovirt.engine.core.common.utils.StringUtil;
@@ -78,7 +78,7 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     private int replicaCount;
     private int stripeCount;
     private GlusterVolumeOptions options = new GlusterVolumeOptions();
-    private List<GlusterBrick> bricks = new ArrayList<GlusterBrick>();
+    private List<GlusterBrickEntity> bricks = new ArrayList<GlusterBrickEntity>();
     private List<String> cifsUsers = new ArrayList<String>();
 
     public GlusterVolumeEntity() {
@@ -265,42 +265,42 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
         this.options.setOptions(volumeOptions);
     }
 
-    public void addBrick(GlusterBrick GlusterBrick) {
+    public void addBrick(GlusterBrickEntity GlusterBrick) {
         bricks.add(GlusterBrick);
     }
 
     public void addBrick(String brickQualifiedName) {
-        bricks.add(new GlusterBrick(brickQualifiedName));
+        bricks.add(new GlusterBrickEntity(brickQualifiedName));
     }
 
-    public void addBricks(Collection<GlusterBrick> bricks) {
+    public void addBricks(Collection<GlusterBrickEntity> bricks) {
         this.bricks.addAll(bricks);
     }
 
-    public void setBricks(List<GlusterBrick> bricks) {
+    public void setBricks(List<GlusterBrickEntity> bricks) {
         this.bricks = bricks;
     }
 
     public void setBricks(String bricksStr) {
         if(bricksStr == null || bricksStr.trim().isEmpty()) {
-            this.bricks = new ArrayList<GlusterBrick>();
+            this.bricks = new ArrayList<GlusterBrickEntity>();
             return;
         }
 
         String[] brickList = bricksStr.split(",", -1);
-        List<GlusterBrick> bricks = new ArrayList<GlusterBrick>();
+        List<GlusterBrickEntity> bricks = new ArrayList<GlusterBrickEntity>();
         for(String brick : brickList) {
             String[] brickInfo = brick.split(":", -1);
-            bricks.add(new GlusterBrick(brickInfo[0], BRICK_STATUS.ONLINE, brickInfo[1]));
+            bricks.add(new GlusterBrickEntity(brickInfo[0], BRICK_STATUS.ONLINE, brickInfo[1]));
         }
         setBricks(bricks);
     }
 
-    public void removeBrick(GlusterBrick GlusterBrick) {
+    public void removeBrick(GlusterBrickEntity GlusterBrick) {
         bricks.remove(GlusterBrick);
     }
 
-    public List<GlusterBrick> getBricks() {
+    public List<GlusterBrickEntity> getBricks() {
         return bricks;
     }
 
@@ -373,7 +373,7 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
 
     public List<String> getBrickDirectories() {
         List<String> brickDirectories = new ArrayList<String>();
-        for (GlusterBrick brick : getBricks()) {
+        for (GlusterBrickEntity brick : getBricks()) {
             brickDirectories.add(brick.getQualifiedName());
         }
         return brickDirectories;
@@ -401,8 +401,8 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
             }
         }
 
-        List<GlusterBrick> oldBricks = getBricks();
-        List<GlusterBrick> newBricks = volume.getBricks();
+        List<GlusterBrickEntity> oldBricks = getBricks();
+        List<GlusterBrickEntity> newBricks = volume.getBricks();
         if (oldBricks.size() != newBricks.size()) {
             return false;
         }
@@ -415,7 +415,7 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
             return false;
         }
 
-        Map<GlusterBrick, GlusterBrick> modifiedBricks = GlusterCoreUtil.getModifiedEntities(oldBricks, newBricks);
+        Map<GlusterBrickEntity, GlusterBrickEntity> modifiedBricks = GlusterCoreUtil.getModifiedEntities(oldBricks, newBricks);
         if (modifiedBricks.size() > 0) {
             return false;
         }

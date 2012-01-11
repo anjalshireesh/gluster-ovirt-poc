@@ -2396,7 +2396,7 @@
           <xs:element name="transportType" type="xs:string" minOccurs="0" maxOccurs="1"/>
           <xs:element name="replicaCount" type="xs:integer" minOccurs="0" maxOccurs="1"/>
           <xs:element name="stripeCount" type="xs:integer" minOccurs="0" maxOccurs="1"/>
-          <xs:element name="bricks" type="xs:string" minOccurs="1" maxOccurs="1"/>
+          <xs:element ref="gluster_bricks" minOccurs="1" maxOccurs="1"/>
           <xs:element name="accessProtocols" type="xs:string" minOccurs="0" maxOccurs="1"/>
           <xs:element name="accessControlList" type="xs:string" minOccurs="0" maxOccurs="1"/>
           <xs:element name="cifsUsers" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -2416,6 +2416,40 @@
             </xs:appinfo>
           </xs:annotation>
           <xs:element ref="gluster_volume" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:element name="gluster_bricks" type="GlusterBricks"/>
+  <xs:element name="gluster_brick" type="GlusterBrick"/>
+
+  <xs:complexType name="GlusterBrick">
+    <xs:annotation>
+      <xs:appinfo>
+         <jaxb:class name="GlusterBrick"/>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="BaseResource">
+        <xs:sequence>
+          <xs:element name="host" type="xs:string" minOccurs="1" maxOccurs="1"/>
+          <xs:element name="brickDirectory" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="GlusterBricks">
+    <xs:complexContent>
+      <xs:extension base="BaseResources">
+        <xs:sequence>
+          <xs:annotation>
+            <xs:appinfo>
+                <jaxb:property name="GlusterBricks"/>
+            </xs:appinfo>
+          </xs:annotation>
+          <xs:element ref="gluster_brick" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
