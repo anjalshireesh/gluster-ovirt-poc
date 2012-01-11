@@ -32,7 +32,7 @@ public class SubTabVolumeBrickPresenter extends AbstractSubTabPresenter<GlusterV
 	@TabInfo(container = VolumeSubTabPanelPresenter.class)
     static TabData getTabData(ClientGinjector ginjector) {
         return new ModelBoundTabData(ginjector.getApplicationConstants().volumeBrickSubTabLabel(), 1,
-                ginjector.getSubTabVolumeParameterModelProvider());
+                ginjector.getSubTabVolumeBrickModelProvider());
     }
 
     @Inject
