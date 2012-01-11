@@ -667,6 +667,10 @@ public interface Enums extends ConstantsWithLookup {
 
     String ActionGroup___CONFIGURE_ENGINE();
 
+    String ActionGroup___GLUSTER_CREATE_VOLUME();
+
+    String ActionGroup___GLUSTER_VOLUME_OPERATIONS();
+
     String NonOperationalReason___NONE();
 
     String NonOperationalReason___GENERAL();

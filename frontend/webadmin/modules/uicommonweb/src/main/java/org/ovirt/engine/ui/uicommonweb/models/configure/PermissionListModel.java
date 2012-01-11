@@ -15,6 +15,7 @@ import org.ovirt.engine.core.common.*;
 
 import org.ovirt.engine.core.common.businessentities.*;
 
+import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeListModel;
 import org.ovirt.engine.ui.uicommonweb.models.users.*;
 import org.ovirt.engine.core.common.users.*;
 import org.ovirt.engine.core.common.interfaces.*;
@@ -89,13 +90,23 @@ public class PermissionListModel extends SearchableListModel
 	protected void SyncSearch()
 	{
 		VdcObjectType objType = getObjectType();
-		boolean directOnly = (objType == VdcObjectType.VM ? true : false);
-		GetPermissionsForObjectParameters tempVar = new GetPermissionsForObjectParameters();
-		tempVar.setObjectId(getEntityGuid());
-		tempVar.setVdcObjectType(objType);
-		tempVar.setDirectOnly(directOnly);
-		tempVar.setRefresh(getIsQueryFirstTime());
-		super.SyncSearch(VdcQueryType.GetPermissionsForObject, tempVar);
+		if(!objType.equals(VdcObjectType.GlusterVolume)){
+			boolean directOnly = (objType == VdcObjectType.VM ? true : false);
+			GetPermissionsForObjectParameters tempVar = new GetPermissionsForObjectParameters();
+			tempVar.setObjectId(getEntityGuid());
+			tempVar.setVdcObjectType(objType);
+			tempVar.setDirectOnly(directOnly);
+			tempVar.setRefresh(getIsQueryFirstTime());
+			super.SyncSearch(VdcQueryType.GetPermissionsForObject, tempVar);
+		} else {
+			GetPermissionsForObjectParameters tempVar = new GetPermissionsForObjectParameters();
+			//TODO
+			tempVar.setObjectId(VolumeListModel.clusterId);
+			tempVar.setVdcObjectType(VdcObjectType.VdsGroups);
+			tempVar.setDirectOnly(false);
+			tempVar.setRefresh(getIsQueryFirstTime());
+			super.SyncSearch(VdcQueryType.GetPermissionsForObject, tempVar);
+		}
 	}
 
 	@Override
@@ -369,7 +380,7 @@ public class PermissionListModel extends SearchableListModel
 		{
 			return VdcObjectType.VmPool;
 		}
-		if (getEntity() instanceof GlusterVolume)
+		if (getEntity() instanceof GlusterVolumeEntity)
 		{
 			return VdcObjectType.GlusterVolume;
 		}
