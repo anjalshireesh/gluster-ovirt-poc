@@ -262,8 +262,8 @@ public class PermissionListModel extends SearchableListModel
 			tempVar2.setad_element_id(user.getuser_id());
 			tempVar2.setrole_id(role.getId());
 			permissions perm = tempVar2;
-			perm.setObjectId(getEntityGuid());
-			perm.setObjectType(this.getObjectType());
+			perm.setObjectId(getObjectType() == VdcObjectType.GlusterVolume ? VolumeListModel.clusterId : getEntityGuid());
+			perm.setObjectType(getObjectType() == VdcObjectType.GlusterVolume ? VdcObjectType.VdsGroups : getObjectType());
 
 			if (user.getIsGroup())
 			{
