@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.TRANSPORT_TYPE;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
 import org.ovirt.engine.core.common.glustercommands.CreateGlusterVolumeVDSParameters;
 
 /**
@@ -42,11 +43,22 @@ public class CreateGlusterVolumeVDSCommand extends GlusterBrokerCommand<CreateGl
         // IMPORTANT! This handles errors if any
         ProceedProxyReturnValue();
 
-        // TODO: invoke additional calls to set options, access protocols, access control list and CIFS users (if required)
-//        parameters.put("volumeType", volume.getVolumeType().toString());
-//        parameters.put("options", StringUtil.collectionToString(volume.getOptions().getOptions(), ","));
-//        parameters.put("accessProtocols", StringUtil.collectionToString(volume.getAccessProtocols(), ","));
-//        parameters.put("accessControlList", volume.getAccessControlList());
-//        parameters.put("cifsUsers", StringUtil.collectionToString(volume.getCifsUsers(), ","));
+        String accessControlList = volume.getAccessControlList();
+        if(accessControlList != null && !accessControlList.trim().isEmpty()) {
+            status = getIrsProxy().glusterVolumeSet(volume.getName(), GlusterVolumeEntity.OPTION_AUTH_ALLOW, accessControlList.trim());
+            ProceedProxyReturnValue();
+        }
+
+        if(!volume.isNfsEnabled()) {
+            status = getIrsProxy().glusterVolumeSet(volume.getName(), GlusterVolumeEntity.OPTION_NFS_DISABLE, "on");
+            ProceedProxyReturnValue();
+        }
+
+        for(GlusterVolumeOption option : volume.getOptions().getOptions()) {
+            status = getIrsProxy().glusterVolumeSet(volume.getName(), option.getKey(), option.getValue());
+            ProceedProxyReturnValue();
+        }
+
+        // TODO: handle CIFS related options
     }
 }
