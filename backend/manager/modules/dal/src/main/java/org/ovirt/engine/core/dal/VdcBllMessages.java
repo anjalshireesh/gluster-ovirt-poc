@@ -18,6 +18,7 @@ public enum VdcBllMessages {
     VAR__TYPE__INTERFACE,
     VAR__TYPE__NETWORK,
     VAR__TYPE__VM_DISK,
+    VAR__TYPE__DISK,
     VAR__TYPE__BOOKMARK,
     VAR__TYPE__VM_TICKET,
     VAR__ACTION__RUN,

@@ -915,6 +915,17 @@ public class VdsServerWrapper implements IVdsServer {
     }
 
     @Override
+    public GlusterDiskListReturnForXmlRpc glusterDisksList() {
+        try {
+            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterDisksList();
+            GlusterDiskListReturnForXmlRpc wrapper = new GlusterDiskListReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
     public StatusOnlyReturnForXmlRpc hotunplugDisk(XmlRpcStruct info) {
         try {
             Map<String, Object> xmlRpcReturnValue = vdsServer.hotunplugDisk(info.getInnerMap());
@@ -947,5 +958,4 @@ public class VdsServerWrapper implements IVdsServer {
             throw new XmlRpcRunTimeException(ute);
         }
     }
-
 }

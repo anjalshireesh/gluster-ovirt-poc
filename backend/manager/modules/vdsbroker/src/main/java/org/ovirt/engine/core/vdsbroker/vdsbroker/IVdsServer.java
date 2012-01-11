@@ -187,4 +187,6 @@ public interface IVdsServer {
     FutureTask<Map<String, Object>> poll();
 
     StatusOnlyReturnForXmlRpc snapshot(String vmId, Map<String, String>[] snapParams);
+
+    GlusterDiskListReturnForXmlRpc glusterDisksList();
 }

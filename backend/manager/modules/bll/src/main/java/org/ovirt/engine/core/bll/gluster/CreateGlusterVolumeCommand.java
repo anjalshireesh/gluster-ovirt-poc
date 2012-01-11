@@ -4,6 +4,7 @@
 package org.ovirt.engine.core.bll.gluster;
 
 import org.ovirt.engine.core.bll.Backend;
+import org.ovirt.engine.core.common.AuditLogType;
 import org.ovirt.engine.core.common.glusteractions.CreateGlusterVolumeParameters;
 import org.ovirt.engine.core.common.glustercommands.CreateGlusterVolumeVDSParameters;
 import org.ovirt.engine.core.common.vdscommands.VDSCommandType;
@@ -17,6 +18,7 @@ public class CreateGlusterVolumeCommand extends GlusterCommandBase<CreateGluster
 
     public CreateGlusterVolumeCommand(CreateGlusterVolumeParameters params) {
         super(params);
+        setGlusterVolumeName(getParameters().getVolume().getName());
     }
 
     @Override
@@ -43,5 +45,14 @@ public class CreateGlusterVolumeCommand extends GlusterCommandBase<CreateGluster
                                 new CreateGlusterVolumeVDSParameters(getVdsGroup().getstorage_pool_id().getValue(),
                                         getParameters().getVolume()));
         setSucceeded(returnValue.getSucceeded());
+    }
+
+    @Override
+    public AuditLogType getAuditLogTypeValue() {
+        if(getSucceeded()) {
+            return AuditLogType.GLUSTER_VOLUME_CREATE;
+        } else {
+            return AuditLogType.GLUSTER_VOLUME_CREATE_FAILED;
+        }
     }
 }

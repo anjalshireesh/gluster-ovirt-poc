@@ -254,7 +254,8 @@ public enum VdcActionType {
     StopGlusterVolume(1403, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
     RebalanceGlusterVolumeStart(1404, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
     RebalanceGlusterVolumeStop(1405, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
-    ListGlusterVolumes(1406);
+    ListGlusterVolumes(1406),
+    ListGlusterBricks(1407);
 
     private int intValue;
     private ActionGroup actionGroup;

@@ -180,4 +180,6 @@ public interface VdsServerConnector {
     Map<String, Object> hotunplugDisk(Map<String, Object> info);
 
     Map<String, Object> snapshot(String vmId, Map<String, String>[] snapParams);
+
+    public Map<String, Object> glusterDisksList();
 }
