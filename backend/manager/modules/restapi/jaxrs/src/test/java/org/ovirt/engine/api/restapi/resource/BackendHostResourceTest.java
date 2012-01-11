@@ -1,5 +1,11 @@
 package org.ovirt.engine.api.restapi.resource;
 
+import static org.easymock.EasyMock.expect;
+import static org.ovirt.engine.api.restapi.resource.BackendHostsResourceTest.getModel;
+import static org.ovirt.engine.api.restapi.resource.BackendHostsResourceTest.setUpEntityExpectations;
+import static org.ovirt.engine.api.restapi.resource.BackendHostsResourceTest.setUpStatisticalEntityExpectations;
+import static org.ovirt.engine.api.restapi.resource.BackendHostsResourceTest.verifyModelSpecific;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
@@ -10,26 +16,22 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.junit.Test;
-
 import org.ovirt.engine.api.model.Action;
 import org.ovirt.engine.api.model.Cluster;
+import org.ovirt.engine.api.model.CreationStatus;
 import org.ovirt.engine.api.model.FenceType;
 import org.ovirt.engine.api.model.Host;
-import org.ovirt.engine.api.model.IscsiDetails;
 import org.ovirt.engine.api.model.PowerManagementStatus;
 import org.ovirt.engine.api.model.Statistic;
-import org.ovirt.engine.api.model.CreationStatus;
-import org.ovirt.engine.core.common.action.ApproveVdsParameters;
 import org.ovirt.engine.core.common.action.ChangeVDSClusterParameters;
 import org.ovirt.engine.core.common.action.FenceVdsActionParameters;
 import org.ovirt.engine.core.common.action.FenceVdsManualyParameters;
 import org.ovirt.engine.core.common.action.MaintananceNumberOfVdssParameters;
-import org.ovirt.engine.core.common.action.StorageServerConnectionParametersBase;
 import org.ovirt.engine.core.common.action.UpdateVdsActionParameters;
-import org.ovirt.engine.core.common.action.VdcReturnValueBase;
-import org.ovirt.engine.core.common.action.VdsActionParameters;
 import org.ovirt.engine.core.common.action.VdcActionParametersBase;
 import org.ovirt.engine.core.common.action.VdcActionType;
+import org.ovirt.engine.core.common.action.VdcReturnValueBase;
+import org.ovirt.engine.core.common.action.VdsActionParameters;
 import org.ovirt.engine.core.common.businessentities.AsyncTaskStatus;
 import org.ovirt.engine.core.common.businessentities.AsyncTaskStatusEnum;
 import org.ovirt.engine.core.common.businessentities.FenceActionType;
@@ -38,21 +40,10 @@ import org.ovirt.engine.core.common.businessentities.StorageType;
 import org.ovirt.engine.core.common.businessentities.VDS;
 import org.ovirt.engine.core.common.businessentities.VdsStatic;
 import org.ovirt.engine.core.common.businessentities.VdsStatistics;
-import org.ovirt.engine.core.common.queries.DiscoverSendTargetsQueryParameters;
 import org.ovirt.engine.core.common.queries.GetVdsByVdsIdParameters;
-import org.ovirt.engine.core.common.queries.VdcQueryReturnValue;
 import org.ovirt.engine.core.common.queries.VdcQueryType;
 import org.ovirt.engine.core.common.queries.VdsIdParametersBase;
 import org.ovirt.engine.core.compat.Guid;
-
-import static org.easymock.classextension.EasyMock.expect;
-import static org.ovirt.engine.api.restapi.resource.BackendHostsResourceTest.getModel;
-import static org.ovirt.engine.api.restapi.resource.BackendHostsResourceTest.setUpEntityExpectations;
-import static org.ovirt.engine.api.restapi.resource.BackendHostsResourceTest.setUpStatisticalEntityExpectations;
-import static org.ovirt.engine.api.restapi.resource.BackendHostsResourceTest.verifyModelSpecific;
-import static org.ovirt.engine.api.restapi.test.util.TestHelper.eqQueryParams;
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.verify;
 
 public class BackendHostResourceTest
         extends AbstractBackendSubResourceTest<Host, VDS, BackendHostResource> {
@@ -259,100 +250,100 @@ public class BackendHostResourceTest
 
     }
 
-    @Test
-    public void testApprove() throws Exception {
-        setUriInfo(setUpActionExpectations(VdcActionType.ApproveVds,
-                                           ApproveVdsParameters.class,
-                                           new String[] { "VdsId" },
-                                           new Object[] { GUIDS[0] }));
+//    @Test
+//    public void testApprove() throws Exception {
+//        setUriInfo(setUpActionExpectations(VdcActionType.ApproveVds,
+//                                           ApproveVdsParameters.class,
+//                                           new String[] { "VdsId" },
+//                                           new Object[] { GUIDS[0] }));
+//
+//        verifyActionResponse(resource.approve(new Action()));
+//    }
 
-        verifyActionResponse(resource.approve(new Action()));
-    }
+//    @Test
+//    public void testApproveChangingCluster() throws Exception {
+//        setUpGetEntityExpectations(3);
+//
+//        setUriInfo(setUpActionExpectations(VdcActionType.ChangeVDSCluster,
+//                                           ChangeVDSClusterParameters.class,
+//                                           new String[] { "ClusterId", "VdsId" },
+//                                           new Object[] { GUIDS[0],  GUIDS[0]},
+//                                           true,
+//                                           true,
+//                                           new VdcReturnValueBase(),
+//                                           false));
+//
+//        setUriInfo(setUpActionExpectations(VdcActionType.UpdateVds,
+//                                           UpdateVdsActionParameters.class,
+//                                           new String[] { "RootPassword" },
+//                                           new Object[] { "" },
+//                                           true,
+//                                           true,
+//                                           false));
+//
+//        setUriInfo(setUpActionExpectations(VdcActionType.ApproveVds,
+//                                           ApproveVdsParameters.class,
+//                                           new String[] { "VdsId" },
+//                                           new Object[] { GUIDS[0] }));
+//
+//        verifyActionResponse(resource.approve(new Action() {{ setCluster(new Cluster()); getCluster().setId(GUIDS[0].toString()); }}));
+//    }
 
-    @Test
-    public void testApproveChangingCluster() throws Exception {
-        setUpGetEntityExpectations(3);
+//    @Test
+//    public void testIscsiLogin() throws Exception {
+//        setUriInfo(setUpActionExpectations(VdcActionType.ConnectStorageToVds,
+//                                           StorageServerConnectionParametersBase.class,
+//                                           new String[] { "VdsId",
+//                                                          "StorageServerConnection.connection",
+//                                                          "StorageServerConnection.portal",
+//                                                          "StorageServerConnection.iqn",
+//                                                          "StorageServerConnection.port",
+//                                                          "StorageServerConnection.storage_type",
+//                                                          "StorageServerConnection.user_name",
+//                                                          "StorageServerConnection.password" },
+//                                           new Object[] { GUIDS[0],
+//                                                          ISCSI_SERVER_ADDRESS,
+//                                                          ISCSI_SERVER_ADDRESS,
+//                                                          ISCSI_IQN,
+//                                                          ISCSI_PORT_STRING,
+//                                                          ISCSI_STORAGE_TYPE,
+//                                                          ISCSI_USER_NAME,
+//                                                          ISCSI_USER_PASS }));
+//
+//        Action action = new Action();
+//        IscsiDetails iscsiDetails = new IscsiDetails();
+//        iscsiDetails.setAddress(ISCSI_SERVER_ADDRESS);
+//        iscsiDetails.setPort(ISCSI_PORT_INT);
+//        iscsiDetails.setTarget(ISCSI_IQN);
+//        iscsiDetails.setUsername(ISCSI_USER_NAME);
+//        iscsiDetails.setPassword(ISCSI_USER_PASS);
+//        action.setIscsi(iscsiDetails);
+//        verifyActionResponse(resource.iscsiLogin(action));
+//    }
 
-        setUriInfo(setUpActionExpectations(VdcActionType.ChangeVDSCluster,
-                                           ChangeVDSClusterParameters.class,
-                                           new String[] { "ClusterId", "VdsId" },
-                                           new Object[] { GUIDS[0],  GUIDS[0]},
-                                           true,
-                                           true,
-                                           new VdcReturnValueBase(),
-                                           false));
-
-        setUriInfo(setUpActionExpectations(VdcActionType.UpdateVds,
-                                           UpdateVdsActionParameters.class,
-                                           new String[] { "RootPassword" },
-                                           new Object[] { "" },
-                                           true,
-                                           true,
-                                           false));
-
-        setUriInfo(setUpActionExpectations(VdcActionType.ApproveVds,
-                                           ApproveVdsParameters.class,
-                                           new String[] { "VdsId" },
-                                           new Object[] { GUIDS[0] }));
-
-        verifyActionResponse(resource.approve(new Action() {{ setCluster(new Cluster()); getCluster().setId(GUIDS[0].toString()); }}));
-    }
-
-    @Test
-    public void testIscsiLogin() throws Exception {
-        setUriInfo(setUpActionExpectations(VdcActionType.ConnectStorageToVds,
-                                           StorageServerConnectionParametersBase.class,
-                                           new String[] { "VdsId",
-                                                          "StorageServerConnection.connection",
-                                                          "StorageServerConnection.portal",
-                                                          "StorageServerConnection.iqn",
-                                                          "StorageServerConnection.port",
-                                                          "StorageServerConnection.storage_type",
-                                                          "StorageServerConnection.user_name",
-                                                          "StorageServerConnection.password" },
-                                           new Object[] { GUIDS[0],
-                                                          ISCSI_SERVER_ADDRESS,
-                                                          ISCSI_SERVER_ADDRESS,
-                                                          ISCSI_IQN,
-                                                          ISCSI_PORT_STRING,
-                                                          ISCSI_STORAGE_TYPE,
-                                                          ISCSI_USER_NAME,
-                                                          ISCSI_USER_PASS }));
-
-        Action action = new Action();
-        IscsiDetails iscsiDetails = new IscsiDetails();
-        iscsiDetails.setAddress(ISCSI_SERVER_ADDRESS);
-        iscsiDetails.setPort(ISCSI_PORT_INT);
-        iscsiDetails.setTarget(ISCSI_IQN);
-        iscsiDetails.setUsername(ISCSI_USER_NAME);
-        iscsiDetails.setPassword(ISCSI_USER_PASS);
-        action.setIscsi(iscsiDetails);
-        verifyActionResponse(resource.iscsiLogin(action));
-    }
-
-    @Test
-    public void testIscsiDiscover() throws Exception {
-        IscsiDetails iscsiDetails = new IscsiDetails();
-        iscsiDetails.setAddress(ISCSI_SERVER_ADDRESS);
-        iscsiDetails.setPort(ISCSI_PORT_INT);
-        iscsiDetails.setUsername(ISCSI_USER_NAME);
-        iscsiDetails.setPassword(ISCSI_USER_PASS);
-
-        Action action = new Action();
-        action.setIscsi(iscsiDetails);
-
-        VdcQueryReturnValue queryResult = new VdcQueryReturnValue();
-        queryResult.setSucceeded(true);
-
-        expect(backend.RunQuery(eq(VdcQueryType.DiscoverSendTargets),
-                                eqQueryParams(DiscoverSendTargetsQueryParameters.class,
-                                              addSession("VdsId", "Connection.connection", "Connection.port", "Connection.user_name", "Connection.password"),
-                                              addSession(GUIDS[0], ISCSI_SERVER_ADDRESS, ISCSI_PORT_STRING, ISCSI_USER_NAME, ISCSI_USER_PASS)
-                                              ))).andReturn(queryResult);
-        control.replay();
-        resource.iscsiDiscover(action);
-        verify(backend);
-    }
+//    @Test
+//    public void testIscsiDiscover() throws Exception {
+//        IscsiDetails iscsiDetails = new IscsiDetails();
+//        iscsiDetails.setAddress(ISCSI_SERVER_ADDRESS);
+//        iscsiDetails.setPort(ISCSI_PORT_INT);
+//        iscsiDetails.setUsername(ISCSI_USER_NAME);
+//        iscsiDetails.setPassword(ISCSI_USER_PASS);
+//
+//        Action action = new Action();
+//        action.setIscsi(iscsiDetails);
+//
+//        VdcQueryReturnValue queryResult = new VdcQueryReturnValue();
+//        queryResult.setSucceeded(true);
+//
+//        expect(backend.RunQuery(eq(VdcQueryType.DiscoverSendTargets),
+//                                eqQueryParams(DiscoverSendTargetsQueryParameters.class,
+//                                              addSession("VdsId", "Connection.connection", "Connection.port", "Connection.user_name", "Connection.password"),
+//                                              addSession(GUIDS[0], ISCSI_SERVER_ADDRESS, ISCSI_PORT_STRING, ISCSI_USER_NAME, ISCSI_USER_PASS)
+//                                              ))).andReturn(queryResult);
+//        control.replay();
+//        resource.iscsiDiscover(action);
+//        verify(backend);
+//    }
 
     @Test
     public void testDeactivate() throws Exception {
@@ -573,6 +564,7 @@ public class BackendHostResourceTest
         return entity;
     }
 
+    @Override
     protected void verifyModel(Host model, int index) {
         verifyModelSpecific(model, index);
         verifyLinks(model);
