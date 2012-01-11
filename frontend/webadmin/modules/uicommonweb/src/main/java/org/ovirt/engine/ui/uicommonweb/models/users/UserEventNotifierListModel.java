@@ -115,6 +115,10 @@ public class UserEventNotifierListModel extends SearchableListModel
 		for (EventNotificationEntity eventType : eventTypes)
 		{
 			SelectionTreeNodeModel stnm = new SelectionTreeNodeModel();
+			if(eventType == EventNotificationEntity.Vm || eventType == EventNotificationEntity.Storage) {
+				continue;
+			}
+			
 			stnm.setTitle(eventType.toString());
 			stnm.setDescription(eventNotificationEntityTranslator.containsKey(eventType) ? eventNotificationEntityTranslator.get(eventType) : eventType.toString());
 			list.add(stnm);
