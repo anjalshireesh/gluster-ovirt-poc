@@ -126,6 +126,10 @@ public enum VDSCommandType {
     Snapshot("org.ovirt.engine.core.vdsbroker.vdsbroker");
     CreateGlusterVolume("org.ovirt.engine.core.vdsbroker.glusterbroker"),
     AddBricksToGlusterVolume("org.ovirt.engine.core.vdsbroker.glusterbroker"),
+    StartGlusterVolume("org.ovirt.engine.core.vdsbroker.glusterbroker"),
+    StopGlusterVolume("org.ovirt.engine.core.vdsbroker.glusterbroker"),
+    RebalanceGlusterVolumeStart("org.ovirt.engine.core.vdsbroker.glusterbroker"),
+    RebalanceGlusterVolumeStop("org.ovirt.engine.core.vdsbroker.glusterbroker"),
     ListGlusterVolumes("org.ovirt.engine.core.vdsbroker.glusterbroker");
 
     String packageName;

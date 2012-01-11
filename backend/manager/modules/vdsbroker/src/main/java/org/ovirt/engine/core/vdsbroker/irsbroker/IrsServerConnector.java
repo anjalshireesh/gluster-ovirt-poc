@@ -106,8 +106,11 @@ public interface IrsServerConnector {
     public Map<String, Object> getVmsList(String storagePoolId, String storageDomainId);
 
     public Map<String, Object> glusterVolumeCreate(Map<String, Object> volumeData);
-
+    public Map<String, Object> glusterVolumeStart(String volumeName);
+    public Map<String, Object> glusterVolumeStop(String volumeName);
     public Map<String, Object> glusterVolumesList();
-
     public Map<String, Object> glusterVolumeAddBrick(String volumeName, String[] brickList);
+    public Map<String, Object> glusterVolumeRebalanceStart(String volumeName, String mode);
+    public Map<String, Object> glusterVolumeRebalanceStop(String volumeName);
+    public Map<String, Object> glusterVolumeRebalanceStatus(String volumeName);
 }

@@ -341,4 +341,39 @@ public class IrsServerWrapper implements IIrsServer {
         StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
         return wrapper;
     }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStart(String volumeName, String mode) {
+        Map<String, Object> xmlRpcReturnValue = irsServer.glusterVolumeRebalanceStart(volumeName, mode);
+        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+        return wrapper;
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStop(String volumeName) {
+        Map<String, Object> xmlRpcReturnValue = irsServer.glusterVolumeRebalanceStop(volumeName);
+        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+        return wrapper;
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStatus(String volumeName) {
+        Map<String, Object> xmlRpcReturnValue = irsServer.glusterVolumeRebalanceStatus(volumeName);
+        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+        return wrapper;
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeStart(String volumeName) {
+        Map<String, Object> xmlRpcReturnValue = irsServer.glusterVolumeStart(volumeName);
+        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+        return wrapper;
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeStop(String volumeName) {
+        Map<String, Object> xmlRpcReturnValue = irsServer.glusterVolumeStop(volumeName);
+        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+        return wrapper;
+    }
 }
