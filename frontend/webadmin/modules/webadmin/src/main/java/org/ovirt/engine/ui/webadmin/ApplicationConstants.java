@@ -54,9 +54,6 @@ public interface ApplicationConstants extends CommonApplicationConstants {
 
     @DefaultStringValue("Hosts")
     String hostMainTabLabel();
-    
-    @DefaultStringValue("Volumes")
-    String volumeMainTabLabel();
 
     @DefaultStringValue("Storage")
     String storageMainTabLabel();
@@ -693,12 +690,6 @@ public interface ApplicationConstants extends CommonApplicationConstants {
 
     @DefaultStringValue("Collapse All")
     String treeCollapseAll();
-    
-    @DefaultStringValue("Mail Recipient:")
-    String manageEventsPopupEmailLabel();
-
-    @DefaultStringValue("Select the Events for Notification:")
-    String manageEventsPopupTitleLabel();
 
     @DefaultStringValue("Mail Recipient:")
     String manageEventsPopupEmailLabel();
@@ -787,25 +778,4 @@ public interface ApplicationConstants extends CommonApplicationConstants {
 
     @DefaultStringValue("VMs")
     String quotaVmSubTabLabel();
-
-    @DefaultStringValue("Source")
-    String sourceStorage();
-
-    @DefaultStringValue("Destination")
-    String destinationStorage();
-
-    @DefaultStringValue("Summary")
-    String volumeGeneralSubTabLabel();
-
-    @DefaultStringValue("Volume Options")
-    String volumeParameterSubTabLabel();
-
-    @DefaultStringValue("Bricks")
-    String volumeBrickSubTabLabel();
-
-    @DefaultStringValue("Permissions")
-    String volumePermissionSubTabLabel();
-
-    @DefaultStringValue("Events")
-    String volumeEventSubTabLabel();
 }

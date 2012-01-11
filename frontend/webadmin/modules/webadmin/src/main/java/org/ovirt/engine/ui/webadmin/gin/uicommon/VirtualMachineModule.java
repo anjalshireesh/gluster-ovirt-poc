@@ -33,8 +33,8 @@ import org.ovirt.engine.ui.webadmin.gin.ClientGinjector;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.ReportPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.AssignTagsPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.PermissionsPopupPresenterWidget;
+import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.datacenter.FindSingleStoragePopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.guide.GuidePopupPresenterWidget;
-import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.storage.DisksAllocationPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.vm.VmChangeCDPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.vm.VmDesktopNewPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.vm.VmDiskPopupPresenterWidget;
@@ -64,7 +64,7 @@ public class VirtualMachineModule extends AbstractGinModule {
             final Provider<VmChangeCDPopupPresenterWidget> changeCDPopupProvider,
             final Provider<VmExportPopupPresenterWidget> exportPopupProvider,
             final Provider<VmMigratePopupPresenterWidget> migratePopupProvider,
-            final Provider<DisksAllocationPopupPresenterWidget> movePopupProvider,
+            final Provider<FindSingleStoragePopupPresenterWidget> movePopupProvider,
             final Provider<VmDesktopNewPopupPresenterWidget> newDesktopVmPopupProvider,
             final Provider<VmServerNewPopupPresenterWidget> newServerVmPopupProvider,
             final Provider<GuidePopupPresenterWidget> guidePopupProvider,
@@ -174,8 +174,7 @@ public class VirtualMachineModule extends AbstractGinModule {
     @Singleton
     public SearchableDetailModelProvider<DiskImage, VmListModel, VmDiskListModel> getVmDiskListProvider(ClientGinjector ginjector,
             final Provider<VmDiskPopupPresenterWidget> popupProvider,
-            final Provider<RemoveConfirmationPopupPresenterWidget> removeConfirmPopupProvider,
-            final Provider<DisksAllocationPopupPresenterWidget> movePopupProvider) {
+            final Provider<RemoveConfirmationPopupPresenterWidget> removeConfirmPopupProvider) {
         return new SearchableDetailTabModelProvider<DiskImage, VmListModel, VmDiskListModel>(ginjector,
                 VmListModel.class,
                 VmDiskListModel.class) {
@@ -185,8 +184,6 @@ public class VirtualMachineModule extends AbstractGinModule {
 
                 if (lastExecutedCommand == model.getNewCommand() || lastExecutedCommand == model.getEditCommand()) {
                     return popupProvider.get();
-                } else if (lastExecutedCommand == getModel().getMoveCommand()) {
-                    return movePopupProvider.get();
                 } else {
                     return super.getModelPopup(lastExecutedCommand);
                 }

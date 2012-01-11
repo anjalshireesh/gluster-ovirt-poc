@@ -1,4 +1,3 @@
-package org.ovirt.engine.ui.webadmin.gin;
 
 import org.ovirt.engine.ui.common.gin.BasePresenterModule;
 import org.ovirt.engine.ui.webadmin.section.login.presenter.LoginPopupPresenterWidget;
@@ -32,6 +31,8 @@ import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.guide.MoveHostP
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.host.ConfigureLocalStoragePopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.gluster.AddBrickPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.gluster.VolumePopupPresenterWidget;
+import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.guide.GuidePopupPresenterWidget;
+import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.guide.MoveHostPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.host.HostBondPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.host.HostInstallPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.host.HostInterfacePopupPresenterWidget;
@@ -172,6 +173,8 @@ import org.ovirt.engine.ui.webadmin.section.main.view.popup.guide.GuidePopupView
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.guide.MoveHostPopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.gluster.AddBrickPopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.gluster.VolumePopupView;
+import org.ovirt.engine.ui.webadmin.section.main.view.popup.guide.GuidePopupView;
+import org.ovirt.engine.ui.webadmin.section.main.view.popup.guide.MoveHostPopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.host.HostBondPopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.host.HostConfigureLocalStoragePopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.host.HostInstallPopupView;

@@ -14,11 +14,6 @@ import org.ovirt.engine.ui.webadmin.gin.uicommon.TemplateModule;
 import org.ovirt.engine.ui.webadmin.gin.uicommon.UserModule;
 import org.ovirt.engine.ui.webadmin.gin.uicommon.VirtualMachineModule;
 import org.ovirt.engine.ui.webadmin.uicommon.WebAdminConfigurator;
-import org.ovirt.engine.ui.webadmin.gin.uicommon.VolumeModule;
-import org.ovirt.engine.ui.webadmin.uicommon.FrontendEventsHandlerImpl;
-import org.ovirt.engine.ui.webadmin.uicommon.FrontendFailureEventListener;
-import org.ovirt.engine.ui.webadmin.uicommon.LoggerImpl;
-import org.ovirt.engine.ui.webadmin.uicommon.UiCommonDefaultTypeResolver;
 import org.ovirt.engine.ui.webadmin.uicommon.model.AlertFirstRowModelProvider;
 import org.ovirt.engine.ui.webadmin.uicommon.model.AlertModelProvider;
 import org.ovirt.engine.ui.webadmin.uicommon.model.BookmarkModelProvider;
@@ -61,7 +56,6 @@ public class UiCommonModule extends BaseUiCommonModule {
         install(new EventModule());
         install(new ReportsModule());
         install(new QuotaModule());
-        install(new VolumeModule());
 
         // SystemTreeModel
         bind(SystemTreeModelProvider.class).asEagerSingleton();
