@@ -40,8 +40,8 @@ public interface GlusterVolumesResource {
     public Response add(GlusterVolume volume);
 
     @DELETE
-    @Path("{name}")
-    public Response remove(@PathParam("name") String name);
+    @Path("{id}")
+    public Response remove(@PathParam("id") String id);
 
     /**
      * Sub-resource locator method, returns individual GlusterVolumeResource on which the remainder of the URI is
@@ -51,6 +51,6 @@ public interface GlusterVolumesResource {
      *            the GlusterVolume name
      * @return matching subresource if found
      */
-    @Path("{name}")
-    public GlusterVolumeResource getGlusterVolumeSubResource(@PathParam("name") String name);
+    @Path("{id}")
+    public GlusterVolumeResource getGlusterVolumeSubResource(@PathParam("id") String id);
 }

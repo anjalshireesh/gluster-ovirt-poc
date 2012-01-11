@@ -8,9 +8,9 @@ import org.ovirt.engine.core.common.vdscommands.VDSCommandType;
 import org.ovirt.engine.core.common.vdscommands.VDSReturnValue;
 import org.ovirt.engine.core.dal.VdcBllMessages;
 
-public class AddBricksToGlusterVolumeAction extends GlusterCommandBase<AddBricksToGlusterVolumeParameters> {
+public class AddBricksToGlusterVolumeCommand extends GlusterCommandBase<AddBricksToGlusterVolumeParameters> {
 
-    public AddBricksToGlusterVolumeAction(AddBricksToGlusterVolumeParameters params) {
+    public AddBricksToGlusterVolumeCommand(AddBricksToGlusterVolumeParameters params) {
         super(params);
     }
 

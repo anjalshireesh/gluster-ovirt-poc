@@ -19,14 +19,14 @@ import org.ovirt.engine.core.compat.Guid;
 /**
  *
  */
-public class BackendGlusterVolumesResource extends AbstractBackendCollectionResource<GlusterVolume, org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity>
+public class BackendGlusterVolumesResource extends AbstractBackendCollectionResource<GlusterVolume, GlusterVolumeEntity>
         implements GlusterVolumesResource {
     static final String[] SUB_COLLECTIONS = { "bricks", "options" };
-    private String clusterId;
+    private final String clusterId;
 
     public BackendGlusterVolumesResource(String clusterId) {
         super(GlusterVolume.class, org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.class, SUB_COLLECTIONS);
-        setClusterId(clusterId);
+        this.clusterId = clusterId;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class BackendGlusterVolumesResource extends AbstractBackendCollectionReso
     @Override
     @SingleEntityResource
     public GlusterVolumeResource getGlusterVolumeSubResource(String id) {
-        return inject(new BackendGlusterVolumeResource(id, this));
+        return inject(new BackendGlusterVolumeResource(getClusterId(), id, this));
     }
 
     @Override
@@ -67,10 +67,6 @@ public class BackendGlusterVolumesResource extends AbstractBackendCollectionReso
 
     public String getClusterId() {
         return clusterId;
-    }
-
-    public void setClusterId(String clusterId) {
-        this.clusterId = clusterId;
     }
 
     @Override
