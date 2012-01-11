@@ -108,4 +108,5 @@ public interface IIrsServer {
     StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStart(String volumeName, String mode);
     StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStop(String volumeName);
     StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStatus(String volumeName);
+    StatusOnlyReturnForXmlRpc glusterVolumeSet(String volumeName, String key, String value);
 }

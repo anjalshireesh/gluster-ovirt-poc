@@ -118,4 +118,5 @@ public interface IrsServerConnector {
     public Map<String, Object> glusterVolumeRebalanceStart(String volumeName, String mode);
     public Map<String, Object> glusterVolumeRebalanceStop(String volumeName);
     public Map<String, Object> glusterVolumeRebalanceStatus(String volumeName);
+    public Map<String, Object> glusterVolumeSet(String volumeName, String key, String value);
 }
