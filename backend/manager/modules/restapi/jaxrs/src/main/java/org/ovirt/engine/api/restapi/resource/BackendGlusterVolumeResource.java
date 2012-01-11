@@ -10,6 +10,9 @@ import org.ovirt.engine.api.model.GlusterVolumes;
 import org.ovirt.engine.api.model.VM;
 import org.ovirt.engine.api.resource.GlusterVolumeBricksResource;
 import org.ovirt.engine.api.resource.GlusterVolumeResource;
+import org.ovirt.engine.core.common.action.VdcActionType;
+import org.ovirt.engine.core.common.glusteractions.GlusterVolumeParameters;
+import org.ovirt.engine.core.compat.Guid;
 
 public class BackendGlusterVolumeResource extends AbstractBackendActionableResource<VM, org.ovirt.engine.core.common.businessentities.VM> implements
         GlusterVolumeResource {
@@ -41,20 +44,50 @@ public class BackendGlusterVolumeResource extends AbstractBackendActionableResou
 
     @Override
     public Response start(Action action) {
-        // TODO Invoke VDSM command to start the volume
-        return null;
+        String volumeName = get().getVolumeName();
+
+        try {
+            return performAction(VdcActionType.StartGlusterVolume,
+                    new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), volumeName));
+        } catch (Exception e) {
+            return handleError(e, false);
+        }
     }
 
     @Override
     public Response stop(Action action) {
-        // TODO Invoke VDSM command to stop the volume
-        return null;
+        String volumeName = get().getVolumeName();
+
+        try {
+            return performAction(VdcActionType.StopGlusterVolume,
+                    new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), volumeName));
+        } catch (Exception e) {
+            return handleError(e, false);
+        }
     }
 
     @Override
-    public Response rebalance(Action action) {
-        // TODO Invoke VDSM command to trigger volume rebalance
-        return null;
+    public Response rebalanceStart(Action action) {
+        String volumeName = get().getVolumeName();
+
+        try {
+            return performAction(VdcActionType.RebalanceGlusterVolumeStart,
+                    new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), volumeName));
+        } catch (Exception e) {
+            return handleError(e, false);
+        }
+    }
+
+    @Override
+    public Response rebalanceStop(Action action) {
+        String volumeName = get().getVolumeName();
+
+        try {
+            return performAction(VdcActionType.RebalanceGlusterVolumeStop,
+                    new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), volumeName));
+        } catch (Exception e) {
+            return handleError(e, false);
+        }
     }
 
     @Override

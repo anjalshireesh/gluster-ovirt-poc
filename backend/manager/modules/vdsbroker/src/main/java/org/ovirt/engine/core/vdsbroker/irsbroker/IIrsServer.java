@@ -101,8 +101,11 @@ public interface IIrsServer {
     GetVmsListReturnForXmlRpc getVmsList(String storagePoolId, String storageDomainId);
 
     StatusOnlyReturnForXmlRpc glusterVolumeCreate(Map<String, Object> volumeData);
-
+    StatusOnlyReturnForXmlRpc glusterVolumeStart(String volumeName);
+    StatusOnlyReturnForXmlRpc glusterVolumeStop(String volumeName);
     GlusterVolumeListReturnForXmlRpc glusterVolumesList();
-
     StatusOnlyReturnForXmlRpc glusterVolumeAddBrick(String volumeName, String[] brickList);
+    StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStart(String volumeName, String mode);
+    StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStop(String volumeName);
+    StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStatus(String volumeName);
 }
