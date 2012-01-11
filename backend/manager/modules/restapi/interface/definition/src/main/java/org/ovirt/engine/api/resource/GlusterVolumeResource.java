@@ -22,7 +22,7 @@ public interface GlusterVolumeResource {
     @Path("{action: (start|stop|rebalanceStart|rebalanceStop)}/{oid}")
     public ActionResource getActionSubresource(@PathParam("action") String action, @PathParam("oid") String oid);
 
-    @Path("bricks")
+    @Path("glusterbricks")
     public GlusterVolumeBricksResource getBricksResource();
 
     @POST

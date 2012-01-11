@@ -1783,7 +1783,7 @@ actions:
       signatures:
       - mandatoryArguments: {glustervolume.volumeName: 'xs:string', 
           glustervolume.volumeType: 'xs:string', 
-          glustervolume.bricks: 'xs:string'}
+          glustervolume.glusterbricks: 'xs:string'}
         optionalArguments: {}
     urlparams: {}
     headers: {Content-Type: application/xml}
