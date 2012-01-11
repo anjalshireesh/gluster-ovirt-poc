@@ -3,8 +3,6 @@
  */
 package org.ovirt.engine.api.restapi.resource;
 
-import java.util.List;
-
 import javax.ws.rs.core.Response;
 
 import org.ovirt.engine.api.model.GlusterBrick;
@@ -44,13 +42,12 @@ public class BackendGlusterBricksResource extends AbstractBackendCollectionResou
     }
 
     @Override
-    public Response add(GlusterBricks bricks) {
-        //validateParameters(bricks, "glusterBricks.host", "glusterBricks.brickDirectory");
+    public Response add(GlusterBricks glusterbricks) {
+        //validateParameters(glusterbricks, "glusterBricks.host", "glusterBricks.brickDirectory");
 
         try {
-            List<GlusterBrick> glusterBricks = bricks.getGlusterBricks();
             String brickList = "";
-            for (GlusterBrick brick : glusterBricks) {
+            for (GlusterBrick brick : glusterbricks.getGlusterBricks()) {
                 String brickQualifiedName = brick.getHost() + ":" + brick.getHost();
                 brickList += (brickList.isEmpty() ? "," : "") + brick.getHost() + ":" + brick.getBrickDirectory();
             }

@@ -21,7 +21,7 @@ public interface GlusterVolumeBricksResource {
     @POST
     @Formatted
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_X_YAML })
-    public Response add(GlusterBricks bricks);
+    public Response add(GlusterBricks glusterbricks);
 
 
     @DELETE

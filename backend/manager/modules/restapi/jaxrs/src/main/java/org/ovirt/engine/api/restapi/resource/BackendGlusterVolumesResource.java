@@ -21,7 +21,7 @@ import org.ovirt.engine.core.compat.Guid;
  */
 public class BackendGlusterVolumesResource extends AbstractBackendCollectionResource<GlusterVolume, GlusterVolumeEntity>
         implements GlusterVolumesResource {
-    static final String[] SUB_COLLECTIONS = { "bricks", "options" };
+    static final String[] SUB_COLLECTIONS = { "glusterbricks", "options" };
     private final String clusterId;
 
     public BackendGlusterVolumesResource(String clusterId) {
