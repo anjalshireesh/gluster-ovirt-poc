@@ -682,6 +682,12 @@ public interface ApplicationConstants extends Constants {
 
     @DefaultStringValue("Collapse All")
     String treeCollapseAll();
+    
+    @DefaultStringValue("Mail Recipient:")
+    String manageEventsPopupEmailLabel();
+
+    @DefaultStringValue("Select the Events for Notification:")
+    String manageEventsPopupTitleLabel();
 
     @DefaultStringValue("Summary")
 	String volumeGeneralSubTabLabel();
