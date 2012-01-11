@@ -2,11 +2,8 @@ package org.ovirt.engine.ui.webadmin.section.main.presenter.tab;
 
 import java.util.List;
 
-import org.ovirt.engine.core.common.businessentities.GlusterVolume;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
-import org.ovirt.engine.core.common.businessentities.VDS;
 import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeListModel;
-import org.ovirt.engine.ui.uicommonweb.models.hosts.HostListModel;
 import org.ovirt.engine.ui.webadmin.gin.ClientGinjector;
 import org.ovirt.engine.ui.webadmin.place.ApplicationPlaces;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.AbstractMainTabWithDetailsPresenter;

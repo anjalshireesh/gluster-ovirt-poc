@@ -8,7 +8,6 @@ import org.ovirt.engine.core.common.businessentities.AuditLog;
 import org.ovirt.engine.core.common.businessentities.DbUser;
 import org.ovirt.engine.core.common.businessentities.DiskImage;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
-import org.ovirt.engine.core.common.businessentities.GlusterVolume;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
 import org.ovirt.engine.core.common.businessentities.VDS;
@@ -168,7 +167,6 @@ import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.virtualMachine.Vi
 import org.ovirt.engine.ui.webadmin.uicommon.model.DetailModelProvider;
 import org.ovirt.engine.ui.webadmin.uicommon.model.MainModelProvider;
 import org.ovirt.engine.ui.webadmin.uicommon.model.SearchableDetailModelProvider;
-import org.ovirt.engine.ui.webadmin.uicommon.model.SearchableDetailTabModelProvider;
 
 import com.google.gwt.inject.client.AsyncProvider;
 import com.google.inject.Provider;

@@ -1,41 +1,24 @@
 package org.ovirt.engine.ui.webadmin.gin.uicommon;
 
-import java.util.Map;
-
 import org.ovirt.engine.core.common.businessentities.AuditLog;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
-import org.ovirt.engine.core.common.businessentities.GlusterVolume;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
-import org.ovirt.engine.core.common.businessentities.VDSGroup;
 import org.ovirt.engine.core.common.businessentities.permissions;
 import org.ovirt.engine.ui.uicommonweb.UICommand;
 import org.ovirt.engine.ui.uicommonweb.models.ConfirmationModel;
 import org.ovirt.engine.ui.uicommonweb.models.Model;
-import org.ovirt.engine.ui.uicommonweb.models.clusters.ClusterListModel;
 import org.ovirt.engine.ui.uicommonweb.models.configure.PermissionListModel;
 import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeBrickListModel;
 import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeEventListModel;
 import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeGeneralModel;
 import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeListModel;
 import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeParameterListModel;
-import org.ovirt.engine.ui.uicommonweb.models.hosts.HostEventListModel;
-import org.ovirt.engine.ui.uicommonweb.models.hosts.HostGeneralModel;
-import org.ovirt.engine.ui.uicommonweb.models.hosts.HostHooksListModel;
-import org.ovirt.engine.ui.uicommonweb.models.hosts.HostListModel;
 import org.ovirt.engine.ui.webadmin.gin.ClientGinjector;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.AbstractModelBoundPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.PermissionsPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.RemoveConfirmationPopupPresenterWidget;
-import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.cluster.ClusterPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.gluster.VolumePopupPresenterWidget;
-import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.host.HostInstallPopupPresenterWidget;
-import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster.SubTabVolumeBrickPresenter;
-import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster.SubTabVolumeEventPresenter;
-import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster.SubTabVolumeGeneralPresenter;
-import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster.SubTabVolumeParameterPresenter;
-import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster.SubTabVolumePermissionPresenter;
-import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster.VolumeSubTabPanelPresenter;
 import org.ovirt.engine.ui.webadmin.uicommon.model.DetailModelProvider;
 import org.ovirt.engine.ui.webadmin.uicommon.model.DetailTabModelProvider;
 import org.ovirt.engine.ui.webadmin.uicommon.model.MainModelProvider;
@@ -44,7 +27,6 @@ import org.ovirt.engine.ui.webadmin.uicommon.model.SearchableDetailModelProvider
 import org.ovirt.engine.ui.webadmin.uicommon.model.SearchableDetailTabModelProvider;
 
 import com.google.gwt.inject.client.AbstractGinModule;
-import com.google.gwt.inject.client.AsyncProvider;
 import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;

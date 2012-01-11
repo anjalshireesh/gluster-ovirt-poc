@@ -1,8 +1,6 @@
 package org.ovirt.engine.ui.webadmin.section.main.view.tab;
 
-import org.ovirt.engine.core.common.businessentities.GlusterVolume;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
-import org.ovirt.engine.core.common.businessentities.VDS;
 import org.ovirt.engine.ui.uicommonweb.UICommand;
 import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeListModel;
 import org.ovirt.engine.ui.webadmin.idhandler.ElementIdHandler;
@@ -10,7 +8,6 @@ import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.MainTabVolumePres
 import org.ovirt.engine.ui.webadmin.section.main.view.AbstractMainTabWithDetailsTableView;
 import org.ovirt.engine.ui.webadmin.uicommon.model.MainModelProvider;
 import org.ovirt.engine.ui.webadmin.widget.action.UiCommandButtonDefinition;
-import org.ovirt.engine.ui.webadmin.widget.table.column.HostStatusColumn;
 import org.ovirt.engine.ui.webadmin.widget.table.column.TextColumnWithTooltip;
 import org.ovirt.engine.ui.webadmin.widget.table.column.VolumeStatusColumn;
 

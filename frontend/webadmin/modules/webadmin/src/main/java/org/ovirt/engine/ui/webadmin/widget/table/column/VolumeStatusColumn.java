@@ -1,7 +1,6 @@
 package org.ovirt.engine.ui.webadmin.widget.table.column;
 
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
-import org.ovirt.engine.core.common.businessentities.VDS;
 
 import com.google.gwt.user.cellview.client.Column;
 

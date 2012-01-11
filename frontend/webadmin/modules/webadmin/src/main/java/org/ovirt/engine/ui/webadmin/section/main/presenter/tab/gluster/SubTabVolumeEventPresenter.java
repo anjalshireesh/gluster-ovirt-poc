@@ -2,15 +2,11 @@ package org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster;
 
 import org.ovirt.engine.core.common.businessentities.AuditLog;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
-import org.ovirt.engine.core.common.businessentities.storage_pool;
-import org.ovirt.engine.ui.uicommonweb.models.datacenters.DataCenterEventListModel;
-import org.ovirt.engine.ui.uicommonweb.models.datacenters.DataCenterListModel;
 import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeEventListModel;
 import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeListModel;
 import org.ovirt.engine.ui.webadmin.gin.ClientGinjector;
 import org.ovirt.engine.ui.webadmin.place.ApplicationPlaces;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.AbstractSubTabPresenter;
-import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.DataCenterSelectionChangeEvent;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.VolumeSelectionChangeEvent;
 import org.ovirt.engine.ui.webadmin.uicommon.model.SearchableDetailModelProvider;
 import org.ovirt.engine.ui.webadmin.widget.Align;
