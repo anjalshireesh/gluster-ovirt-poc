@@ -29,7 +29,8 @@ public enum SystemTreeItemType
 	Cluster,
 	VMs,
 	Hosts,
-	Host;
+	Host, 
+	Volumes;
 
 	public int getValue()
 	{

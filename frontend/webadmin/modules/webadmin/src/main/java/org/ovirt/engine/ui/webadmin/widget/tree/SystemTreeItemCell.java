@@ -57,6 +57,9 @@ public class SystemTreeItemCell extends AbstractCell<SystemTreeItemModel> {
         case VMs:
             imageResource = applicationResources.vmsImage();
             break;
+        case Volumes:
+            imageResource = applicationResources.storagesImage();
+            break;
         default:
             imageResource = applicationResources.questionMarkImage();
         }

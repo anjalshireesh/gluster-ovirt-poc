@@ -439,7 +439,7 @@ public class CommonModel extends ListModel
 
 		storageList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Host || model.getType() == SystemTreeItemType.Storages || model.getType() == SystemTreeItemType.Storage || model.getType() == SystemTreeItemType.System);
 		
-		volumeListModel.setIsAvailable(model.getType() == SystemTreeItemType.Cluster ? true : false);
+		volumeListModel.setIsAvailable(model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Volumes ? true : false);
 
 
 		boolean isDataStorage = false;

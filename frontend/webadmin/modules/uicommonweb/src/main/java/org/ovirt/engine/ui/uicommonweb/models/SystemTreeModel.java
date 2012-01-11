@@ -338,12 +338,19 @@ public class SystemTreeModel extends SearchableListModel implements IFrontendMul
 							hostsItem.getChildren().add(hostItem);
 						}
 					}
+					
+					SystemTreeItemModel volumesItem = new SystemTreeItemModel();
+					volumesItem.setType(SystemTreeItemType.Volumes);
+					volumesItem.setTitle("Volumes");
+					volumesItem.setParent(clusterItem);
+					volumesItem.setEntity(cluster);
+					clusterItem.getChildren().add(volumesItem);
 
-					SystemTreeItemModel vmsItem = new SystemTreeItemModel();
-					vmsItem.setType(SystemTreeItemType.VMs);
-					vmsItem.setTitle("VMs");
-					vmsItem.setParent(clusterItem);
-					vmsItem.setEntity(cluster);
+//					SystemTreeItemModel vmsItem = new SystemTreeItemModel();
+//					vmsItem.setType(SystemTreeItemType.VMs);
+//					vmsItem.setTitle("VMs");
+//					vmsItem.setParent(clusterItem);
+//					vmsItem.setEntity(cluster);
 					//clusterItem.getChildren().add(vmsItem);
 				}
 			}
