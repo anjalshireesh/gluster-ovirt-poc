@@ -43,13 +43,13 @@ public interface GlusterVolumeResource {
     @Formatted
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_X_YAML })
     @Actionable
-    @Path("rebalance")
+    @Path("rebalanceStart")
     public Response rebalanceStart(Action action);
 
     @POST
     @Formatted
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_X_YAML })
     @Actionable
-    @Path("rebalance")
+    @Path("rebalanceStop")
     public Response rebalanceStop(Action action);
 }
