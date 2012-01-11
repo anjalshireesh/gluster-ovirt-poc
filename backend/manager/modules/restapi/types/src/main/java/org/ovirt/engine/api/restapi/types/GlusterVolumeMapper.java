@@ -24,6 +24,7 @@ public class GlusterVolumeMapper {
         volume.setId(fromVolume.getId());
         volume.setName(fromVolume.getVolumeName());
         volume.setVolumeType(fromVolume.getVolumeType());
+        volume.setOptions(fromVolume.getOptions());
 
         String transportType = fromVolume.getTransportType();
         if(transportType == null || transportType.trim().isEmpty()) {
@@ -48,7 +49,6 @@ public class GlusterVolumeMapper {
         volume.setStripeCount(count == null ? 0 : count.intValue());
 
         volume.setCifsUsers(fromVolume.getCifsUsers());
-        volume.setOptions(fromVolume.getOptions());
 
         String status = fromVolume.getStatus();
         if(status == null || status.trim().isEmpty()) {
