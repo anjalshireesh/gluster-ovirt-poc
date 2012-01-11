@@ -1,6 +1,5 @@
 package org.ovirt.engine.ui.webadmin.section.main.view.tab.gluster;
 
-import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.datacenter.DataCenterSubTabPanelPresenter;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster.VolumeSubTabPanelPresenter;
 import org.ovirt.engine.ui.webadmin.view.AbstractTabPanelView;
 import org.ovirt.engine.ui.webadmin.widget.tab.AbstractTabPanel;
