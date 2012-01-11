@@ -138,4 +138,9 @@ public class GlusterBrickEntity extends GlusterEntity {
         // setDeviceName(newBrick.getDeviceName());
         setStatus(newBrick.getStatus());
     }
+
+    @Override
+    public Object getQueryableId() {
+        return getId();
+    }
 }
