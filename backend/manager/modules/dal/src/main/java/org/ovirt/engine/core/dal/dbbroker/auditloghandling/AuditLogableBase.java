@@ -56,6 +56,8 @@ public class AuditLogableBase extends TimeoutBase {
     private String correlationId;
     private NGuid jobId;
     private boolean isInternalExecution = false;
+    private NGuid glusterVolumeId;
+    private String glusterVolumeName;
 
     public AuditLogableBase() {
     }
@@ -450,6 +452,22 @@ public class AuditLogableBase extends TimeoutBase {
         } else {
             return "";
         }
+    }
+
+    public NGuid getGlusterVolumeId() {
+        return glusterVolumeId;
+    }
+
+    public void setGlusterVolumeId(NGuid value) {
+        glusterVolumeId = value;
+    }
+
+    public String getGlusterVolumeName() {
+        return glusterVolumeName;
+    }
+
+    public void setGlusterVolumeName(String value) {
+        glusterVolumeName = value;
     }
 
     protected void log() {

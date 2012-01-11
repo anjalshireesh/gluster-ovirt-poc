@@ -37,6 +37,8 @@ public class AuditLog extends IVdcQueryable implements INotifyPropertyChanged, S
 
     private String correlationId;
     private NGuid jobId;
+    private NGuid glusterVolumeId;
+    private String glusterVolumeName;
 
     public AuditLog() {
     }
@@ -301,6 +303,22 @@ public class AuditLog extends IVdcQueryable implements INotifyPropertyChanged, S
 
     public void setvds_group_name(String value) {
         vdsGroupName = value;
+    }
+
+    public NGuid getGlusterVolumeId() {
+        return glusterVolumeId;
+    }
+
+    public void setGlusterVolumeId(NGuid value) {
+        glusterVolumeId = value;
+    }
+
+    public String getGlusterVolumeName() {
+        return glusterVolumeName;
+    }
+
+    public void setGlusterVolumeName(String value) {
+        glusterVolumeName = value;
     }
 
     protected void OnPropertyChanged(PropertyChangedEventArgs e) {
