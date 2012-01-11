@@ -54,7 +54,7 @@ public class BackendGlusterVolumesResource extends AbstractBackendCollectionReso
 
     @Override
     public Response add(GlusterVolume volume) {
-        validateParameters(volume, "volumeName", "volumeType", "bricks");
+        validateParameters(volume, "volumeName", "volumeType", "glusterBricks");
 
         try {
             GlusterVolumeEntity volumeEntity = getMapper(GlusterVolume.class, GlusterVolumeEntity.class).map(volume, null);
