@@ -155,7 +155,7 @@ public abstract class TabModelProvider<M extends EntityModel> implements ModelPr
         RevealRootPopupContentEvent.fire(eventBus, popup);
     }
 
-    <T extends Model> void revealAndAssignPopup(T model,
+    public <T extends Model> void revealAndAssignPopup(T model,
             AbstractModelBoundPopupPresenterWidget<T, ?> popup, boolean isConfirm) {
         revealPopup(model, popup);
 

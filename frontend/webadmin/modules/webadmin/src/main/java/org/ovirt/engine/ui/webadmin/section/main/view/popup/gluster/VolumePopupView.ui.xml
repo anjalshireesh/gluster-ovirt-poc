@@ -26,7 +26,7 @@
 				<e:EntityModelTextBoxEditor ui:field="nameEditor" />
 				<e:ListModelListBoxEditor ui:field="typeListEditor" />
 				<g:HorizontalPanel>
-					<!--g:PushButton>Add Bricks</g:PushButton>-->
+					<g:PushButton ui:field="addBrickButton">Add Bricks</g:PushButton>
 					<e:EntityModelTextBoxEditor ui:field="bricksEditor" />
 				</g:HorizontalPanel>
 				<e:EntityModelCheckBoxEditor ui:field="gluster_accecssProtocolEditor"/>

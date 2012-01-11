@@ -5,6 +5,10 @@ import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
 import org.ovirt.engine.core.common.businessentities.permissions;
+import org.ovirt.engine.core.compat.Event;
+import org.ovirt.engine.core.compat.EventArgs;
+import org.ovirt.engine.core.compat.IEventListener;
+import org.ovirt.engine.core.compat.PropertyChangedEventArgs;
 import org.ovirt.engine.ui.uicommonweb.UICommand;
 import org.ovirt.engine.ui.uicommonweb.models.ConfirmationModel;
 import org.ovirt.engine.ui.uicommonweb.models.Model;
@@ -18,6 +22,7 @@ import org.ovirt.engine.ui.webadmin.gin.ClientGinjector;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.AbstractModelBoundPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.PermissionsPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.RemoveConfirmationPopupPresenterWidget;
+import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.gluster.AddBrickPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.gluster.VolumePopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.uicommon.model.DetailModelProvider;
 import org.ovirt.engine.ui.webadmin.uicommon.model.DetailTabModelProvider;
@@ -39,9 +44,12 @@ public class VolumeModule extends AbstractGinModule {
     @Singleton
     public MainModelProvider<GlusterVolumeEntity, VolumeListModel> getVolumeListProvider(ClientGinjector ginjector,
             final Provider<VolumePopupPresenterWidget> popupProvider,
+            final Provider<AddBrickPopupPresenterWidget> popupProvider2,
             final Provider<RemoveConfirmationPopupPresenterWidget> removeConfirmPopupProvider) {
         return new MainTabModelProvider<GlusterVolumeEntity, VolumeListModel>(ginjector, VolumeListModel.class) {
-            @Override
+        	private AbstractModelBoundPopupPresenterWidget<?, ?> window2;
+        	
+        	@Override
             protected AbstractModelBoundPopupPresenterWidget<? extends Model, ?> getModelPopup(UICommand lastExecutedCommand) {
                 if (lastExecutedCommand == getModel().getCreateVolumeCommand()) {
                     return popupProvider.get();
@@ -57,6 +65,33 @@ public class VolumeModule extends AbstractGinModule {
                 } else {
                     return super.getConfirmModelPopup(lastExecutedCommand);
                 }
+            }
+            
+            @Override
+            protected void onCommonModelChange() {
+            	super.onCommonModelChange();
+            	getModel().getPropertyChangedEvent().addListener(new IEventListener() {
+                    @Override
+                    public void eventRaised(Event ev, Object sender, EventArgs args) {
+                        String propName = ((PropertyChangedEventArgs) args).PropertyName;
+
+                        if ("Window2".equals(propName)) {
+                        	Model windowModel = getModel().getWindow2();
+                        	if(windowModel != null) {
+	                            UICommand lastExecutedCommand = getModel().getLastExecutedCommand();
+	
+	                            // Resolve
+	                            window2 = popupProvider2.get();
+	                            revealAndAssignPopup(windowModel,
+	                            		(AbstractModelBoundPopupPresenterWidget<Model, ?>) window2, false);
+                        	} else {
+                        		window2.hideAndUnbind();
+                	            window2 = null;
+                	            getModel().ForceRefresh();
+                        	}
+                        } 
+                    }
+                });
             }
         };
     }

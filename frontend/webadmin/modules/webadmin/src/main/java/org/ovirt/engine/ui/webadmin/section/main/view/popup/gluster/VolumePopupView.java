@@ -17,9 +17,12 @@ import org.ovirt.engine.ui.webadmin.widget.renderer.NullSafeRenderer;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.PushButton;
 import com.google.inject.Inject;
 
 public class VolumePopupView extends AbstractModelBoundPopupView<VolumeModel> implements VolumePopupPresenterWidget.ViewDef {
@@ -34,6 +37,14 @@ public class VolumePopupView extends AbstractModelBoundPopupView<VolumeModel> im
 
     interface ViewIdHandler extends ElementIdHandler<VolumePopupView> {
         ViewIdHandler idHandler = GWT.create(ViewIdHandler.class);
+    }
+    
+    @UiField
+    PushButton addBrickButton;
+    
+    @UiHandler("addBrickButton")
+    void handleAddBrickButtonClick(ClickEvent event) {
+    	volumeModel.getAddBrickCommand().Execute();
     }
     
     @UiField(provided = true)
@@ -85,6 +96,8 @@ public class VolumePopupView extends AbstractModelBoundPopupView<VolumeModel> im
     @Path(value = "allowAccess.entity")
     @WithElementId
     EntityModelTextBoxEditor allowAccessEditor;
+
+	private VolumeModel volumeModel;
         
     @Inject
     public VolumePopupView(EventBus eventBus, ApplicationResources resources, ApplicationConstants constants) {
@@ -102,13 +115,6 @@ public class VolumePopupView extends AbstractModelBoundPopupView<VolumeModel> im
 	}
 
 	private void initListBoxEditors() {
-//		typeListEditor = new ListModelListBoxEditor<Object>(new NullSafeRenderer<Object>() {
-//            @Override
-//            public String renderNullSafe(Object object) {
-//                return ((VOLUME_TYPE) object).getname();
-//            }
-//        });
-		
 		dataCenterEditor = new ListModelListBoxEditor<Object>(new NullSafeRenderer<Object>() {
             @Override
             public String renderNullSafe(Object object) {
@@ -145,6 +151,7 @@ public class VolumePopupView extends AbstractModelBoundPopupView<VolumeModel> im
 
     @Override
     public void edit(final VolumeModel object) {
+    	this.volumeModel = object;
         Driver.driver.edit(object);
     }
 

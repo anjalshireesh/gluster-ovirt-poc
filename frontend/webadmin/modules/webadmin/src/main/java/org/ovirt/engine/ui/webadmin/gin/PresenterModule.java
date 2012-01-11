@@ -27,6 +27,7 @@ import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.datacenter.Data
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.datacenter.DataCenterPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.datacenter.FindMultiStoragePopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.datacenter.FindSingleStoragePopupPresenterWidget;
+import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.gluster.AddBrickPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.gluster.VolumePopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.host.HostBondPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.host.HostInstallPopupPresenterWidget;
@@ -147,6 +148,7 @@ import org.ovirt.engine.ui.webadmin.section.main.view.popup.datacenter.DataCente
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.datacenter.DataCenterPopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.datacenter.FindMultiStoragePopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.datacenter.FindSingleStoragePopupView;
+import org.ovirt.engine.ui.webadmin.section.main.view.popup.gluster.AddBrickPopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.gluster.VolumePopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.host.HostBondPopupView;
 import org.ovirt.engine.ui.webadmin.section.main.view.popup.host.HostInstallPopupView;
@@ -781,6 +783,10 @@ public class PresenterModule extends AbstractPresenterModule {
                 SubTabVolumeEventPresenter.ViewDef.class,
                 SubTabVolumeEventView.class,
                 SubTabVolumeEventPresenter.ProxyDef.class);
+        
+        bindPresenterWidget(AddBrickPopupPresenterWidget.class,
+        		AddBrickPopupPresenterWidget.ViewDef.class,
+        		AddBrickPopupView.class);
     }
 
 }
