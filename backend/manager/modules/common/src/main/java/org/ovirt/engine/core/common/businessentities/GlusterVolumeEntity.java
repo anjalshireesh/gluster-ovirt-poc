@@ -33,6 +33,7 @@ import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity.BRICK_ST
 import org.ovirt.engine.core.common.constants.GlusterConstants;
 import org.ovirt.engine.core.common.utils.GlusterCoreUtil;
 import org.ovirt.engine.core.common.utils.StringUtil;
+import org.ovirt.engine.core.compat.Guid;
 
 public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity<String> {
     public enum VOLUME_STATUS {
@@ -80,6 +81,7 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     private GlusterVolumeOptions options = new GlusterVolumeOptions();
     private List<GlusterBrickEntity> bricks = new ArrayList<GlusterBrickEntity>();
     private List<String> cifsUsers = new ArrayList<String>();
+    private Guid clusterId;
 
     public GlusterVolumeEntity() {
     }
@@ -444,5 +446,13 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     @Override
     public Object getQueryableId() {
         return getId();
+    }
+
+    public Guid getClusterId() {
+        return clusterId;
+    }
+
+    public void setClusterId(Guid clusterId) {
+        this.clusterId = clusterId;
     }
 }
