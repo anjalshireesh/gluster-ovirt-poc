@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.ovirt.engine.core.common.businessentities.GlusterBrick;
+import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterEntity;
 
 public class GlusterCoreUtil {
@@ -39,9 +39,9 @@ public class GlusterCoreUtil {
     // return qualifiedDiskNames;
     // }
 
-    public static final List<String> getQualifiedBrickList(Set<GlusterBrick> bricks) {
+    public static final List<String> getQualifiedBrickList(Set<GlusterBrickEntity> bricks) {
         List<String> qualifiedBricks = new ArrayList<String>();
-        for (GlusterBrick GlusterBrick : bricks) {
+        for (GlusterBrickEntity GlusterBrick : bricks) {
             qualifiedBricks.add(GlusterBrick.getQualifiedName());
         }
         return qualifiedBricks;

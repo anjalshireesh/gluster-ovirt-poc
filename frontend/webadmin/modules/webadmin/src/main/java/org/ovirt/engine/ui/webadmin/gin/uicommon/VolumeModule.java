@@ -3,7 +3,7 @@ package org.ovirt.engine.ui.webadmin.gin.uicommon;
 import java.util.Map;
 
 import org.ovirt.engine.core.common.businessentities.AuditLog;
-import org.ovirt.engine.core.common.businessentities.GlusterBrick;
+import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolume;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
@@ -95,8 +95,8 @@ public class VolumeModule extends AbstractGinModule {
 	
 	@Provides
     @Singleton
-    public SearchableDetailModelProvider<GlusterBrick, VolumeListModel, VolumeBrickListModel> getVolumeBrickListProvider(ClientGinjector ginjector) {
-        return new SearchableDetailTabModelProvider<GlusterBrick, VolumeListModel, VolumeBrickListModel>(ginjector,
+    public SearchableDetailModelProvider<GlusterBrickEntity, VolumeListModel, VolumeBrickListModel> getVolumeBrickListProvider(ClientGinjector ginjector) {
+        return new SearchableDetailTabModelProvider<GlusterBrickEntity, VolumeListModel, VolumeBrickListModel>(ginjector,
         		VolumeListModel.class,
         		VolumeBrickListModel.class){
         	

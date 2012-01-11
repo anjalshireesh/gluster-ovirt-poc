@@ -1,6 +1,6 @@
 package org.ovirt.engine.ui.webadmin.section.main.presenter.tab.gluster;
 
-import org.ovirt.engine.core.common.businessentities.GlusterBrick;
+import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeBrickListModel;
 import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeGeneralModel;
@@ -41,7 +41,7 @@ public class SubTabVolumeBrickPresenter extends AbstractSubTabPresenter<GlusterV
 			ViewDef view,
 			ProxyDef proxy,
 			PlaceManager placeManager,
-			SearchableDetailModelProvider<GlusterBrick, VolumeListModel, VolumeBrickListModel> modelProvider) {
+			SearchableDetailModelProvider<GlusterBrickEntity, VolumeListModel, VolumeBrickListModel> modelProvider) {
 		super(eventBus, view, proxy, placeManager, modelProvider);
 	}
 

@@ -1,6 +1,6 @@
 package org.ovirt.engine.ui.webadmin.section.main.view.tab.gluster;
 
-import org.ovirt.engine.core.common.businessentities.GlusterBrick;
+import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.VM;
 import org.ovirt.engine.ui.uicommonweb.models.gluster.VolumeBrickListModel;
@@ -15,19 +15,19 @@ import org.ovirt.engine.ui.webadmin.widget.table.column.TextColumnWithTooltip;
 
 import com.google.inject.Inject;
 
-public class SubTabVolumeBrickView extends AbstractSubTabTableView<GlusterVolumeEntity, GlusterBrick, VolumeListModel, VolumeBrickListModel> implements SubTabVolumeBrickPresenter.ViewDef {
+public class SubTabVolumeBrickView extends AbstractSubTabTableView<GlusterVolumeEntity, GlusterBrickEntity, VolumeListModel, VolumeBrickListModel> implements SubTabVolumeBrickPresenter.ViewDef {
 
     @Inject
-    public SubTabVolumeBrickView(SearchableDetailModelProvider<GlusterBrick, VolumeListModel, VolumeBrickListModel> modelProvider) {
+    public SubTabVolumeBrickView(SearchableDetailModelProvider<GlusterBrickEntity, VolumeListModel, VolumeBrickListModel> modelProvider) {
         super(modelProvider);
         initTable();
         initWidget(getTable());
     }
 
     void initTable() {
-        TextColumnWithTooltip<GlusterBrick> brickNameColumn = new TextColumnWithTooltip<GlusterBrick>() {
+        TextColumnWithTooltip<GlusterBrickEntity> brickNameColumn = new TextColumnWithTooltip<GlusterBrickEntity>() {
             @Override
-            public String getValue(GlusterBrick brick) {
+            public String getValue(GlusterBrickEntity brick) {
                 return brick.getName();
             }
         };

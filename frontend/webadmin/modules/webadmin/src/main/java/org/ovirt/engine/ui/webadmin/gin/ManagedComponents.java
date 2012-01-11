@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import org.ovirt.engine.core.common.businessentities.AuditLog;
 import org.ovirt.engine.core.common.businessentities.DbUser;
 import org.ovirt.engine.core.common.businessentities.DiskImage;
-import org.ovirt.engine.core.common.businessentities.GlusterBrick;
+import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolume;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
@@ -491,7 +491,7 @@ public interface ManagedComponents {
     //bricks
     AsyncProvider<SubTabVolumeBrickPresenter> getSubTabVolumeBrickPresenter();
     
-    SearchableDetailModelProvider<GlusterBrick, VolumeListModel, VolumeBrickListModel> getSubTabVolumeBrickModelProvider();
+    SearchableDetailModelProvider<GlusterBrickEntity, VolumeListModel, VolumeBrickListModel> getSubTabVolumeBrickModelProvider();
     //parameters
     AsyncProvider<SubTabVolumeParameterPresenter> getSubTabVolumeParameterPresenter();
 

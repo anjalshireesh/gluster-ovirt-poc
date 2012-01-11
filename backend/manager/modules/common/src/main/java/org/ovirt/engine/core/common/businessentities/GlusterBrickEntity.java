@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.ovirt.engine.core.common.utils.StringUtil;
 
-public class GlusterBrick extends GlusterEntity {
+public class GlusterBrickEntity extends GlusterEntity {
     public enum BRICK_STATUS {
         ONLINE,
         OFFLINE
@@ -35,7 +35,7 @@ public class GlusterBrick extends GlusterEntity {
     private String brickDirectory;
     private BRICK_STATUS status;
 
-    public GlusterBrick() {
+    public GlusterBrickEntity() {
     }
 
     private void initBrick(String serverName, String brickDirectory) {
@@ -44,12 +44,12 @@ public class GlusterBrick extends GlusterEntity {
         setStatus(BRICK_STATUS.ONLINE);
     }
 
-    public GlusterBrick(String serverName, String brickDirectory) {
+    public GlusterBrickEntity(String serverName, String brickDirectory) {
         super();
         initBrick(serverName, brickDirectory);
     }
 
-    public GlusterBrick(String qualifiedName) {
+    public GlusterBrickEntity(String qualifiedName) {
         String brickInfo[] = qualifiedName.split(":", -1);
         initBrick(brickInfo[0], brickInfo[1]);
     }
@@ -72,7 +72,7 @@ public class GlusterBrick extends GlusterEntity {
         this.status = status;
     }
 
-    public GlusterBrick(String serverName, BRICK_STATUS brickStatus, String brickDirectory) {
+    public GlusterBrickEntity(String serverName, BRICK_STATUS brickStatus, String brickDirectory) {
         setServerName(serverName);
         setStatus(brickStatus);
         // setDeviceName(deviceName);
@@ -120,11 +120,11 @@ public class GlusterBrick extends GlusterEntity {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof GlusterBrick)) {
+        if (!(obj instanceof GlusterBrickEntity)) {
             return false;
         }
 
-        GlusterBrick brick = (GlusterBrick) obj;
+        GlusterBrickEntity brick = (GlusterBrickEntity) obj;
         if (getQualifiedName().equals(brick.getQualifiedName()) && getStatus() == brick.getStatus()) {
             return true;
         }
@@ -132,7 +132,7 @@ public class GlusterBrick extends GlusterEntity {
         return false;
     }
 
-    public void copyFrom(GlusterBrick newBrick) {
+    public void copyFrom(GlusterBrickEntity newBrick) {
         setServerName(newBrick.getServerName());
         setBrickDirectory(newBrick.getBrickDirectory());
         // setDeviceName(newBrick.getDeviceName());
