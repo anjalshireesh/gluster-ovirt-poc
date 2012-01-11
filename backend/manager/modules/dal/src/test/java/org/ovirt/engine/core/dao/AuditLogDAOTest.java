@@ -1,6 +1,9 @@
 package org.ovirt.engine.core.dao;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -10,7 +13,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
 import org.ovirt.engine.core.common.AuditLogSeverity;
 import org.ovirt.engine.core.common.AuditLogType;
 import org.ovirt.engine.core.common.businessentities.AuditLog;
@@ -60,6 +62,8 @@ public class AuditLogDAOTest extends BaseDAOTestCase {
         newAuditLog.setstorage_pool_name("rhel6.iscsi");
         newAuditLog.setstorage_domain_id(new Guid("72e3a666-89e1-4005-a7ca-f7548004a9ab"));
         newAuditLog.setstorage_domain_name("fDMzhE-wx3s-zo3q-Qcxd-T0li-yoYU-QvVePk");
+        newAuditLog.setGlusterVolumeId(new Guid("0e0abdbc-2a0f-4df0-8b99-cc577a7a9bb5"));
+        newAuditLog.setGlusterVolumeName("gluster_volume_name-1");
 
         existingAuditLog = dao.get(EXISTING_ENTRY_ID);
     }

@@ -6,11 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
-
 import org.ovirt.engine.core.common.AuditLogSeverity;
 import org.ovirt.engine.core.common.AuditLogType;
 import org.ovirt.engine.core.common.businessentities.AuditLog;
@@ -20,6 +15,10 @@ import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.compat.NGuid;
 import org.ovirt.engine.core.dal.dbbroker.DbFacade;
 import org.ovirt.engine.core.dal.dbbroker.DbFacadeUtils;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
+import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
 /**
  * ,code>AuditLogDAODbFacadeImpl</code> provides a concrete implementation of {@link AuditLogDAO}. It uses code
@@ -69,6 +68,8 @@ public class AuditLogDAODbFacadeImpl extends BaseDAODbFacade implements AuditLog
                         .getString("vds_group_id")));
                 entity.setvds_group_name(rs
                         .getString("vds_group_name"));
+                entity.setGlusterVolumeId(NGuid.createGuidFromString(rs.getString("gluster_volume_id")));
+                entity.setGlusterVolumeName(rs.getString("gluster_volume_name"));
                 return entity;
             }
         };
@@ -117,6 +118,8 @@ public class AuditLogDAODbFacadeImpl extends BaseDAODbFacade implements AuditLog
                         .getString("vds_group_id")));
                 entity.setvds_group_name(rs
                         .getString("vds_group_name"));
+                entity.setGlusterVolumeId(NGuid.createGuidFromString(rs.getString("gluster_volume_id")));
+                entity.setGlusterVolumeName(rs.getString("gluster_volume_name"));
                 return entity;
             }
         };
@@ -161,6 +164,8 @@ public class AuditLogDAODbFacadeImpl extends BaseDAODbFacade implements AuditLog
                         .getString("vds_group_id")));
                 entity.setvds_group_name(rs
                         .getString("vds_group_name"));
+                entity.setGlusterVolumeId(NGuid.createGuidFromString(rs.getString("gluster_volume_id")));
+                entity.setGlusterVolumeName(rs.getString("gluster_volume_name"));
                 return entity;
             }
         };
@@ -208,6 +213,8 @@ public class AuditLogDAODbFacadeImpl extends BaseDAODbFacade implements AuditLog
                         .getString("vds_group_id")));
                 entity.setvds_group_name(rs
                         .getString("vds_group_name"));
+                entity.setGlusterVolumeId(NGuid.createGuidFromString(rs.getString("gluster_volume_id")));
+                entity.setGlusterVolumeName(rs.getString("gluster_volume_name"));
                 return entity;
             }
         };
@@ -236,7 +243,9 @@ public class AuditLogDAODbFacadeImpl extends BaseDAODbFacade implements AuditLog
                 .addValue("storage_domain_id", event.getstorage_domain_id())
                 .addValue("storage_domain_name", event.getstorage_domain_name())
                 .addValue("vds_group_id", event.getvds_group_id())
-                .addValue("vds_group_name", event.getvds_group_name());
+                .addValue("vds_group_name", event.getvds_group_name())
+                .addValue("gluster_volume_id", event.getGlusterVolumeId())
+                .addValue("gluster_volume_name", event.getGlusterVolumeName());
 
         getCallsHandler().executeModification("InsertAuditLog", parameterSource);
     }
@@ -262,7 +271,9 @@ public class AuditLogDAODbFacadeImpl extends BaseDAODbFacade implements AuditLog
                 .addValue("storage_domain_id", event.getstorage_domain_id())
                 .addValue("storage_domain_name", event.getstorage_domain_name())
                 .addValue("vds_group_id", event.getvds_group_id())
-                .addValue("vds_group_name", event.getvds_group_name());
+                .addValue("vds_group_name", event.getvds_group_name())
+                .addValue("gluster_volume_id", event.getGlusterVolumeId())
+                .addValue("gluster_volume_name", event.getGlusterVolumeName());
 
         getCallsHandler().executeModification("UpdateAuditLog", parameterSource);
     }

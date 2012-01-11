@@ -48,6 +48,8 @@ public class AuditLogableBase extends TimeoutBase {
     private NGuid _storagePoolId;
     private Guid mVdsGroupId;
     private VDSGroup mVdsGroup;
+    private NGuid glusterVolumeId;
+    private String glusterVolumeName;
 
     public AuditLogableBase() {
     }
@@ -396,6 +398,22 @@ public class AuditLogableBase extends TimeoutBase {
         } else {
             return "";
         }
+    }
+
+    public NGuid getGlusterVolumeId() {
+        return glusterVolumeId;
+    }
+
+    public void setGlusterVolumeId(NGuid value) {
+        glusterVolumeId = value;
+    }
+
+    public String getGlusterVolumeName() {
+        return glusterVolumeName;
+    }
+
+    public void setGlusterVolumeName(String value) {
+        glusterVolumeName = value;
     }
 
     protected void log() {

@@ -652,6 +652,8 @@ public final class AuditLogDirector {
                     tempVar.setstorage_pool_name(auditLogable.getStoragePoolName());
                     tempVar.setvds_group_id(auditLogable.getVdsGroupId());
                     tempVar.setvds_group_name(auditLogable.getVdsGroupName());
+                    tempVar.setGlusterVolumeId(auditLogable.getGlusterVolumeId());
+                    tempVar.setGlusterVolumeName(auditLogable.getGlusterVolumeName());
                     auditLog = tempVar;
                 } else {
                     auditLog = new AuditLog(logType, severity, resolvedMessage, null, null, null, null, null, null,
