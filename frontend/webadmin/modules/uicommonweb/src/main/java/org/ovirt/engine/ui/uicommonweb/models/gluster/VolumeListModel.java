@@ -121,6 +121,7 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
 					{
 						case Hosts:
 						case Cluster:
+						case Volumes:
 							VDSGroup cluster = (VDSGroup)volumeListModel.getSystemTreeSelectedItem().getEntity();
 							for (storage_pool dc : (java.util.ArrayList<storage_pool>)innerVolumeModel.getDataCenter().getItems())
 							{
