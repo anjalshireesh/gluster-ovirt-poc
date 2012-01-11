@@ -143,23 +143,32 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
 		
 	}
 	
+	public static Guid clusterId;
+	
 	@Override
 	protected void SyncSearch() {
 		super.SyncSearch();
 		if(getSystemTreeSelectedItem() != null && getSystemTreeSelectedItem().getType().equals(SystemTreeItemType.Cluster)) {
-			VDSGroup cluster = (VDSGroup)getSystemTreeSelectedItem().getEntity();
+			final VDSGroup cluster = (VDSGroup)getSystemTreeSelectedItem().getEntity();
 			Frontend.RunAction(VdcActionType.ListGlusterVolumes, new VdsGroupParametersBase(cluster.getID()), new IFrontendActionAsyncCallback() {
 				
 				@Override
 				public void Executed(FrontendActionAsyncResult result) {
 					if(result.getReturnValue().getActionReturnValue() != null) {
 						ArrayList<GlusterVolumeEntity> volumes =  new ArrayList<GlusterVolumeEntity>(Arrays.asList((GlusterVolumeEntity[])result.getReturnValue().getActionReturnValue()));
+						for (GlusterVolumeEntity glusterVolumeEntity : volumes) {
+							//glusterVolumeEntity.setClusterId(cluster.getID());
+							clusterId = cluster.getID();
+						}
 						setItems(volumes);
 					} else {
 						setItems(new ArrayList<GlusterVolumeEntity>());
 					}
 				}
 			});
+		} 
+		else {
+			setItems(new ArrayList<GlusterVolumeEntity>());
 		}
 		setIsQueryFirstTime(false);
 	}

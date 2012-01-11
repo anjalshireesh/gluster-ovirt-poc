@@ -1,5 +1,6 @@
 package org.ovirt.engine.ui.uicommonweb.models.gluster;
 
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.ui.uicommonweb.UICommand;
 import org.ovirt.engine.ui.uicommonweb.models.SearchableListModel;
 
@@ -44,6 +45,16 @@ public class VolumeParameterListModel extends SearchableListModel {
 	private void removeParameter() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	protected void OnEntityChanged() {
+		if(getEntity() == null) {
+			return;
+		}
+		super.OnEntityChanged();
+		GlusterVolumeEntity glusterVolumeEntity = (GlusterVolumeEntity)getEntity();
+		setItems(glusterVolumeEntity.getOptions().getOptions());
 	}
 
 	@Override

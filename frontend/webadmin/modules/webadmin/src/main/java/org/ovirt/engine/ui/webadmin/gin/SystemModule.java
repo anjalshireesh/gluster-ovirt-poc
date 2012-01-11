@@ -52,7 +52,7 @@ public class SystemModule extends AbstractGinModule {
 
     void bindConfiguration() {
         bindConstant().annotatedWith(DefaultLoginSectionPlace.class).to(ApplicationPlaces.loginPlace);
-        bindConstant().annotatedWith(DefaultMainSectionPlace.class).to(ApplicationPlaces.volumeMainTabPlace);
+        bindConstant().annotatedWith(DefaultMainSectionPlace.class).to(ApplicationPlaces.clusterMainTabPlace);
         bind(ApplicationConstants.class).in(Singleton.class);
         bind(ApplicationMessages.class).in(Singleton.class);
         bind(ApplicationResources.class).in(Singleton.class);

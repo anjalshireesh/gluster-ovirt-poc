@@ -25,13 +25,44 @@ public class SubTabVolumeBrickView extends AbstractSubTabTableView<GlusterVolume
     }
 
     void initTable() {
-        TextColumnWithTooltip<GlusterBrickEntity> brickNameColumn = new TextColumnWithTooltip<GlusterBrickEntity>() {
+        TextColumnWithTooltip<GlusterBrickEntity> serverColumn = new TextColumnWithTooltip<GlusterBrickEntity>() {
             @Override
             public String getValue(GlusterBrickEntity brick) {
-                return brick.getName();
+                return brick.getServerName();
             }
         };
-        getTable().addColumn(brickNameColumn, "Name");
+        getTable().addColumn(serverColumn, "Server");
+        
+        TextColumnWithTooltip<GlusterBrickEntity> directoryColumn = new TextColumnWithTooltip<GlusterBrickEntity>() {
+            @Override
+            public String getValue(GlusterBrickEntity brick) {
+                return brick.getBrickDirectory();
+            }
+        };
+        getTable().addColumn(directoryColumn, "Brick Directory");
+        
+        TextColumnWithTooltip<GlusterBrickEntity> freeSpaceColumn = new TextColumnWithTooltip<GlusterBrickEntity>() {
+            @Override
+            public String getValue(GlusterBrickEntity brick) {
+                return "???";
+            }
+        };
+        getTable().addColumn(freeSpaceColumn, "Free Space (GB)");
+        
+        TextColumnWithTooltip<GlusterBrickEntity> totalSpaceColumn = new TextColumnWithTooltip<GlusterBrickEntity>() {
+            @Override
+            public String getValue(GlusterBrickEntity brick) {
+                return "???";
+            }
+        };
+        getTable().addColumn(totalSpaceColumn, "Total Space (GB)");
+        
+        TextColumnWithTooltip<GlusterBrickEntity> statusColumn = new TextColumnWithTooltip<GlusterBrickEntity>() {
+            @Override
+            public String getValue(GlusterBrickEntity brick) {
+                return brick.getStatusStr();
+            }
+        };
+        getTable().addColumn(statusColumn, "Status");
     }
-
 }

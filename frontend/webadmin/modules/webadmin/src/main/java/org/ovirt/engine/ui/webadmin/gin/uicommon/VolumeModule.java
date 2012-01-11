@@ -99,7 +99,10 @@ public class VolumeModule extends AbstractGinModule {
         return new SearchableDetailTabModelProvider<GlusterBrickEntity, VolumeListModel, VolumeBrickListModel>(ginjector,
         		VolumeListModel.class,
         		VolumeBrickListModel.class){
-        	
+        	@Override
+            protected AbstractModelBoundPopupPresenterWidget<? extends Model, ?> getModelPopup(UICommand lastExecutedCommand) {
+            	return super.getModelPopup(lastExecutedCommand);
+            }
         };
     }
 	
