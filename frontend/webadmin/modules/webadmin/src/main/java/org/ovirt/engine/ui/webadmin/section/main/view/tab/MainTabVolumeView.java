@@ -80,10 +80,28 @@ public class MainTabVolumeView extends AbstractMainTabWithDetailsTableView<Glust
                 return getMainModel().getCreateVolumeCommand();
             }
         });
-        getTable().addActionButton(new UiCommandButtonDefinition<GlusterVolumeEntity>("Remove") {
+        getTable().addActionButton(new UiCommandButtonDefinition<GlusterVolumeEntity>("Remove", false, false) {
             @Override
             protected UICommand resolveCommand() {
                 return getMainModel().getRemoveVolumeCommand();
+            }
+        });
+        getTable().addActionButton(new UiCommandButtonDefinition<GlusterVolumeEntity>("Start") {
+            @Override
+            protected UICommand resolveCommand() {
+                return getMainModel().getStartCommand();
+            }
+        });
+        getTable().addActionButton(new UiCommandButtonDefinition<GlusterVolumeEntity>("Stop") {
+            @Override
+            protected UICommand resolveCommand() {
+                return getMainModel().getStopCommand();
+            }
+        });
+        getTable().addActionButton(new UiCommandButtonDefinition<GlusterVolumeEntity>("Rebalance") {
+            @Override
+            protected UICommand resolveCommand() {
+                return getMainModel().getRebalanceCommand();
             }
         });
     }
