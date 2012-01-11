@@ -1,6 +1,7 @@
 package org.ovirt.engine.core.bll.gluster;
 
 import org.ovirt.engine.core.bll.Backend;
+import org.ovirt.engine.core.common.AuditLogType;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeParameters;
 import org.ovirt.engine.core.common.glustercommands.GlusterVolumeVDSParameters;
 import org.ovirt.engine.core.common.vdscommands.VDSCommandType;
@@ -11,6 +12,7 @@ public class StopGlusterVolumeCommand extends GlusterCommandBase<GlusterVolumePa
 
     public StopGlusterVolumeCommand(GlusterVolumeParameters params) {
         super(params);
+        setGlusterVolumeName(getParameters().getVolumeName());
     }
 
     @Override
@@ -31,5 +33,14 @@ public class StopGlusterVolumeCommand extends GlusterCommandBase<GlusterVolumePa
                                 new GlusterVolumeVDSParameters(getVdsGroup().getstorage_pool_id().getValue(),
                                         getParameters().getVolumeName()));
         setSucceeded(returnValue.getSucceeded());
+    }
+
+    @Override
+    public AuditLogType getAuditLogTypeValue() {
+        if(getSucceeded()) {
+            return AuditLogType.GLUSTER_VOLUME_STOP;
+        } else {
+            return AuditLogType.GLUSTER_VOLUME_STOP_FAILED;
+        }
     }
 }
