@@ -12,7 +12,7 @@ public final class GlusterVolumeListReturnForXmlRpc extends StatusReturnForXmlRp
 
     // We are ignoring missing fields after the status, because on failure it is
     // not sent.
-    // [XmlRpcMissingMapping(MappingAction.Ignore), XmlRpcMember("vmlist")]
+    // [XmlRpcMissingMapping(MappingAction.Ignore), XmlRpcMember("volumes")]
     public GlusterVolumeEntity[] volumes;
 
     @SuppressWarnings("unchecked")

@@ -357,7 +357,6 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
             VOLUME_TYPE volumeType,
             TRANSPORT_TYPE transportType,
             VOLUME_STATUS status) {
-        super(name, parent);
         setVolumeType(volumeType);
         setTransportType(transportType);
         setStatus(status);

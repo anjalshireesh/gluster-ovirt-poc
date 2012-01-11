@@ -166,4 +166,5 @@ public interface VdsServerConnector {
 
     public Map<String, Object> revertTask(String taskUUID);
 
+    public Map<String, Object> glusterDisksList();
 }

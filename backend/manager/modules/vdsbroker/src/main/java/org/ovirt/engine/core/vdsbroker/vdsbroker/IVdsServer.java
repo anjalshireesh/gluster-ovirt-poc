@@ -173,4 +173,6 @@ public interface IVdsServer {
     StatusOnlyReturnForXmlRpc clearTask(String taskUUID);
 
     StatusOnlyReturnForXmlRpc revertTask(String taskUUID);
+
+    GlusterDiskListReturnForXmlRpc glusterDisksList();
 }

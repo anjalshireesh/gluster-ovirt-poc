@@ -18,45 +18,14 @@
  *******************************************************************************/
 package org.ovirt.engine.core.common.businessentities;
 
-import java.io.Serializable;
+public class GlusterPartitionEntity extends GlusterDeviceEntity {
 
-import org.ovirt.engine.core.common.utils.StringUtil;
-
-public class GlusterEntity extends IVdcQueryable implements Filterable, Serializable {
-    private String id;
-    protected String name;
-
-    public GlusterEntity() {
-
+    public GlusterPartitionEntity() {
+        super();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public GlusterEntity(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public boolean filter(String filterString, boolean caseSensitive) {
-        return StringUtil.filterString(getName(), filterString, caseSensitive);
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    public String getId() {
-        return id == null ? getName() : id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public GlusterPartitionEntity(String serverName, String name, String mountPoint, Double space, Double spaceInUse,
+            DEVICE_STATUS status) {
+        super(serverName, name, mountPoint, space, spaceInUse, status);
     }
 }
