@@ -12,6 +12,7 @@
 		<include name="core/common/businessentities/GlusterEntity.java" />
 		<include name="core/common/businessentities/Filterable.java" />
 		<include name="core/common/businessentities/GlusterVolumeOptions.java" />
+		<include name="core/common/businessentities/GlusterBrickEntity.java" />
 		<include name="core/common/businessentities/GlusterBrick.java" />
 		<include name="core/common/constants/GlusterConstants.java" />
 		<include name="core/common/businessentities/GlusterVolumeOption.java" />
@@ -213,7 +214,10 @@
 		<include name="core/common/businessentities/AsyncTaskResultEnum.java"/>
 		<include name="core/common/queries/VdcQueryParametersBase.java"/>
 
-		<include name="core/common/action/CreateGlusterVolumeParameters.java"/>
+		<include name="core/common/glusteractions/AddBricksToGlusterVolumeParameters.java"/>
+		<include name="core/common/glusteractions/CreateGlusterVolumeParameters.java"/>
+		<include name="core/common/glusteractions/GlusterParametersBase.java"/>
+		<include name="core/common/glusteractions/GlusterVolumeParameters.java"/>
 		
 		<include name="core/common/businessentities/FenceActionType.java"/>
 		<include name="core/common/businessentities/CopyVolumeType.java"/>
