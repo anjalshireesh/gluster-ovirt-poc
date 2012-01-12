@@ -3,12 +3,14 @@
  */
 package org.ovirt.engine.core.bll.gluster;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
 import org.ovirt.engine.core.bll.Backend;
 import org.ovirt.engine.core.common.VdcObjectType;
 import org.ovirt.engine.core.common.action.VdsGroupParametersBase;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.glustercommands.GlusterBaseVDSCommandParameters;
 import org.ovirt.engine.core.common.vdscommands.VDSCommandType;
 import org.ovirt.engine.core.common.vdscommands.VDSReturnValue;
@@ -44,7 +46,11 @@ public class ListGlusterVolumesCommand extends GlusterCommandBase<VdsGroupParame
                         new GlusterBaseVDSCommandParameters(getVdsGroup().getstorage_pool_id().getValue()));
 
         // Get the return value from VDS command and put it into the return value of the BLL command
-        getReturnValue().setActionReturnValue(returnValue.getReturnValue());
+        ArrayList<GlusterVolumeEntity> list = new ArrayList<GlusterVolumeEntity>();
+        for (GlusterVolumeEntity glusterVolumeEntity : (GlusterVolumeEntity[])returnValue.getReturnValue()) {
+            list.add(glusterVolumeEntity);
+        }
+        getReturnValue().setActionReturnValue(list);
 
         setSucceeded(returnValue.getSucceeded());
     }

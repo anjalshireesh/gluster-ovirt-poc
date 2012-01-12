@@ -1,7 +1,6 @@
 package org.ovirt.engine.ui.uicommonweb.models.gluster;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.action.VdsGroupParametersBase;
@@ -201,15 +200,15 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
 		super.SyncSearch();
 		if(getSystemTreeSelectedItem() != null && (getSystemTreeSelectedItem().getType().equals(SystemTreeItemType.Cluster) || getSystemTreeSelectedItem().getType().equals(SystemTreeItemType.Volumes))) {
 			final VDSGroup cluster = (VDSGroup)getSystemTreeSelectedItem().getEntity();
+			clusterId = cluster.getID();
 			Frontend.RunAction(VdcActionType.ListGlusterVolumes, new VdsGroupParametersBase(cluster.getID()), new IFrontendActionAsyncCallback() {
 				
 				@Override
 				public void Executed(FrontendActionAsyncResult result) {
 					if(result.getReturnValue().getActionReturnValue() != null) {
-						ArrayList<GlusterVolumeEntity> volumes =  new ArrayList<GlusterVolumeEntity>(Arrays.asList((GlusterVolumeEntity[])result.getReturnValue().getActionReturnValue()));
-						for (GlusterVolumeEntity glusterVolumeEntity : volumes) {
-							//glusterVolumeEntity.setClusterId(cluster.getID());
-							clusterId = cluster.getID();
+						ArrayList<GlusterVolumeEntity> volumes =  new ArrayList<GlusterVolumeEntity>();
+						for (GlusterVolumeEntity iterable_element : (java.util.ArrayList<GlusterVolumeEntity>)result.getReturnValue().getActionReturnValue()) {
+							volumes.add(iterable_element);
 						}
 						setItems(volumes);
 					} else {
