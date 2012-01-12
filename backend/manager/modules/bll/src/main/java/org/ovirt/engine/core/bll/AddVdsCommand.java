@@ -316,7 +316,7 @@ public class AddVdsCommand<T extends AddVdsActionParameters> extends VdsCommand<
         // if this is not the first host in the storage pool, check that there is spm
         if (retrunValue && !isFirstHostInStoragePool()) {
             // check if there is SPM
-            boolean isValid = !(Boolean) Backend.getInstance()
+            boolean isValid = (Boolean) Backend.getInstance()
                     .getResourceManager()
                     .RunVdsCommand(VDSCommandType.IsValid,
                             new IrsBaseVDSCommandParameters(getVdsGroup().getstorage_pool_id().getValue()))
