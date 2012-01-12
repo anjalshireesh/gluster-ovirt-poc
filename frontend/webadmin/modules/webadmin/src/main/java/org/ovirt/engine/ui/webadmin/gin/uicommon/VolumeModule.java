@@ -78,12 +78,9 @@ public class VolumeModule extends AbstractGinModule {
                         if ("Window2".equals(propName)) {
                         	Model windowModel = getModel().getWindow2();
                         	if(windowModel != null) {
-	                            UICommand lastExecutedCommand = getModel().getLastExecutedCommand();
-	
 	                            // Resolve
 	                            window2 = popupProvider2.get();
-	                            revealAndAssignPopup(windowModel,
-	                            		(AbstractModelBoundPopupPresenterWidget<Model, ?>) window2, false);
+	                            revealPopup(windowModel, (AbstractModelBoundPopupPresenterWidget<Model, ?>)window2);
                         	} else {
                         		window2.hideAndUnbind();
                 	            window2 = null;

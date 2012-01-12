@@ -139,7 +139,8 @@ public class EntityModelCellTable<M extends ListModel> extends CellTable<EntityM
                         new CheckboxCell(true, false)) {
                     @Override
                     public Boolean getValue(EntityModel object) {
-                        return getSelectionModel().isSelected(object);
+                    	return object.getIsSelected();
+                        //return getSelectionModel().isSelected(object);
                     }
                 };
             } else {

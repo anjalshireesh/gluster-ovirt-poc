@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.action.VdsGroupParametersBase;
+import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_TYPE;
 import org.ovirt.engine.core.common.businessentities.VDSGroup;
@@ -255,14 +256,59 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
 		} else if(command.equals(getAddBricksCommand())){
 			addBricks();
 		} else if(command.getName().equals("CancelAddBrick")){
-			setWindow2(null);
+			CancelWindow2();
+		} else if(command.getName().equals("onAddBrick")){
+			onAddBrick();
 		}
 	}
 	
+	private void CancelWindow2() {
+		setWindow2(null);
+	}
+	
+	private void onAddBrick() {
+		AddBrickModel model = (AddBrickModel)getWindow2();
+		if(model == null){
+			CancelWindow2();
+		}
+		VolumeModel volumeModel = (VolumeModel)getWindow();
+		for (Object item : model.getItems())
+		{
+			EntityModel entityModel = (EntityModel) item;
+			if (entityModel.getIsSelected())
+			{
+				String currBricks = (String)volumeModel.getBricks().getEntity();
+				if(currBricks == null || currBricks.isEmpty()){
+					volumeModel.getBricks().setEntity(((GlusterBrickEntity)entityModel.getEntity()).getQualifiedName());
+				} else {
+					volumeModel.getBricks().setEntity(currBricks + ", " + ((GlusterBrickEntity)entityModel.getEntity()).getQualifiedName());
+				}
+			}
+		}
+		CancelWindow2();
+	}
 	private void addBricks() {
+//		if(getSelectedItem() == null) {
+//			return;
+//		}
+//		GlusterVolumeEntity volume = (GlusterVolumeEntity)getSelectedItem();
+		if(((VolumeModel)getWindow()).getName() == null || ((String)((VolumeModel)getWindow()).getName().getEntity()).isEmpty()){
+			return;
+		}
 		AddBrickModel model = new AddBrickModel();
 		setWindow2(model);
-		UICommand command = new UICommand("CancelAddBrick", this);
+		model.setVolumeName((String)((VolumeModel)getWindow()).getName().getEntity());
+		
+		ArrayList<String> list = new ArrayList<String>();
+		if(((VolumeModel)getWindow()).getBricks().getEntity() != null && !((String)((VolumeModel)getWindow()).getBricks().getEntity()).isEmpty()) {
+			for (String str : ((String)((VolumeModel)getWindow()).getBricks().getEntity()).split(",")) {
+				list.add(str.trim());
+			}
+		}
+		
+		model.setCurBrickList(list);
+		model.init();
+		UICommand command = new UICommand("onAddBrick", this);
 		command.setTitle("OK");
 		command.setIsDefault(true);
 		model.getCommands().add(command);
@@ -316,7 +362,7 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
 			
 			@Override
 			public void Executed(FrontendActionAsyncResult result) {
-				
+				cancel();
 			}
 		});
 	}

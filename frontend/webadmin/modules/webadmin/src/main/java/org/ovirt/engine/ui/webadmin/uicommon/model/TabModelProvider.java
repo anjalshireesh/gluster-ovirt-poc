@@ -128,7 +128,7 @@ public abstract class TabModelProvider<M extends EntityModel> implements ModelPr
     /**
      * Reveals a popup bound to the given model.
      */
-    <T extends Model> void revealPopup(final T model,
+    public <T extends Model> void revealPopup(final T model,
             final AbstractModelBoundPopupPresenterWidget<T, ?> popup) {
         assert (model != null) : "Popup model must not be null";
 
