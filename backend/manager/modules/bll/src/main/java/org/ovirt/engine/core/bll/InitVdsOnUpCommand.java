@@ -3,12 +3,10 @@ package org.ovirt.engine.core.bll;
 import org.ovirt.engine.core.bll.storage.StorageHandlingCommandBase;
 import org.ovirt.engine.core.bll.storage.StoragePoolStatusHandler;
 import org.ovirt.engine.core.common.AuditLogType;
-import org.ovirt.engine.core.common.action.SetNonOperationalVdsParameters;
 import org.ovirt.engine.core.common.action.StoragePoolParametersBase;
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.businessentities.FenceActionType;
 import org.ovirt.engine.core.common.businessentities.FenceStatusReturnValue;
-import org.ovirt.engine.core.common.businessentities.NonOperationalReason;
 import org.ovirt.engine.core.common.businessentities.StoragePoolStatus;
 import org.ovirt.engine.core.common.businessentities.VdsSpmStatus;
 import org.ovirt.engine.core.common.businessentities.storage_pool;
@@ -24,8 +22,8 @@ import org.ovirt.engine.core.utils.log.Log;
 import org.ovirt.engine.core.utils.log.LogFactory;
 
 /**
- * Initialize Vds on its loading. For storages: First connect all storage
- * servers to VDS. Second connect Vds to storage Pool.
+ * Initialize Vds on its loading. For storages: First connect all storage servers to VDS. Second connect Vds to storage
+ * Pool.
  *
  * After server initialized - its will be moved to Up status.
  */
@@ -42,28 +40,27 @@ public class InitVdsOnUpCommand<T extends StoragePoolParametersBase> extends Sto
 
     @Override
     protected void executeCommand() {
-        if (InitializeStorage()) {
-            // VDSReturnValue returnValue =
-            // Backend.getInstance().getResourceManager().RunVdsCommand(
-            // VDSCommandType.SetVdsStatus,
-            // new SetVdsStatusVDSCommandParameters(Vds.vds_id, VDSStatus.Up));
-            // Succeeded = returnValue.Succeeded;
-            FencingExecutor executor = new FencingExecutor(getVds(), FenceActionType.Status);
-            // check first if we have any VDS to act as the proxy for fencing
-            // actions.
-            if (getVds().getpm_enabled() && executor.FindVdsToFence()) {
-                VDSReturnValue returnValue = executor.Fence();
-                _fencingSucceeded = returnValue.getSucceeded();
-                _fenceStatusReturnValue = (FenceStatusReturnValue) returnValue.getReturnValue();
-                _vdsProxyFound = true;
-            }
-            if (getVds().getspm_status() != VdsSpmStatus.None) {
-                storage_pool pool = DbFacade.getInstance().getStoragePoolDAO().get(getVds().getstorage_pool_id());
-                if (pool != null && pool.getstatus() == StoragePoolStatus.NotOperational) {
-                    pool.setstatus(StoragePoolStatus.Problematic);
-                    DbFacade.getInstance().getStoragePoolDAO().updateStatus(pool.getId(), pool.getstatus());
-                    StoragePoolStatusHandler.PoolStatusChanged(pool.getId(), pool.getstatus());
-                }
+        // if (InitializeStorage()) {
+        // VDSReturnValue returnValue =
+        // Backend.getInstance().getResourceManager().RunVdsCommand(
+        // VDSCommandType.SetVdsStatus,
+        // new SetVdsStatusVDSCommandParameters(Vds.vds_id, VDSStatus.Up));
+        // Succeeded = returnValue.Succeeded;
+        FencingExecutor executor = new FencingExecutor(getVds(), FenceActionType.Status);
+        // check first if we have any VDS to act as the proxy for fencing
+        // actions.
+        if (getVds().getpm_enabled() && executor.FindVdsToFence()) {
+            VDSReturnValue returnValue = executor.Fence();
+            _fencingSucceeded = returnValue.getSucceeded();
+            _fenceStatusReturnValue = (FenceStatusReturnValue) returnValue.getReturnValue();
+            _vdsProxyFound = true;
+        }
+        if (getVds().getspm_status() != VdsSpmStatus.None) {
+            storage_pool pool = DbFacade.getInstance().getStoragePoolDAO().get(getVds().getstorage_pool_id());
+            if (pool != null && pool.getstatus() == StoragePoolStatus.NotOperational) {
+                pool.setstatus(StoragePoolStatus.Problematic);
+                DbFacade.getInstance().getStoragePoolDAO().updateStatus(pool.getId(), pool.getstatus());
+                StoragePoolStatusHandler.PoolStatusChanged(pool.getId(), pool.getstatus());
             }
         } else {
             SetNonOperationalVdsParameters tempVar = new SetNonOperationalVdsParameters(getVds().getId(),
@@ -71,6 +68,12 @@ public class InitVdsOnUpCommand<T extends StoragePoolParametersBase> extends Sto
             tempVar.setSaveToDb(true);
             Backend.getInstance().runInternalAction(VdcActionType.SetNonOperationalVds, tempVar);
         }
+        // } else {
+        // SetNonOperationalVdsParameters tempVar = new SetNonOperationalVdsParameters(getVds().getvds_id(),
+        // NonOperationalReason.STORAGE_DOMAIN_UNREACHABLE);
+        // tempVar.setSaveToDb(true);
+        // Backend.getInstance().runInternalAction(VdcActionType.SetNonOperationalVds, tempVar);
+        // }
         setSucceeded(true);
     }
 
