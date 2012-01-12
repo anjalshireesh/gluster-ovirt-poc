@@ -1,11 +1,14 @@
 package org.ovirt.engine.core.dao;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
 import org.junit.Test;
-
 import org.ovirt.engine.core.common.businessentities.VDS;
 import org.ovirt.engine.core.common.businessentities.VDSType;
 import org.ovirt.engine.core.compat.Guid;
@@ -197,6 +200,20 @@ public class VdsDAOTest extends BaseDAOTestCase {
         assertFalse(result.isEmpty());
         for (VDS vds : result) {
             assertEquals(existingVds.getvds_group_id(), vds.getvds_group_id());
+        }
+    }
+
+    /**
+     * Ensures that all VDS related to the storage pool supplied.
+     */
+    @Test
+    public void testGetAllForStoragePool() {
+        List<VDS> result = dao.getAllForStoragePool(existingVds.getstorage_pool_id());
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        for (VDS vds : result) {
+            assertEquals(existingVds.getstorage_pool_id(), vds.getstorage_pool_id());
         }
     }
 }

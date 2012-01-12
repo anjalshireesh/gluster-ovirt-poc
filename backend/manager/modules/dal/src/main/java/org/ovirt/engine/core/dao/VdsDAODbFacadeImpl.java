@@ -112,6 +112,14 @@ public class VdsDAODbFacadeImpl extends BaseDAODbFacade implements VdsDAO {
                         .addValue("vds_group_id", vdsGroupID));
     }
 
+    @Override
+    public List<VDS> getAllForStoragePool(Guid storagePoolId) {
+        return getCallsHandler().executeReadList("GetVdsByStoragePoolId",
+                new VdsRowMapper(),
+                getCustomMapSqlParameterSource()
+                        .addValue("storage_pool_id", storagePoolId));
+    }
+
     static final class VdsRowMapper implements ParameterizedRowMapper<VDS> {
         @Override
         public VDS mapRow(final ResultSet rs, final int rowNum) throws SQLException {

@@ -109,4 +109,11 @@ public interface VdsDAO extends DAO {
      */
     List<VDS> getAllForVdsGroup(Guid vdsGroup);
 
+    /**
+     * Retrieves all VDS instances by storage pool id
+     *
+     * @param storagePoolId
+     * @return the list of VDS instances
+     */
+    List<VDS> getAllForStoragePool(Guid storagePoolId);
 }

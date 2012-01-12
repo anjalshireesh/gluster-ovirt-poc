@@ -758,3 +758,17 @@ BEGIN
 END; $procedure$
 LANGUAGE plpgsql;
 
+Create or replace FUNCTION GetVdsByStoragePoolId(v_storage_pool_id UUID) RETURNS SETOF vds
+   AS $procedure$
+BEGIN
+	-- this sp returns all vds for a given storage pool
+	BEGIN
+      RETURN QUERY SELECT DISTINCT vds.*
+
+      FROM vds
+      WHERE storage_pool_id = v_storage_pool_id;
+   END;
+
+   RETURN;
+END; $procedure$
+LANGUAGE plpgsql;
