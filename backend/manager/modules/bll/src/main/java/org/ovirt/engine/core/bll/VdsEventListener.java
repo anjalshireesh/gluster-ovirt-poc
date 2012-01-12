@@ -57,8 +57,8 @@ public class VdsEventListener implements IVdsEventListener {
 
     @Override
     public void VdsMovedToMaintanance(Guid vdsId) {
-        VDS vds = DbFacade.getInstance().getVdsDAO().get(vdsId);
-        MaintananceVdsCommand.ProcessStorageOnVdsInactive(vds);
+        //VDS vds = DbFacade.getInstance().getVdsDAO().get(vdsId);
+        //MaintananceVdsCommand.ProcessStorageOnVdsInactive(vds);
     }
 
     @Override
