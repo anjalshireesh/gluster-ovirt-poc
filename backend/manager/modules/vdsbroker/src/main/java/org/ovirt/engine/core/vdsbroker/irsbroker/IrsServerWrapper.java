@@ -383,4 +383,11 @@ public class IrsServerWrapper implements IIrsServer {
         StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
         return wrapper;
     }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterHostAdd(String hostName) {
+        Map<String, Object> xmlRpcReturnValue = irsServer.glusterHostAdd(hostName);
+        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+        return wrapper;
+    }
 }
