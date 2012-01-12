@@ -6,21 +6,19 @@
 	xmlns:t="urn:import:org.ovirt.engine.ui.webadmin.widget.dialog.tab">
 
 	<ui:style>
-		.generalTabTopDecorator {
-			background-color: #D3D3D3;
-			margin-bottom: 8px;
-			margin-top: 4px;
-			margin-right: 3px;
-			padding-top: 6px;
-			padding-bottom: 6px;
+		.searchItemsPanel {
+			width: 100%;
+			height: 77%;
+			border-bottom: 1px solid #BBBBBB;
+			border-top: 1px solid #BBBBBB;
 		}
 	</ui:style>
 
-	<d:SimpleDialogPanel width="400px" height="500px">
+	<d:SimpleDialogPanel width="400px" height="300px">
 		<d:content>
-			<g:VerticalPanel>
-				<g:Label>DEREZ</g:Label>
-			</g:VerticalPanel>
+			<g:ScrollPanel addStyleNames="{style.searchItemsPanel}">
+				<e:EntityModelCellTable ui:field="brickList" />
+			</g:ScrollPanel>
 		</d:content>
 	</d:SimpleDialogPanel>
 </ui:UiBinder>
