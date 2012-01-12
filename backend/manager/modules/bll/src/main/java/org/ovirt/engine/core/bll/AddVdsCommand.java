@@ -134,7 +134,7 @@ public class AddVdsCommand<T extends AddVdsActionParameters> extends VdsCommand<
                             .asList(new VdcActionParametersBase[] { installVdsParameters })));
         }
 
-        if (isFirstHostInStoragePool()) {
+        if (!isFirstHostInStoragePool()) {
             setSucceeded(Backend.getInstance()
                     .getResourceManager()
                     .RunVdsCommand(VDSCommandType.AddGlusterHost,
@@ -284,7 +284,7 @@ public class AddVdsCommand<T extends AddVdsActionParameters> extends VdsCommand<
         }
 
         // if this is not the first host in the storage pool, check that there is spm
-        if (retrunValue && isFirstHostInStoragePool()) {
+        if (retrunValue && !isFirstHostInStoragePool()) {
             // check if there is SPM
             boolean isValid = !(Boolean) Backend.getInstance()
                     .getResourceManager()
