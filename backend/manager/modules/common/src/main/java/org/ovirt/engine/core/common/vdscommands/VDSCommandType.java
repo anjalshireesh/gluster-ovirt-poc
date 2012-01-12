@@ -131,7 +131,8 @@ public enum VDSCommandType {
     RebalanceGlusterVolumeStart("org.ovirt.engine.core.vdsbroker.glusterbroker"),
     RebalanceGlusterVolumeStop("org.ovirt.engine.core.vdsbroker.glusterbroker"),
     ListGlusterVolumes("org.ovirt.engine.core.vdsbroker.glusterbroker"),
-    ListGlusterHostDisks("org.ovirt.engine.core.vdsbroker.glusterbroker");
+    ListGlusterHostDisks("org.ovirt.engine.core.vdsbroker.glusterbroker"),
+    AddGlusterHost("org.ovirt.engine.core.vdsbroker.glusterbroker");
 
     String packageName;
 
