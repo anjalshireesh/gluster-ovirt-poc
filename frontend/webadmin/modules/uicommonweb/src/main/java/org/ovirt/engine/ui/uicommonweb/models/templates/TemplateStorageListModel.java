@@ -50,6 +50,8 @@ public class TemplateStorageListModel extends SearchableListModel
         setRemoveCommand(new UICommand("Remove", this));
 
         UpdateActionAvailability();
+
+        setIsTimerDisabled(true);
     }
 
     @Override

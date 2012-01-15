@@ -633,6 +633,7 @@ public class VmGeneralModel extends EntityModel
                                     break;
                                 }
                             }
+                            model.UpdateStorageDomain();
 
                         }
                     }));
@@ -640,6 +641,8 @@ public class VmGeneralModel extends EntityModel
         else
         {
             setDefaultHost("Any Host in Cluster");
+
+            UpdateStorageDomain();
         }
     }
 

@@ -32,7 +32,6 @@ import org.ovirt.engine.ui.frontend.Frontend;
 import org.ovirt.engine.ui.frontend.INewAsyncCallback;
 import org.ovirt.engine.ui.uicommonweb.DataProvider;
 import org.ovirt.engine.ui.uicommonweb.Linq;
-import org.ovirt.engine.ui.uicommonweb.Linq.DiskByInternalDriveMappingComparer;
 import org.ovirt.engine.ui.uicommonweb.UICommand;
 import org.ovirt.engine.ui.uicommonweb.dataprovider.AsyncDataProvider;
 import org.ovirt.engine.ui.uicommonweb.models.ConfirmationModel;
@@ -128,18 +127,6 @@ public class VmDiskListModel extends SearchableListModel
         }
     }
 
-    private UICommand privateMoveCommand;
-
-    public UICommand getMoveCommand()
-    {
-        return privateMoveCommand;
-    }
-
-    private void setMoveCommand(UICommand value)
-    {
-        privateMoveCommand = value;
-    }
-
     public VmDiskListModel()
     {
         setTitle("Virtual Disks");
@@ -149,7 +136,6 @@ public class VmDiskListModel extends SearchableListModel
         setRemoveCommand(new UICommand("Remove", this));
         setPlugCommand(new UICommand("Plug", this));
         setUnPlugCommand(new UICommand("Unplug", this));
-        setMoveCommand(new UICommand("Move", this));
 
         UpdateActionAvailability();
     }
@@ -205,7 +191,6 @@ public class VmDiskListModel extends SearchableListModel
         ArrayList<DiskImage> disks =
                 value != null ? Linq.<DiskImage> Cast(value) : new ArrayList<DiskImage>();
 
-        Linq.Sort(disks, new DiskByInternalDriveMappingComparer());
         super.setItems(disks);
     }
 
@@ -398,9 +383,47 @@ public class VmDiskListModel extends SearchableListModel
         model.getCommands().add(tempVar2);
     }
 
+    public void OnSystemRemoveConfirm()
+    {
+        // var systemDisks = SelectedItems.Cast<DiskImage>().Where(a => a.disk_type == DiskType.System);
+        // if (systemDisks.Count() > 0)
+        // {
+        // SystemDiskRemoveConfirmModel = new ConfirmModel();
+        // SystemDiskRemoveConfirmModel.View = new ConfirmationView();
+        // SystemDiskRemoveConfirmModel.IsOpen = true;
+        // SystemDiskRemoveConfirmModel.Header = "Remove System Disk(s)";
+        // SystemDiskRemoveConfirmModel.ConfirmMsg = "Are you sure you want to remove the following System Disk(s)?";
+        // SystemDiskRemoveConfirmModel.EntityNames = systemDisks.Select(a => StringFormat.format("Disk {0}",
+        // a.internal_drive_mapping));
+        // SystemDiskRemoveConfirmModel.Commands =
+        // new ArrayList
+        // {
+        // new
+        // {
+        // Command = new DelegateCommand(OnRemove),
+        // Text = "OK",
+        // IsDefault = true
+        // },
+        // new
+        // {
+        // Command = new DelegateCommand(Cancel),
+        // Text = "Cancel"
+        // }
+        // };
+        // }
+        // else
+        // {
+        // OnRemove();
+        // }
+    }
+
     private void OnRemove()
     {
         VM vm = (VM) getEntity();
+
+        // TODO: Confirm system disk removal.
+
+        // List<Guid> images = SelectedItems.Cast<DiskImage>().Select(a =>(Guid) a.image_guid).ToList();
 
         java.util.ArrayList<Guid> images = new java.util.ArrayList<Guid>();
         for (Object item : getSelectedItems())
@@ -522,34 +545,6 @@ public class VmDiskListModel extends SearchableListModel
                 this);
     }
 
-    private void Move()
-    {
-        ArrayList<DiskImage> disks = (ArrayList<DiskImage>) getSelectedItems();
-
-        if (disks == null)
-        {
-            return;
-        }
-
-        if (getWindow() != null)
-        {
-            return;
-        }
-
-        VM vm = (VM) getEntity();
-
-        MoveDiskModel model = new MoveDiskModel(vm);
-        model.setIsSingleDiskMove(disks.size() == 1);
-        setWindow(model);
-        model.setTitle("Move Disk(s)");
-        model.setHashName("move_disk");
-        model.setIsVolumeFormatAvailable(false);
-        model.setIsSourceStorageDomainNameAvailable(true);
-        model.setEntity(this);
-        model.init(disks);
-        model.StartProgress(null);
-    }
-
     private void Cancel()
     {
         setWindow(null);
@@ -591,9 +586,6 @@ public class VmDiskListModel extends SearchableListModel
                 && getSelectedItems().size() == 1 && isVmDown());
 
         getRemoveCommand().setIsExecutionAllowed(getSelectedItems() != null && getSelectedItems().size() > 0
-                && isVmDown());
-
-        getMoveCommand().setIsExecutionAllowed(getSelectedItems() != null && getSelectedItems().size() > 0
                 && isVmDown());
 
         getPlugCommand().setIsExecutionAllowed(isPlugCommandAvailable(true));
@@ -649,10 +641,6 @@ public class VmDiskListModel extends SearchableListModel
         else if (command == getRemoveCommand())
         {
             remove();
-        }
-        else if (command == getMoveCommand())
-        {
-            Move();
         }
         else if (StringHelper.stringsEqual(command.getName(), "OnSave"))
         {

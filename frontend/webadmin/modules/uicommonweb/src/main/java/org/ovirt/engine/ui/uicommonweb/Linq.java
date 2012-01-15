@@ -27,8 +27,6 @@ import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.compat.NotImplementedException;
 import org.ovirt.engine.core.compat.StringHelper;
 import org.ovirt.engine.core.compat.Version;
-import org.ovirt.engine.ui.uicommonweb.models.EntityModel;
-import org.ovirt.engine.ui.uicommonweb.models.ListModel;
 import org.ovirt.engine.ui.uicommonweb.models.storage.LunModel;
 import org.ovirt.engine.ui.uicommonweb.models.storage.SanTargetModel;
 import org.ovirt.engine.ui.uicommonweb.models.vms.DiskModel;
@@ -193,15 +191,6 @@ public final class Linq
             return x.getinternal_drive_mapping().compareTo(y.getinternal_drive_mapping());
         }
 
-    }
-
-    public static class DiskModelByNameComparer implements java.util.Comparator<DiskModel>
-    {
-        @Override
-        public int compare(DiskModel x, DiskModel y)
-        {
-            return x.getName().compareTo(y.getName());
-        }
     }
 
     // C# TO JAVA CONVERTER TODO TASK: The interface type was changed to the closest equivalent Java type, but the
@@ -936,10 +925,7 @@ public final class Linq
             ArrayList<storage_domains> storageDomains) {
         ArrayList<storage_domains> list = new ArrayList<storage_domains>();
         for (Guid storageId : storageIds) {
-            storage_domains storageDomain = getStorageById(storageId, storageDomains);
-            if (storageDomain != null) {
-                list.add(getStorageById(storageId, storageDomains));
-            }
+            list.add(getStorageById(storageId, storageDomains));
         }
         return list;
     }
@@ -953,24 +939,6 @@ public final class Linq
             storageDomainsDisjoint = Linq.Disjoint(storageDomainsDisjoint, list);
         }
         return storageDomainsDisjoint;
-    }
-
-    public static ListModel ToEntityListModel(ListModel list)
-    {
-        ListModel listModel = new ListModel();
-        ArrayList<EntityModel> entityModelList = new ArrayList<EntityModel>();
-
-        if (list.getItems() != null) {
-            for (Object item : list.getItems())
-            {
-                EntityModel model = new EntityModel();
-                model.setEntity(item);
-                entityModelList.add(model);
-            }
-        }
-
-        listModel.setItems(entityModelList);
-        return listModel;
     }
 
     public final static class TimeZonePredicate implements IPredicate<java.util.Map.Entry<String, String>>
