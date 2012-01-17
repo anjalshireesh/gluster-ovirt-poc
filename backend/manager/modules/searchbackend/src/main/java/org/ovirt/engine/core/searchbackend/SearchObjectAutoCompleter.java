@@ -8,18 +8,18 @@ public class SearchObjectAutoCompleter extends SearchObjectsBaseAutoCompleter {
 
     public SearchObjectAutoCompleter(boolean isDesktopsAllowed) {
 
-//        mVerbs.put(SearchObjects.VM_PLU_OBJ_NAME, SearchObjects.VM_PLU_OBJ_NAME);
-//        if (isDesktopsAllowed) {
-//            mVerbs.put(SearchObjects.VDC_POOL_PLU_OBJ_NAME, SearchObjects.VDC_POOL_PLU_OBJ_NAME);
-//        }
+        mVerbs.put(SearchObjects.VM_PLU_OBJ_NAME, SearchObjects.VM_PLU_OBJ_NAME);
+        if (isDesktopsAllowed) {
+            mVerbs.put(SearchObjects.VDC_POOL_PLU_OBJ_NAME, SearchObjects.VDC_POOL_PLU_OBJ_NAME);
+        }
         mVerbs.put(SearchObjects.VDS_PLU_OBJ_NAME, SearchObjects.VDS_PLU_OBJ_NAME);
-//        mVerbs.put(SearchObjects.TEMPLATE_PLU_OBJ_NAME, SearchObjects.TEMPLATE_PLU_OBJ_NAME);
+        mVerbs.put(SearchObjects.TEMPLATE_PLU_OBJ_NAME, SearchObjects.TEMPLATE_PLU_OBJ_NAME);
         mVerbs.put(SearchObjects.AUDIT_PLU_OBJ_NAME, SearchObjects.AUDIT_PLU_OBJ_NAME);
         mVerbs.put(SearchObjects.VDC_USER_PLU_OBJ_NAME, SearchObjects.VDC_USER_PLU_OBJ_NAME);
         mVerbs.put(SearchObjects.VDC_CLUSTER_PLU_OBJ_NAME, SearchObjects.VDC_CLUSTER_PLU_OBJ_NAME);
         mVerbs.put(SearchObjects.DISK_IMAGE_PLU_OBJ_NAME, SearchObjects.DISK_IMAGE_PLU_OBJ_NAME);
         mVerbs.put(SearchObjects.VDC_STORAGE_POOL_OBJ_NAME, SearchObjects.VDC_STORAGE_POOL_OBJ_NAME);
-//        mVerbs.put(SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME);
+        mVerbs.put(SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME);
 
         buildCompletions();
         mVerbs.put(SearchObjects.VM_OBJ_NAME, SearchObjects.VM_OBJ_NAME);
@@ -28,58 +28,58 @@ public class SearchObjectAutoCompleter extends SearchObjectsBaseAutoCompleter {
         }
         mVerbs.put(SearchObjects.DISK_IMAGE_OBJ_NAME, SearchObjects.DISK_IMAGE_OBJ_NAME);
         mVerbs.put(SearchObjects.VDS_OBJ_NAME, SearchObjects.VDS_OBJ_NAME);
-//        mVerbs.put(SearchObjects.TEMPLATE_OBJ_NAME, SearchObjects.TEMPLATE_OBJ_NAME);
+        mVerbs.put(SearchObjects.TEMPLATE_OBJ_NAME, SearchObjects.TEMPLATE_OBJ_NAME);
         mVerbs.put(SearchObjects.AUDIT_OBJ_NAME, SearchObjects.AUDIT_OBJ_NAME);
         mVerbs.put(SearchObjects.VDC_USER_OBJ_NAME, SearchObjects.VDC_USER_OBJ_NAME);
         mVerbs.put(SearchObjects.VDC_CLUSTER_OBJ_NAME, SearchObjects.VDC_CLUSTER_OBJ_NAME);
 
-//        // vms - vds
-//        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VM_OBJ_NAME, SearchObjects.VDS_OBJ_NAME),
-//                new String[] { "run_on_vds", "vds_id" });
-//        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VM_OBJ_NAME, SearchObjects.VDS_OBJ_NAME),
-//                new String[] { "vds_id", "run_on_vds" });
-//
-//        // vms - vmt
-//        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VM_OBJ_NAME, SearchObjects.TEMPLATE_OBJ_NAME),
-//                new String[] { "vmt_guid", "vmt_guid" });
-//        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VM_OBJ_NAME, SearchObjects.TEMPLATE_OBJ_NAME),
-//                new String[] { "vmt_guid", "vmt_guid" });
-//
-//        // vms - users
-//        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VM_OBJ_NAME, SearchObjects.VDC_USER_OBJ_NAME),
-//                new String[] { "vm_guid", "vm_guid" });
-//        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VM_OBJ_NAME, SearchObjects.VDC_USER_OBJ_NAME),
-//                new String[] { "vm_guid", "vm_guid" });
-//
-//        // vms - audit
-//        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VM_OBJ_NAME, SearchObjects.AUDIT_OBJ_NAME),
-//                new String[] { "vm_guid", "vm_id" });
-//        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VM_OBJ_NAME, SearchObjects.AUDIT_OBJ_NAME),
-//                new String[] { "vm_id", "vm_guid" });
-//
-//        // vms - storage domain
-//        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VM_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
-//                new String[] { "storage_id", "id" });
-//        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VM_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
-//                new String[] { "id", "storage_id" });
-//
-//        // templates - storage domain
-//        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.TEMPLATE_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
-//                new String[] { "storage_id", "id" });
-//        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.TEMPLATE_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
-//                new String[] { "id", "storage_id" });
-//
-//        // vds - storage domain
-//        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VDS_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
-//                new String[] { "storage_id", "id" });
-//        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VDS_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
-//                new String[] { "id", "storage_id" });
-//
-//        // cluster - storage domain
-//        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VDC_CLUSTER_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
-//                new String[] { "storage_id", "id" });
-//        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VDC_CLUSTER_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
-//                new String[] { "id", "storage_id" });
+        // vms - vds
+        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VM_OBJ_NAME, SearchObjects.VDS_OBJ_NAME),
+                new String[] { "run_on_vds", "vds_id" });
+        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VM_OBJ_NAME, SearchObjects.VDS_OBJ_NAME),
+                new String[] { "vds_id", "run_on_vds" });
+
+        // vms - vmt
+        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VM_OBJ_NAME, SearchObjects.TEMPLATE_OBJ_NAME),
+                new String[] { "vmt_guid", "vmt_guid" });
+        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VM_OBJ_NAME, SearchObjects.TEMPLATE_OBJ_NAME),
+                new String[] { "vmt_guid", "vmt_guid" });
+
+        // vms - users
+        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VM_OBJ_NAME, SearchObjects.VDC_USER_OBJ_NAME),
+                new String[] { "vm_guid", "vm_guid" });
+        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VM_OBJ_NAME, SearchObjects.VDC_USER_OBJ_NAME),
+                new String[] { "vm_guid", "vm_guid" });
+
+        // vms - audit
+        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VM_OBJ_NAME, SearchObjects.AUDIT_OBJ_NAME),
+                new String[] { "vm_guid", "vm_id" });
+        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VM_OBJ_NAME, SearchObjects.AUDIT_OBJ_NAME),
+                new String[] { "vm_id", "vm_guid" });
+
+        // vms - storage domain
+        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VM_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
+                new String[] { "storage_id", "id" });
+        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VM_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
+                new String[] { "id", "storage_id" });
+
+        // templates - storage domain
+        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.TEMPLATE_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
+                new String[] { "storage_id", "id" });
+        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.TEMPLATE_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
+                new String[] { "id", "storage_id" });
+
+        // vds - storage domain
+        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VDS_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
+                new String[] { "storage_id", "id" });
+        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VDS_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
+                new String[] { "id", "storage_id" });
+
+        // cluster - storage domain
+        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VDC_CLUSTER_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
+                new String[] { "storage_id", "id" });
+        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VDC_CLUSTER_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME),
+                new String[] { "id", "storage_id" });
 
         // vds - audit
         mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VDS_OBJ_NAME, SearchObjects.AUDIT_OBJ_NAME),
@@ -105,13 +105,13 @@ public class SearchObjectAutoCompleter extends SearchObjectsBaseAutoCompleter {
                 .put(StringFormat.format("%2$s.%1$s", SearchObjects.VDC_STORAGE_POOL_OBJ_NAME,
                         SearchObjects.VDC_CLUSTER_OBJ_NAME), new String[] { "storage_pool_id", "id" });
 
-//        // Datacenter(Storage_pool) - Storage Domain
-//        mJoinDictionary
-//                .put(StringFormat.format("%1$s.%2$s", SearchObjects.VDC_STORAGE_POOL_OBJ_NAME,
-//                        SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME), new String[] { "id", "storage_pool_id" });
-//        mJoinDictionary
-//                .put(StringFormat.format("%2$s.%1$s", SearchObjects.VDC_STORAGE_POOL_OBJ_NAME,
-//                        SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME), new String[] { "storage_pool_id", "id" });
+        // Datacenter(Storage_pool) - Storage Domain
+        mJoinDictionary
+                .put(StringFormat.format("%1$s.%2$s", SearchObjects.VDC_STORAGE_POOL_OBJ_NAME,
+                        SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME), new String[] { "id", "storage_pool_id" });
+        mJoinDictionary
+                .put(StringFormat.format("%2$s.%1$s", SearchObjects.VDC_STORAGE_POOL_OBJ_NAME,
+                        SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME), new String[] { "storage_pool_id", "id" });
 
         // audit - cluster
         mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VDC_CLUSTER_OBJ_NAME, SearchObjects.AUDIT_OBJ_NAME),
