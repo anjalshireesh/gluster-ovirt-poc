@@ -52,6 +52,14 @@ insert into event_map(event_up_name, event_down_name) values('VM_MIGRATION_FAILE
 insert into event_map(event_up_name, event_down_name) values('VM_MIGRATION_FAILED_FROM_TO', 'UNASSIGNED');
 insert into event_map(event_up_name, event_down_name) values('VM_NOT_RESPONDING', 'UNASSIGNED');
 
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_CREATE', 'UNASSIGNED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_CREATE_FAILED', 'UNASSIGNED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_START', 'UNASSIGNED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_START_FAILED', 'VOLUME_STARTED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_STOP', 'GLUSTER_VOLUME_START');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_STOP_FAILED', 'UNASSIGNED');
+
+
 -- Insert notification methods for notification service
 insert into event_notification_methods (method_id, method_type) values (0,'Email');
 
