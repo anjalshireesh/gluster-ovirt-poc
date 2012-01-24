@@ -38,396 +38,396 @@ import org.ovirt.engine.ui.uicompat.IFrontendMultipleActionAsyncCallback;
 public class PermissionListModel extends SearchableListModel
 {
 
-	private UICommand privateAddCommand;
-	public UICommand getAddCommand()
-	{
-		return privateAddCommand;
-	}
-	private void setAddCommand(UICommand value)
-	{
-		privateAddCommand = value;
-	}
-	private UICommand privateRemoveCommand;
-	public UICommand getRemoveCommand()
-	{
-		return privateRemoveCommand;
-	}
-	private void setRemoveCommand(UICommand value)
-	{
-		privateRemoveCommand = value;
-	}
+    private UICommand privateAddCommand;
+    public UICommand getAddCommand()
+    {
+        return privateAddCommand;
+    }
+    private void setAddCommand(UICommand value)
+    {
+        privateAddCommand = value;
+    }
+    private UICommand privateRemoveCommand;
+    public UICommand getRemoveCommand()
+    {
+        return privateRemoveCommand;
+    }
+    private void setRemoveCommand(UICommand value)
+    {
+        privateRemoveCommand = value;
+    }
 
 
 
-	public Object getEntity()
-	{
-		return super.getEntity();
-	}
-	public void setEntity(Object value)
-	{
-		super.setEntity(value);
-	}
+    public Object getEntity()
+    {
+        return super.getEntity();
+    }
+    public void setEntity(Object value)
+    {
+        super.setEntity(value);
+    }
 
 
 
-	public PermissionListModel()
-	{
-		setTitle("Permissions");
+    public PermissionListModel()
+    {
+        setTitle("Permissions");
 
-		setAddCommand(new UICommand("New", this));
-		setRemoveCommand(new UICommand("Remove", this));
+        setAddCommand(new UICommand("New", this));
+        setRemoveCommand(new UICommand("Remove", this));
 
-		UpdateActionAvailability();
-	}
+        UpdateActionAvailability();
+    }
 
-	@Override
-	protected void OnEntityChanged()
-	{
-		super.OnEntityChanged();
+    @Override
+    protected void OnEntityChanged()
+    {
+        super.OnEntityChanged();
 
-		getSearchCommand().Execute();
-		UpdateActionAvailability();
-	}
+        getSearchCommand().Execute();
+        UpdateActionAvailability();
+    }
 
-	@Override
-	public void Search()
-	{
-		if (getEntity() != null)
-		{
-			super.Search();
-		}
-	}
+    @Override
+    public void Search()
+    {
+        if (getEntity() != null)
+        {
+            super.Search();
+        }
+    }
 
-	@Override
-	protected void SyncSearch()
-	{
-		VdcObjectType objType = getObjectType();
-		if(!objType.equals(VdcObjectType.GlusterVolume)){
-			boolean directOnly = (objType == VdcObjectType.VM ? true : false);
-			GetPermissionsForObjectParameters tempVar = new GetPermissionsForObjectParameters();
-			tempVar.setObjectId(getEntityGuid());
-			tempVar.setVdcObjectType(objType);
-			tempVar.setDirectOnly(directOnly);
-			tempVar.setRefresh(getIsQueryFirstTime());
-			super.SyncSearch(VdcQueryType.GetPermissionsForObject, tempVar);
-		} else {
-			GetPermissionsForObjectParameters tempVar = new GetPermissionsForObjectParameters();
-			//TODO
-			tempVar.setObjectId(VolumeListModel.clusterId);
-			tempVar.setVdcObjectType(VdcObjectType.VdsGroups);
-			tempVar.setDirectOnly(false);
-			tempVar.setRefresh(getIsQueryFirstTime());
-			super.SyncSearch(VdcQueryType.GetPermissionsForObject, tempVar);
-		}
-	}
+    @Override
+    protected void SyncSearch()
+    {
+        VdcObjectType objType = getObjectType();
+        if(!objType.equals(VdcObjectType.GlusterVolume)){
+            boolean directOnly = (objType == VdcObjectType.VM ? true : false);
+            GetPermissionsForObjectParameters tempVar = new GetPermissionsForObjectParameters();
+            tempVar.setObjectId(getEntityGuid());
+            tempVar.setVdcObjectType(objType);
+            tempVar.setDirectOnly(directOnly);
+            tempVar.setRefresh(getIsQueryFirstTime());
+            super.SyncSearch(VdcQueryType.GetPermissionsForObject, tempVar);
+        } else {
+            GetPermissionsForObjectParameters tempVar = new GetPermissionsForObjectParameters();
+            //TODO
+            tempVar.setObjectId(VolumeListModel.clusterId);
+            tempVar.setVdcObjectType(VdcObjectType.VdsGroups);
+            tempVar.setDirectOnly(false);
+            tempVar.setRefresh(getIsQueryFirstTime());
+            super.SyncSearch(VdcQueryType.GetPermissionsForObject, tempVar);
+        }
+    }
 
-	@Override
-	protected void AsyncSearch()
-	{
-		super.AsyncSearch();
-
-
-		VdcObjectType objType = getObjectType();
-		boolean directOnly = (objType == VdcObjectType.VM ? true : false);
-
-		GetPermissionsForObjectParameters tempVar = new GetPermissionsForObjectParameters();
-		tempVar.setObjectId(getEntityGuid());
-		tempVar.setVdcObjectType(objType);
-		tempVar.setDirectOnly(directOnly);
-		setAsyncResult(Frontend.RegisterQuery(VdcQueryType.GetPermissionsForObject, tempVar));
-
-		setItems(getAsyncResult().getData());
-	}
-
-	private void add()
-	{
-		if (getWindow() != null)
-		{
-			return;
-		}
-
-		AdElementListModel model = new AdElementListModel();
-		setWindow(model);
-		model.setTitle("Add Permission to User");
-		model.setHashName("add_permission_to_user");
-
-		UICommand tempVar = new UICommand("OnAdd", this);
-		tempVar.setTitle("OK");
-		tempVar.setIsDefault(true);
-		model.getCommands().add(tempVar);
-		UICommand tempVar2 = new UICommand("Cancel", this);
-		tempVar2.setTitle("Cancel");
-		tempVar2.setIsCancel(true);
-		model.getCommands().add(tempVar2);
-	}
-
-	private void remove()
-	{
-		if (getWindow() != null)
-		{
-			return;
-		}
-
-		ConfirmationModel model = new ConfirmationModel();
-		setWindow(model);
-		model.setTitle("Remove Permission");
-		model.setHashName("remove_permission");
-		model.setMessage("Permission");
-		java.util.ArrayList<String> items = new java.util.ArrayList<String>();
-		for (Object a : getSelectedItems())
-		{
-			items.add("Role " + ((permissions)a).getRoleName() + " on User " + ((permissions)a).getOwnerName());
-		}
-		model.setItems(items);
-
-		UICommand tempVar = new UICommand("OnRemove", this);
-		tempVar.setTitle("OK");
-		tempVar.setIsDefault(true);
-		model.getCommands().add(tempVar);
-		UICommand tempVar2 = new UICommand("Cancel", this);
-		tempVar2.setTitle("Cancel");
-		tempVar2.setIsCancel(true);
-		model.getCommands().add(tempVar2);
-	}
-
-	private void OnRemove()
-	{
-		if (getSelectedItems() != null && getSelectedItems().size() > 0)
-		{
-			ConfirmationModel model = (ConfirmationModel)getWindow();
-
-			if (model.getProgress() != null)
-			{
-				return;
-			}
-
-			java.util.ArrayList<VdcActionParametersBase> list = new java.util.ArrayList<VdcActionParametersBase>();
-			for (Object perm : getSelectedItems())
-			{
-				PermissionsOperationsParametes tempVar = new PermissionsOperationsParametes();
-				tempVar.setPermission((permissions)perm);
-				list.add(tempVar);
-			}
+    @Override
+    protected void AsyncSearch()
+    {
+        super.AsyncSearch();
 
 
-			model.StartProgress(null);
+        VdcObjectType objType = getObjectType();
+        boolean directOnly = (objType == VdcObjectType.VM ? true : false);
 
-			Frontend.RunMultipleAction(VdcActionType.RemovePermission, list,
-		new IFrontendMultipleActionAsyncCallback() {
-			@Override
-			public void Executed(FrontendMultipleActionAsyncResult  result) {
+        GetPermissionsForObjectParameters tempVar = new GetPermissionsForObjectParameters();
+        tempVar.setObjectId(getEntityGuid());
+        tempVar.setVdcObjectType(objType);
+        tempVar.setDirectOnly(directOnly);
+        setAsyncResult(Frontend.RegisterQuery(VdcQueryType.GetPermissionsForObject, tempVar));
 
-				ConfirmationModel localModel = (ConfirmationModel)result.getState();
-				localModel.StopProgress();
-				Cancel();
+        setItems(getAsyncResult().getData());
+    }
 
-			}
-		}, model);
-		}
+    private void add()
+    {
+        if (getWindow() != null)
+        {
+            return;
+        }
 
-		Cancel();
-	}
+        AdElementListModel model = new AdElementListModel();
+        setWindow(model);
+        model.setTitle("Add Permission to User");
+        model.setHashName("add_permission_to_user");
 
-	private void OnAdd()
-	{
-		AdElementListModel model = (AdElementListModel)getWindow();
+        UICommand tempVar = new UICommand("OnAdd", this);
+        tempVar.setTitle("OK");
+        tempVar.setIsDefault(true);
+        model.getCommands().add(tempVar);
+        UICommand tempVar2 = new UICommand("Cancel", this);
+        tempVar2.setTitle("Cancel");
+        tempVar2.setIsCancel(true);
+        model.getCommands().add(tempVar2);
+    }
 
-		if (model.getProgress() != null)
-		{
-			return;
-		}
+    private void remove()
+    {
+        if (getWindow() != null)
+        {
+            return;
+        }
 
-		if (!model.getIsEveryoneSelected() && model.getSelectedItems() == null)
-		{
-			Cancel();
-			return;
-		}
+        ConfirmationModel model = new ConfirmationModel();
+        setWindow(model);
+        model.setTitle("Remove Permission");
+        model.setHashName("remove_permission");
+        model.setMessage("Permission");
+        java.util.ArrayList<String> items = new java.util.ArrayList<String>();
+        for (Object a : getSelectedItems())
+        {
+            items.add("Role " + ((permissions)a).getRoleName() + " on User " + ((permissions)a).getOwnerName());
+        }
+        model.setItems(items);
 
+        UICommand tempVar = new UICommand("OnRemove", this);
+        tempVar.setTitle("OK");
+        tempVar.setIsDefault(true);
+        model.getCommands().add(tempVar);
+        UICommand tempVar2 = new UICommand("Cancel", this);
+        tempVar2.setTitle("Cancel");
+        tempVar2.setIsCancel(true);
+        model.getCommands().add(tempVar2);
+    }
 
-		java.util.ArrayList<DbUser> items = new java.util.ArrayList<DbUser>();
-		if (model.getIsEveryoneSelected())
-		{
-			DbUser tempVar = new DbUser();
-			tempVar.setuser_id(UserListModel.EveryoneUserId);
-			items.add(tempVar);
-		}
-		else
-		{
-			for (Object item : model.getItems())
-			{
-				EntityModel entityModel = (EntityModel) item;
-				if (entityModel.getIsSelected())
-				{
-					items.add((DbUser) entityModel.getEntity());
-				}
-			}
-		}
+    private void OnRemove()
+    {
+        if (getSelectedItems() != null && getSelectedItems().size() > 0)
+        {
+            ConfirmationModel model = (ConfirmationModel)getWindow();
 
-		roles role = (roles)model.getRole().getSelectedItem();
-		//adGroup/user
+            if (model.getProgress() != null)
+            {
+                return;
+            }
 
-
-		java.util.ArrayList<VdcActionParametersBase> list = new java.util.ArrayList<VdcActionParametersBase>();
-		for (DbUser user : items)
-		{
-			permissions tempVar2 = new permissions();
-			tempVar2.setad_element_id(user.getuser_id());
-			tempVar2.setrole_id(role.getId());
-			permissions perm = tempVar2;
-			perm.setObjectId(getObjectType() == VdcObjectType.GlusterVolume ? VolumeListModel.clusterId : getEntityGuid());
-			perm.setObjectType(getObjectType() == VdcObjectType.GlusterVolume ? VdcObjectType.VdsGroups : getObjectType());
-
-			if (user.getIsGroup())
-			{
-				PermissionsOperationsParametes tempVar3 = new PermissionsOperationsParametes();
-				tempVar3.setPermission(perm);
-				tempVar3.setAdGroup(new ad_groups(user.getuser_id(), user.getname(), user.getdomain()));
-				list.add(tempVar3);
-			}
-			else
-			{
-				PermissionsOperationsParametes tempVar4 = new PermissionsOperationsParametes();
-				tempVar4.setPermission(perm);
-				tempVar4.setVdcUser(new VdcUser(user.getuser_id(), user.getusername(), user.getdomain()));
-				list.add(tempVar4);
-			}
-		}
+            java.util.ArrayList<VdcActionParametersBase> list = new java.util.ArrayList<VdcActionParametersBase>();
+            for (Object perm : getSelectedItems())
+            {
+                PermissionsOperationsParametes tempVar = new PermissionsOperationsParametes();
+                tempVar.setPermission((permissions)perm);
+                list.add(tempVar);
+            }
 
 
-		model.StartProgress(null);
+            model.StartProgress(null);
 
-		Frontend.RunMultipleAction(VdcActionType.AddPermission, list,
-		new IFrontendMultipleActionAsyncCallback() {
-			@Override
-			public void Executed(FrontendMultipleActionAsyncResult  result) {
+            Frontend.RunMultipleAction(VdcActionType.RemovePermission, list,
+        new IFrontendMultipleActionAsyncCallback() {
+            @Override
+            public void Executed(FrontendMultipleActionAsyncResult  result) {
 
-			AdElementListModel localModel = (AdElementListModel)result.getState();
-			localModel.StopProgress();
-			Cancel();
+                ConfirmationModel localModel = (ConfirmationModel)result.getState();
+                localModel.StopProgress();
+                Cancel();
 
-			}
-		}, model);
-	}
+            }
+        }, model);
+        }
 
-	private void Cancel()
-	{
-		setWindow(null);
-	}
+        Cancel();
+    }
 
-	@Override
-	protected void OnSelectedItemChanged()
-	{
-		super.OnSelectedItemChanged();
-		UpdateActionAvailability();
-	}
+    private void OnAdd()
+    {
+        AdElementListModel model = (AdElementListModel)getWindow();
 
-	@Override
-	protected void SelectedItemsChanged()
-	{
-		super.SelectedItemsChanged();
-		UpdateActionAvailability();
-	}
+        if (model.getProgress() != null)
+        {
+            return;
+        }
 
-	@Override
-	protected void EntityPropertyChanged(Object sender, PropertyChangedEventArgs e)
-	{
-		super.EntityPropertyChanged(sender, e);
+        if (!model.getIsEveryoneSelected() && model.getSelectedItems() == null)
+        {
+            Cancel();
+            return;
+        }
 
-		if (e.PropertyName.equals("status"))
-		{
-			UpdateActionAvailability();
-		}
-	}
 
-	private void UpdateActionAvailability()
-	{
-		getRemoveCommand().setIsExecutionAllowed((getSelectedItems() != null && getSelectedItems().size() > 0));
-		if (getRemoveCommand().getIsExecutionAllowed() == false)
-		{
-			return;
-		}
-		Guid entityGuid = getEntityGuid();
-		if(entityGuid.equals(new Guid())){
-			return;
-		}
-		for (Object p : getSelectedItems())
-		{
-			if (!entityGuid.equals(((permissions)p).getObjectId()))
-			{
-				getRemoveCommand().setIsExecutionAllowed(false);
-				return;
-			}
-		}
-	}
+        java.util.ArrayList<DbUser> items = new java.util.ArrayList<DbUser>();
+        if (model.getIsEveryoneSelected())
+        {
+            DbUser tempVar = new DbUser();
+            tempVar.setuser_id(UserListModel.EveryoneUserId);
+            items.add(tempVar);
+        }
+        else
+        {
+            for (Object item : model.getItems())
+            {
+                EntityModel entityModel = (EntityModel) item;
+                if (entityModel.getIsSelected())
+                {
+                    items.add((DbUser) entityModel.getEntity());
+                }
+            }
+        }
 
-	private Guid getEntityGuid()
-	{
-		return DataProvider.GetEntityGuid(getEntity());
-	}
+        roles role = (roles)model.getRole().getSelectedItem();
+        //adGroup/user
 
-	private VdcObjectType getObjectType()
-	{
-		if (getEntity() instanceof VM)
-		{
-			return VdcObjectType.VM;
-		}
-		if (getEntity() instanceof storage_pool)
-		{
-			return VdcObjectType.StoragePool;
-		}
-		if (getEntity() instanceof VDSGroup)
-		{
-			return VdcObjectType.VdsGroups;
-		}
-		if (getEntity() instanceof VDS)
-		{
-			return VdcObjectType.VDS;
-		}
-		if (getEntity() instanceof storage_domains)
-		{
-			return VdcObjectType.Storage;
-		}
-		if (getEntity() instanceof VmTemplate)
-		{
-			return VdcObjectType.VmTemplate;
-		}
-		if (getEntity() instanceof vm_pools)
-		{
-			return VdcObjectType.VmPool;
-		}
-		if (getEntity() instanceof GlusterVolumeEntity)
-		{
-			return VdcObjectType.GlusterVolume;
-		}
-		return VdcObjectType.Unknown;
-	}
 
-	@Override
-	public void ExecuteCommand(UICommand command)
-	{
-		super.ExecuteCommand(command);
+        java.util.ArrayList<VdcActionParametersBase> list = new java.util.ArrayList<VdcActionParametersBase>();
+        for (DbUser user : items)
+        {
+            permissions tempVar2 = new permissions();
+            tempVar2.setad_element_id(user.getuser_id());
+            tempVar2.setrole_id(role.getId());
+            permissions perm = tempVar2;
+            perm.setObjectId(getObjectType() == VdcObjectType.GlusterVolume ? VolumeListModel.clusterId : getEntityGuid());
+            perm.setObjectType(getObjectType() == VdcObjectType.GlusterVolume ? VdcObjectType.VdsGroups : getObjectType());
 
-		if (command == getAddCommand())
-		{
-			add();
-		}
-		else if (command == getRemoveCommand())
-		{
-			remove();
-		}
-		else if (StringHelper.stringsEqual(command.getName(), "OnRemove"))
-		{
-			OnRemove();
-		}
-		else if (StringHelper.stringsEqual(command.getName(), "OnAdd"))
-		{
-			OnAdd();
-		}
-		else if (StringHelper.stringsEqual(command.getName(), "Cancel"))
-		{
-			Cancel();
-		}
-	}
+            if (user.getIsGroup())
+            {
+                PermissionsOperationsParametes tempVar3 = new PermissionsOperationsParametes();
+                tempVar3.setPermission(perm);
+                tempVar3.setAdGroup(new ad_groups(user.getuser_id(), user.getname(), user.getdomain()));
+                list.add(tempVar3);
+            }
+            else
+            {
+                PermissionsOperationsParametes tempVar4 = new PermissionsOperationsParametes();
+                tempVar4.setPermission(perm);
+                tempVar4.setVdcUser(new VdcUser(user.getuser_id(), user.getusername(), user.getdomain()));
+                list.add(tempVar4);
+            }
+        }
+
+
+        model.StartProgress(null);
+
+        Frontend.RunMultipleAction(VdcActionType.AddPermission, list,
+        new IFrontendMultipleActionAsyncCallback() {
+            @Override
+            public void Executed(FrontendMultipleActionAsyncResult  result) {
+
+            AdElementListModel localModel = (AdElementListModel)result.getState();
+            localModel.StopProgress();
+            Cancel();
+
+            }
+        }, model);
+    }
+
+    private void Cancel()
+    {
+        setWindow(null);
+    }
+
+    @Override
+    protected void OnSelectedItemChanged()
+    {
+        super.OnSelectedItemChanged();
+        UpdateActionAvailability();
+    }
+
+    @Override
+    protected void SelectedItemsChanged()
+    {
+        super.SelectedItemsChanged();
+        UpdateActionAvailability();
+    }
+
+    @Override
+    protected void EntityPropertyChanged(Object sender, PropertyChangedEventArgs e)
+    {
+        super.EntityPropertyChanged(sender, e);
+
+        if (e.PropertyName.equals("status"))
+        {
+            UpdateActionAvailability();
+        }
+    }
+
+    private void UpdateActionAvailability()
+    {
+        getRemoveCommand().setIsExecutionAllowed((getSelectedItems() != null && getSelectedItems().size() > 0));
+        if (getRemoveCommand().getIsExecutionAllowed() == false)
+        {
+            return;
+        }
+        Guid entityGuid = getEntityGuid();
+        if(entityGuid.equals(new Guid())){
+            return;
+        }
+        for (Object p : getSelectedItems())
+        {
+            if (!entityGuid.equals(((permissions)p).getObjectId()))
+            {
+                getRemoveCommand().setIsExecutionAllowed(false);
+                return;
+            }
+        }
+    }
+
+    private Guid getEntityGuid()
+    {
+        return DataProvider.GetEntityGuid(getEntity());
+    }
+
+    private VdcObjectType getObjectType()
+    {
+        if (getEntity() instanceof VM)
+        {
+            return VdcObjectType.VM;
+        }
+        if (getEntity() instanceof storage_pool)
+        {
+            return VdcObjectType.StoragePool;
+        }
+        if (getEntity() instanceof VDSGroup)
+        {
+            return VdcObjectType.VdsGroups;
+        }
+        if (getEntity() instanceof VDS)
+        {
+            return VdcObjectType.VDS;
+        }
+        if (getEntity() instanceof storage_domains)
+        {
+            return VdcObjectType.Storage;
+        }
+        if (getEntity() instanceof VmTemplate)
+        {
+            return VdcObjectType.VmTemplate;
+        }
+        if (getEntity() instanceof vm_pools)
+        {
+            return VdcObjectType.VmPool;
+        }
+        if (getEntity() instanceof GlusterVolumeEntity)
+        {
+            return VdcObjectType.GlusterVolume;
+        }
+        return VdcObjectType.Unknown;
+    }
+
+    @Override
+    public void ExecuteCommand(UICommand command)
+    {
+        super.ExecuteCommand(command);
+
+        if (command == getAddCommand())
+        {
+            add();
+        }
+        else if (command == getRemoveCommand())
+        {
+            remove();
+        }
+        else if (StringHelper.stringsEqual(command.getName(), "OnRemove"))
+        {
+            OnRemove();
+        }
+        else if (StringHelper.stringsEqual(command.getName(), "OnAdd"))
+        {
+            OnAdd();
+        }
+        else if (StringHelper.stringsEqual(command.getName(), "Cancel"))
+        {
+            Cancel();
+        }
+    }
     @Override
     protected String getListName() {
         return "PermissionListModel";

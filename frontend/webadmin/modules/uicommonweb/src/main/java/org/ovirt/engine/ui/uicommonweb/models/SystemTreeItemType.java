@@ -3,17 +3,17 @@ package org.ovirt.engine.ui.uicommonweb.models;
 @SuppressWarnings("unused")
 public enum SystemTreeItemType
 {
-	System,
-	DataCenter,
-	Storages,
-	Storage,
-	Templates,
-	Clusters,
-	Cluster,
-	VMs,
-	Hosts,
-	Host, 
-	Volumes;
+    System,
+    DataCenter,
+    Storages,
+    Storage,
+    Templates,
+    Clusters,
+    Cluster,
+    VMs,
+    Hosts,
+    Host,
+    Volumes;
 
     public int getValue()
     {

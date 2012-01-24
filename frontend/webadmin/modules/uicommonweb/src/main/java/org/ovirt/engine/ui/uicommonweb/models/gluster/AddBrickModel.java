@@ -12,61 +12,61 @@ import org.ovirt.engine.ui.uicompat.FrontendActionAsyncResult;
 import org.ovirt.engine.ui.uicompat.IFrontendActionAsyncCallback;
 
 public class AddBrickModel extends ListModel{
-	private String volumeName;
-	
-	public AddBrickModel(){
-		setTitle("Add Bricks");
-	}
-	
-	ArrayList<String> curBrickList;
-	
-	
-	public ArrayList<String> getCurBrickList() {
-		return curBrickList;
-	}
+    private String volumeName;
 
-	public void setCurBrickList(ArrayList<String> curBrickList) {
-		this.curBrickList = curBrickList;
-	}
+    public AddBrickModel(){
+        setTitle("Add Bricks");
+    }
 
-	public void init(){
-		Frontend.RunAction(VdcActionType.ListGlusterBricks, new GlusterVolumeParameters(VolumeListModel.clusterId, getVolumeName()), new IFrontendActionAsyncCallback() {
-			
-			@Override
-			public void Executed(FrontendActionAsyncResult result) {
-				ArrayList<EntityModel> list = new ArrayList<EntityModel>();
-				for (GlusterBrickEntity brick : (ArrayList<GlusterBrickEntity>)result.getReturnValue().getActionReturnValue()) {
-					EntityModel eModel = new EntityModel();
-					eModel.setEntity(brick);
-					list.add(eModel);
-				}
-				setItems(list);
-				
-				initSelections();
-			}
-		});
-	}
-	
-	public void initSelections(){
-		if(getItems() != null){
-			for (EntityModel entity : (ArrayList<EntityModel>)getItems()) {
-				GlusterBrickEntity brick = (GlusterBrickEntity)entity.getEntity();
-				for (String str : getCurBrickList()) {
-					if(brick.getQualifiedName().equals(str)){
-						entity.setIsSelected(true);
-						entity.setIsChangable(false);
-					}
-				}
-			}
-		}
-	}
+    ArrayList<String> curBrickList;
 
-	public String getVolumeName() {
-		return volumeName;
-	}
 
-	public void setVolumeName(String volumeName) {
-		this.volumeName = volumeName;
-	}
-	
+    public ArrayList<String> getCurBrickList() {
+        return curBrickList;
+    }
+
+    public void setCurBrickList(ArrayList<String> curBrickList) {
+        this.curBrickList = curBrickList;
+    }
+
+    public void init(){
+        Frontend.RunAction(VdcActionType.ListGlusterBricks, new GlusterVolumeParameters(VolumeListModel.clusterId, getVolumeName()), new IFrontendActionAsyncCallback() {
+
+            @Override
+            public void Executed(FrontendActionAsyncResult result) {
+                ArrayList<EntityModel> list = new ArrayList<EntityModel>();
+                for (GlusterBrickEntity brick : (ArrayList<GlusterBrickEntity>)result.getReturnValue().getActionReturnValue()) {
+                    EntityModel eModel = new EntityModel();
+                    eModel.setEntity(brick);
+                    list.add(eModel);
+                }
+                setItems(list);
+
+                initSelections();
+            }
+        });
+    }
+
+    public void initSelections(){
+        if(getItems() != null){
+            for (EntityModel entity : (ArrayList<EntityModel>)getItems()) {
+                GlusterBrickEntity brick = (GlusterBrickEntity)entity.getEntity();
+                for (String str : getCurBrickList()) {
+                    if(brick.getQualifiedName().equals(str)){
+                        entity.setIsSelected(true);
+                        entity.setIsChangable(false);
+                    }
+                }
+            }
+        }
+    }
+
+    public String getVolumeName() {
+        return volumeName;
+    }
+
+    public void setVolumeName(String volumeName) {
+        this.volumeName = volumeName;
+    }
+
 }

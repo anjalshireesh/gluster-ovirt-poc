@@ -70,6 +70,8 @@ import org.ovirt.engine.core.vdsbroker.vdsbroker.VDSNetworkException;
 import org.ovirt.engine.core.vdsbroker.xmlrpc.XmlRpcRunTimeException;
 import org.ovirt.engine.core.vdsbroker.xmlrpc.XmlRpcStruct;
 import org.ovirt.engine.core.vdsbroker.xmlrpc.XmlRpcUtils;
+import org.ovirt.engine.core.common.vdscommands.ConnectStoragePoolVDSCommandParameters;
+import org.ovirt.engine.core.common.vdscommands.DisconnectStoragePoolVDSCommandParameters;
 
 @Logged(errorLevel = LogLevel.ERROR)
 public abstract class IrsBrokerCommand<P extends IrsBaseVDSCommandParameters> extends BrokerCommandBase<P> {
@@ -723,34 +725,35 @@ public abstract class IrsBrokerCommand<P extends IrsBaseVDSCommandParameters> ex
                                         selectedVdsSpmId));
                     }
                 } else {
-
-            if (selectedVds != null) {
-                RefObject<VDS> tempRefObject2 = new RefObject<VDS>(selectedVds);
-                // RefObject<SpmStatusResult> tempRefObject3 = new RefObject<SpmStatusResult>(spmStatus);
-                returnValue = HandleSelectedVdsForSPM(storagePool, tempRefObject2, null, prevStatus);
-                selectedVds = tempRefObject2.argvalue;
-                // spmStatus = tempRefObject3.argvalue;
-            } else {
-                mCurrentVdsId = null;
+                    if (selectedVds != null) {
+                        RefObject<VDS> tempRefObject2 = new RefObject<VDS>(selectedVds);
+                        // RefObject<SpmStatusResult> tempRefObject3 = new RefObject<SpmStatusResult>(spmStatus);
+                        returnValue = HandleSelectedVdsForSPM(storagePool, tempRefObject2, null, prevStatus);
+                        selectedVds = tempRefObject2.argvalue;
+                        // spmStatus = tempRefObject3.argvalue;
+                    } else {
+                        mCurrentVdsId = null;
+                    }
+                    // if (performedPoolConnect && selectedVds == null) {
+                    // // if could not start spm on this host and connected to
+                    // // pool here
+                    // // then disconnect
+                    // ResourceManager.getInstance().runVdsCommand(
+                    // VDSCommandType.DisconnectStoragePool,
+                    // new DisconnectStoragePoolVDSCommandParameters(selectedVdsId, _storagePoolId,
+                    // selectedVdsSpmId));
+                    // }
+                    // } else {
+                    //
+                    // log.infoFormat("hostFromVds::selectedVds - {0}, spmStatus returned null!",
+                    // selectedVds.getvds_name());
+                    // if (returnValueFromVds.getExceptionObject() instanceof IRSNoMasterDomainException) {
+                    // throw returnValueFromVds.getExceptionObject();
+                    // }
+                    // }
+                    // }
+                }
             }
-            // if (performedPoolConnect && selectedVds == null) {
-            // // if could not start spm on this host and connected to
-            // // pool here
-            // // then disconnect
-            // ResourceManager.getInstance().runVdsCommand(
-            // VDSCommandType.DisconnectStoragePool,
-            // new DisconnectStoragePoolVDSCommandParameters(selectedVdsId, _storagePoolId,
-            // selectedVdsSpmId));
-            // }
-            // } else {
-            //
-            // log.infoFormat("hostFromVds::selectedVds - {0}, spmStatus returned null!",
-            // selectedVds.getvds_name());
-            // if (returnValueFromVds.getExceptionObject() instanceof IRSNoMasterDomainException) {
-            // throw returnValueFromVds.getExceptionObject();
-            // }
-            // }
-            // }
             return returnValue;
         }
 

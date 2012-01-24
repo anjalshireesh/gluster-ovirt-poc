@@ -216,7 +216,7 @@ public class VdsDAOTest extends BaseDAOTestCase {
         for (VDS vds : result) {
             assertEquals(existingVds.getstorage_pool_id(), vds.getstorage_pool_id());
         }
-	}
+    }
 
     /**
      * Ensures that the VDS instances are returned according to spm priority

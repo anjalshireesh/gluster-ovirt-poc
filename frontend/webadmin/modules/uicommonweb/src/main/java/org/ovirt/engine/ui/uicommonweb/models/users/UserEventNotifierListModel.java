@@ -1,6 +1,5 @@
 package org.ovirt.engine.ui.uicommonweb.models.users;
 
-import java.util.Collections;
 import java.util.MissingResourceException;
 
 import org.ovirt.engine.core.compat.*;
@@ -15,318 +14,311 @@ import org.ovirt.engine.ui.uicommonweb.models.*;
 import org.ovirt.engine.core.common.*;
 
 import org.ovirt.engine.ui.uicommonweb.models.common.*;
-import org.ovirt.engine.ui.uicompat.*;
-import org.ovirt.engine.core.common.*;
 import org.ovirt.engine.core.common.interfaces.*;
-import org.ovirt.engine.core.common.businessentities.*;
-
-import org.ovirt.engine.core.common.queries.*;
-import org.ovirt.engine.ui.uicommonweb.*;
-import org.ovirt.engine.ui.uicommonweb.models.*;
 
 @SuppressWarnings("unused")
 public class UserEventNotifierListModel extends SearchableListModel
 {
 
-	private UICommand privateManageEventsCommand;
-	public UICommand getManageEventsCommand()
-	{
-		return privateManageEventsCommand;
-	}
-	private void setManageEventsCommand(UICommand value)
-	{
-		privateManageEventsCommand = value;
-	}
+    private UICommand privateManageEventsCommand;
+    public UICommand getManageEventsCommand()
+    {
+        return privateManageEventsCommand;
+    }
+    private void setManageEventsCommand(UICommand value)
+    {
+        privateManageEventsCommand = value;
+    }
 
 
 
-	public DbUser getEntity()
-	{
-		return (DbUser)super.getEntity();
-	}
-	public void setEntity(DbUser value)
-	{
-		super.setEntity(value);
-	}
+    public DbUser getEntity()
+    {
+        return (DbUser)super.getEntity();
+    }
+    public void setEntity(DbUser value)
+    {
+        super.setEntity(value);
+    }
 
 
 
-	public UserEventNotifierListModel()
-	{
-		setTitle("Event Notifier");
+    public UserEventNotifierListModel()
+    {
+        setTitle("Event Notifier");
 
-		setManageEventsCommand(new UICommand("ManageEvents", this));
-	}
+        setManageEventsCommand(new UICommand("ManageEvents", this));
+    }
 
-	@Override
-	protected void OnEntityChanged()
-	{
-		super.OnEntityChanged();
-		getSearchCommand().Execute();
-	}
+    @Override
+    protected void OnEntityChanged()
+    {
+        super.OnEntityChanged();
+        getSearchCommand().Execute();
+    }
 
-	@Override
-	public void Search()
-	{
-		if (getEntity() != null)
-		{
-			super.Search();
-		}
-	}
+    @Override
+    public void Search()
+    {
+        if (getEntity() != null)
+        {
+            super.Search();
+        }
+    }
 
-	@Override
-	protected void SyncSearch()
-	{
-		if (getEntity() == null)
-		{
-			return;
-		}
+    @Override
+    protected void SyncSearch()
+    {
+        if (getEntity() == null)
+        {
+            return;
+        }
 
-		super.SyncSearch();
+        super.SyncSearch();
 
-		super.SyncSearch(VdcQueryType.GetEventSubscribersBySubscriberIdGrouped, new GetEventSubscribersBySubscriberIdParameters(getEntity().getuser_id()));
-	}
+        super.SyncSearch(VdcQueryType.GetEventSubscribersBySubscriberIdGrouped, new GetEventSubscribersBySubscriberIdParameters(getEntity().getuser_id()));
+    }
 
-	@Override
-	protected void AsyncSearch()
-	{
-		super.AsyncSearch();
+    @Override
+    protected void AsyncSearch()
+    {
+        super.AsyncSearch();
 
-		setAsyncResult(Frontend.RegisterQuery(VdcQueryType.GetEventSubscribersBySubscriberIdGrouped, new GetEventSubscribersBySubscriberIdParameters(getEntity().getuser_id())));
-		setItems(getAsyncResult().getData());
-	}
+        setAsyncResult(Frontend.RegisterQuery(VdcQueryType.GetEventSubscribersBySubscriberIdGrouped, new GetEventSubscribersBySubscriberIdParameters(getEntity().getuser_id())));
+        setItems(getAsyncResult().getData());
+    }
 
-	public void ManageEvents()
-	{
-		EventNotificationModel model = new EventNotificationModel();
-		setWindow(model);
+    public void ManageEvents()
+    {
+        EventNotificationModel model = new EventNotificationModel();
+        setWindow(model);
 
-		model.setTitle("Add Event Notification");
-		model.setHashName("add_event_notification");
+        model.setTitle("Add Event Notification");
+        model.setHashName("add_event_notification");
 
-		java.util.ArrayList<EventNotificationEntity> eventTypes = DataProvider.GetEventNotificationTypeList();
-		java.util.Map<EventNotificationEntity, java.util.HashSet<AuditLogType>> availableEvents = DataProvider.GetAvailableNotificationEvents();
+        java.util.ArrayList<EventNotificationEntity> eventTypes = DataProvider.GetEventNotificationTypeList();
+        java.util.Map<EventNotificationEntity, java.util.HashSet<AuditLogType>> availableEvents = DataProvider.GetAvailableNotificationEvents();
 
-		Translator eventNotificationEntityTranslator = EnumTranslator.Create(EventNotificationEntity.class);
-		Translator auditLogTypeTranslator = EnumTranslator.Create(AuditLogType.class);
+        Translator eventNotificationEntityTranslator = EnumTranslator.Create(EventNotificationEntity.class);
+        Translator auditLogTypeTranslator = EnumTranslator.Create(AuditLogType.class);
 
-		java.util.ArrayList<SelectionTreeNodeModel> list = new java.util.ArrayList<SelectionTreeNodeModel>();
+        java.util.ArrayList<SelectionTreeNodeModel> list = new java.util.ArrayList<SelectionTreeNodeModel>();
 
-		java.util.ArrayList<event_subscriber> items = getItems() == null ? new java.util.ArrayList<event_subscriber>() : Linq.<event_subscriber>Cast(getItems());
-		for (EventNotificationEntity eventType : eventTypes)
-		{
-			SelectionTreeNodeModel stnm = new SelectionTreeNodeModel();
-			if(eventType == EventNotificationEntity.Vm || eventType == EventNotificationEntity.Storage) {
-				continue;
-			}
-			
-			stnm.setTitle(eventType.toString());
-			stnm.setDescription(eventNotificationEntityTranslator.containsKey(eventType) ? eventNotificationEntityTranslator.get(eventType) : eventType.toString());
-			list.add(stnm);
+        java.util.ArrayList<event_subscriber> items = getItems() == null ? new java.util.ArrayList<event_subscriber>() : Linq.<event_subscriber>Cast(getItems());
+        for (EventNotificationEntity eventType : eventTypes)
+        {
+            SelectionTreeNodeModel stnm = new SelectionTreeNodeModel();
+            if(eventType == EventNotificationEntity.Vm || eventType == EventNotificationEntity.Storage) {
+                continue;
+            }
 
-			for (AuditLogType logtype : availableEvents.get(eventType))
-			{
-				SelectionTreeNodeModel eventGrp = new SelectionTreeNodeModel();
+            stnm.setTitle(eventType.toString());
+            stnm.setDescription(eventNotificationEntityTranslator.containsKey(eventType) ? eventNotificationEntityTranslator.get(eventType) : eventType.toString());
+            list.add(stnm);
 
-				String description;
-				try {
-					description = auditLogTypeTranslator.get(logtype);
-		        } catch (MissingResourceException e) {
-					description = logtype.toString();
-		        }
+            for (AuditLogType logtype : availableEvents.get(eventType))
+            {
+                SelectionTreeNodeModel eventGrp = new SelectionTreeNodeModel();
 
-				eventGrp.setTitle(logtype.toString());
-				eventGrp.setDescription(description);
-				eventGrp.setParent(list.get(list.size() - 1));
-				eventGrp.setIsSelectedNotificationPrevent(true);
-				eventGrp.setIsSelectedNullable(false);
-				for (event_subscriber es : items)
-				{
-					if (es.getevent_up_name().equals(logtype.toString()))
-					{
-						eventGrp.setIsSelectedNullable(true);
-						break;
-					}
-				}
+                String description;
+                try {
+                    description = auditLogTypeTranslator.get(logtype);
+                } catch (MissingResourceException e) {
+                    description = logtype.toString();
+                }
 
-				list.get(list.size() - 1).getChildren().add(eventGrp);
-				eventGrp.setIsSelectedNotificationPrevent(false);
-			}
-			if (list.get(list.size() - 1).getChildren().size() > 0)
-			{
-				list.get(list.size() - 1).getChildren().get(0).UpdateParentSelection();
-			}
-		}
+                eventGrp.setTitle(logtype.toString());
+                eventGrp.setDescription(description);
+                eventGrp.setParent(list.get(list.size() - 1));
+                eventGrp.setIsSelectedNotificationPrevent(true);
+                eventGrp.setIsSelectedNullable(false);
+                for (event_subscriber es : items)
+                {
+                    if (es.getevent_up_name().equals(logtype.toString()))
+                    {
+                        eventGrp.setIsSelectedNullable(true);
+                        break;
+                    }
+                }
 
-		model.setEventGroupModels(list);
-		if (!StringHelper.isNullOrEmpty(getEntity().getemail()))
-		{
-			model.getEmail().setEntity(getEntity().getemail());
-		}
-		else if (items.size() > 0)
-		{
-			model.getEmail().setEntity(items.get(0).getmethod_address());
-		}
+                list.get(list.size() - 1).getChildren().add(eventGrp);
+                eventGrp.setIsSelectedNotificationPrevent(false);
+            }
+            if (list.get(list.size() - 1).getChildren().size() > 0)
+            {
+                list.get(list.size() - 1).getChildren().get(0).UpdateParentSelection();
+            }
+        }
 
-		model.setOldEmail((String)model.getEmail().getEntity());
+        model.setEventGroupModels(list);
+        if (!StringHelper.isNullOrEmpty(getEntity().getemail()))
+        {
+            model.getEmail().setEntity(getEntity().getemail());
+        }
+        else if (items.size() > 0)
+        {
+            model.getEmail().setEntity(items.get(0).getmethod_address());
+        }
 
-		UICommand tempVar = new UICommand("OnSave", this);
-		tempVar.setTitle("OK");
-		tempVar.setIsDefault(true);
-		model.getCommands().add(tempVar);
-		UICommand tempVar2 = new UICommand("Cancel", this);
-		tempVar2.setTitle("Cancel");
-		tempVar2.setIsCancel(true);
-		model.getCommands().add(tempVar2);
-	}
+        model.setOldEmail((String)model.getEmail().getEntity());
 
-	public void OnSave()
-	{
-		EventNotificationModel model = (EventNotificationModel)getWindow();
+        UICommand tempVar = new UICommand("OnSave", this);
+        tempVar.setTitle("OK");
+        tempVar.setIsDefault(true);
+        model.getCommands().add(tempVar);
+        UICommand tempVar2 = new UICommand("Cancel", this);
+        tempVar2.setTitle("Cancel");
+        tempVar2.setIsCancel(true);
+        model.getCommands().add(tempVar2);
+    }
 
-		if (!model.Validate())
-		{
-			return;
-		}
+    public void OnSave()
+    {
+        EventNotificationModel model = (EventNotificationModel)getWindow();
 
-		java.util.ArrayList<VdcActionParametersBase> toAddList = new java.util.ArrayList<VdcActionParametersBase>();
-		java.util.ArrayList<VdcActionParametersBase> toRemoveList = new java.util.ArrayList<VdcActionParametersBase>();
+        if (!model.Validate())
+        {
+            return;
+        }
 
-		// var selected = model.EventGroupModels.SelectMany(a => a.Children).Where(a => a.IsSelected == true);
-		java.util.ArrayList<SelectionTreeNodeModel> selected = new java.util.ArrayList<SelectionTreeNodeModel>();
-		for (SelectionTreeNodeModel node : model.getEventGroupModels())
-		{
-			for (SelectionTreeNodeModel child : node.getChildren())
-			{
-				if (child.getIsSelectedNullable() != null && child.getIsSelectedNullable().equals(true))
-				{
-					selected.add(child);
-				}
-			}
-		}
+        java.util.ArrayList<VdcActionParametersBase> toAddList = new java.util.ArrayList<VdcActionParametersBase>();
+        java.util.ArrayList<VdcActionParametersBase> toRemoveList = new java.util.ArrayList<VdcActionParametersBase>();
 
-		java.util.ArrayList<event_subscriber> existing = getItems() != null ? Linq.<event_subscriber>Cast(getItems()) : new java.util.ArrayList<event_subscriber>();
-		java.util.ArrayList<SelectionTreeNodeModel> added = new java.util.ArrayList<SelectionTreeNodeModel>();
-		java.util.ArrayList<event_subscriber> removed = new java.util.ArrayList<event_subscriber>();
+        // var selected = model.EventGroupModels.SelectMany(a => a.Children).Where(a => a.IsSelected == true);
+        java.util.ArrayList<SelectionTreeNodeModel> selected = new java.util.ArrayList<SelectionTreeNodeModel>();
+        for (SelectionTreeNodeModel node : model.getEventGroupModels())
+        {
+            for (SelectionTreeNodeModel child : node.getChildren())
+            {
+                if (child.getIsSelectedNullable() != null && child.getIsSelectedNullable().equals(true))
+                {
+                    selected.add(child);
+                }
+            }
+        }
 
-		// check what has been added:
-		for (SelectionTreeNodeModel selectedEvent : selected)
-		{
-			boolean selectedInExisting = false;
-			for (event_subscriber existingEvent : existing)
-			{
-				if (selectedEvent.getTitle().equals(existingEvent.getevent_up_name()))
-				{
-					selectedInExisting = true;
-					break;
-				}
-			}
+        java.util.ArrayList<event_subscriber> existing = getItems() != null ? Linq.<event_subscriber>Cast(getItems()) : new java.util.ArrayList<event_subscriber>();
+        java.util.ArrayList<SelectionTreeNodeModel> added = new java.util.ArrayList<SelectionTreeNodeModel>();
+        java.util.ArrayList<event_subscriber> removed = new java.util.ArrayList<event_subscriber>();
 
-			if (!selectedInExisting)
-			{
-				added.add(selectedEvent);
-			}
-		}
+        // check what has been added:
+        for (SelectionTreeNodeModel selectedEvent : selected)
+        {
+            boolean selectedInExisting = false;
+            for (event_subscriber existingEvent : existing)
+            {
+                if (selectedEvent.getTitle().equals(existingEvent.getevent_up_name()))
+                {
+                    selectedInExisting = true;
+                    break;
+                }
+            }
 
-		// check what has been deleted:
-		for (event_subscriber existingEvent : existing)
-		{
-			boolean existingInSelected = false;
-			for (SelectionTreeNodeModel selectedEvent : selected)
-			{
-				if (selectedEvent.getTitle().equals(existingEvent.getevent_up_name()))
-				{
-					existingInSelected = true;
-					break;
-				}
-			}
+            if (!selectedInExisting)
+            {
+                added.add(selectedEvent);
+            }
+        }
 
-			if (!existingInSelected)
-			{
-				removed.add(existingEvent);
-			}
-		}
-		if (!StringHelper.isNullOrEmpty(model.getOldEmail()) && !model.getOldEmail().equals((String)model.getEmail().getEntity()))
-		{
-			for (event_subscriber a : existing)
-			{
-				toRemoveList.add(new EventSubscriptionParametesBase(new event_subscriber(a.getevent_up_name(), EventNotificationMethods.EMAIL.getValue(), a.getmethod_address(), a.getsubscriber_id(), ""), ""));
-			}
-			for (SelectionTreeNodeModel a : selected)
-			{
-				toAddList.add(new EventSubscriptionParametesBase(new event_subscriber(a.getTitle(), EventNotificationMethods.EMAIL.getValue(), (String)model.getEmail().getEntity(), getEntity().getuser_id(), ""), ""));
-			}
-		}
-		else
-		{
-			for (SelectionTreeNodeModel a : added)
-			{
-				toAddList.add(new EventSubscriptionParametesBase(new event_subscriber(a.getTitle(), EventNotificationMethods.EMAIL.getValue(), (String)model.getEmail().getEntity(), getEntity().getuser_id(), ""), ""));
-			}
+        // check what has been deleted:
+        for (event_subscriber existingEvent : existing)
+        {
+            boolean existingInSelected = false;
+            for (SelectionTreeNodeModel selectedEvent : selected)
+            {
+                if (selectedEvent.getTitle().equals(existingEvent.getevent_up_name()))
+                {
+                    existingInSelected = true;
+                    break;
+                }
+            }
 
-			for (event_subscriber a : removed)
-			{
-				toRemoveList.add(new EventSubscriptionParametesBase(new event_subscriber(a.getevent_up_name(), EventNotificationMethods.EMAIL.getValue(), a.getmethod_address(), a.getsubscriber_id(), ""), ""));
-			}
-		}
+            if (!existingInSelected)
+            {
+                removed.add(existingEvent);
+            }
+        }
+        if (!StringHelper.isNullOrEmpty(model.getOldEmail()) && !model.getOldEmail().equals((String)model.getEmail().getEntity()))
+        {
+            for (event_subscriber a : existing)
+            {
+                toRemoveList.add(new EventSubscriptionParametesBase(new event_subscriber(a.getevent_up_name(), EventNotificationMethods.EMAIL.getValue(), a.getmethod_address(), a.getsubscriber_id(), ""), ""));
+            }
+            for (SelectionTreeNodeModel a : selected)
+            {
+                toAddList.add(new EventSubscriptionParametesBase(new event_subscriber(a.getTitle(), EventNotificationMethods.EMAIL.getValue(), (String)model.getEmail().getEntity(), getEntity().getuser_id(), ""), ""));
+            }
+        }
+        else
+        {
+            for (SelectionTreeNodeModel a : added)
+            {
+                toAddList.add(new EventSubscriptionParametesBase(new event_subscriber(a.getTitle(), EventNotificationMethods.EMAIL.getValue(), (String)model.getEmail().getEntity(), getEntity().getuser_id(), ""), ""));
+            }
 
-		if (toRemoveList.size() > 0)
-		{
-			for (VdcActionParametersBase param : toRemoveList)
-			{
-				Frontend.RunAction(VdcActionType.RemoveEventSubscription, param);
-			}
-		}
+            for (event_subscriber a : removed)
+            {
+                toRemoveList.add(new EventSubscriptionParametesBase(new event_subscriber(a.getevent_up_name(), EventNotificationMethods.EMAIL.getValue(), a.getmethod_address(), a.getsubscriber_id(), ""), ""));
+            }
+        }
 
-		if (toAddList.size() > 0)
-		{
-			Frontend.RunMultipleAction(VdcActionType.AddEventSubscription, toAddList);
-		}
-		Cancel();
-	}
+        if (toRemoveList.size() > 0)
+        {
+            for (VdcActionParametersBase param : toRemoveList)
+            {
+                Frontend.RunAction(VdcActionType.RemoveEventSubscription, param);
+            }
+        }
 
-	public void Cancel()
-	{
-		setWindow(null);
-	}
+        if (toAddList.size() > 0)
+        {
+            Frontend.RunMultipleAction(VdcActionType.AddEventSubscription, toAddList);
+        }
+        Cancel();
+    }
 
-	@Override
-	protected void ItemsChanged()
-	{
-		super.ItemsChanged();
-		UpdateActionAvailability();
-	}
+    public void Cancel()
+    {
+        setWindow(null);
+    }
 
-	private void UpdateActionAvailability()
-	{
-		if (getEntity() == null || getEntity().getIsGroup() == true)
-		{
-			getManageEventsCommand().setIsExecutionAllowed(false);
-		}
-		else
-		{
-			getManageEventsCommand().setIsExecutionAllowed(true);
-		}
-	}
+    @Override
+    protected void ItemsChanged()
+    {
+        super.ItemsChanged();
+        UpdateActionAvailability();
+    }
 
-	@Override
-	public void ExecuteCommand(UICommand command)
-	{
-		super.ExecuteCommand(command);
+    private void UpdateActionAvailability()
+    {
+        if (getEntity() == null || getEntity().getIsGroup() == true)
+        {
+            getManageEventsCommand().setIsExecutionAllowed(false);
+        }
+        else
+        {
+            getManageEventsCommand().setIsExecutionAllowed(true);
+        }
+    }
 
-		if (command == getManageEventsCommand())
-		{
-			ManageEvents();
-		}
-		if (StringHelper.stringsEqual(command.getName(), "OnSave"))
-		{
-			OnSave();
-		}
-		if (StringHelper.stringsEqual(command.getName(), "Cancel"))
-		{
-			Cancel();
-		}
-	}
+    @Override
+    public void ExecuteCommand(UICommand command)
+    {
+        super.ExecuteCommand(command);
+
+        if (command == getManageEventsCommand())
+        {
+            ManageEvents();
+        }
+        if (StringHelper.stringsEqual(command.getName(), "OnSave"))
+        {
+            OnSave();
+        }
+        if (StringHelper.stringsEqual(command.getName(), "Cancel"))
+        {
+            Cancel();
+        }
+    }
 
     @Override
     protected String getListName() {
