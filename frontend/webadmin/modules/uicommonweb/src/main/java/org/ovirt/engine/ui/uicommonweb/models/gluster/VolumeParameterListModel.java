@@ -6,65 +6,65 @@ import org.ovirt.engine.ui.uicommonweb.models.SearchableListModel;
 
 public class VolumeParameterListModel extends SearchableListModel {
 
-	private UICommand addParameterCommand;
-	private UICommand removeParameterCommand;
-	
-	public UICommand getAddParameterCommand() {
-		return addParameterCommand;
-	}
-	
-	public void setAddParameterCommand(UICommand command) {
-		this.addParameterCommand = command;
-	}
-	
-	public void setRemoveParameterCommand(UICommand command) {
-		this.removeParameterCommand = command;
-	}
-	
-	public UICommand getRemoveParameterCommand() {
-		return removeParameterCommand;
-	}
-	
-	@Override
-	protected String getListName() {
-		// TODO Auto-generated method stub
-		return "VolumeParameterListModel";
-	}
+    private UICommand addParameterCommand;
+    private UICommand removeParameterCommand;
 
-	public VolumeParameterListModel()
-	{
-		setAddParameterCommand(new UICommand("Add", this));
-		setRemoveParameterCommand(new UICommand("Remove", this));
-	}
+    public UICommand getAddParameterCommand() {
+        return addParameterCommand;
+    }
 
-	private void addParameter() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	private void removeParameter() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	protected void OnEntityChanged() {
-		if(getEntity() == null) {
-			return;
-		}
-		super.OnEntityChanged();
-		GlusterVolumeEntity glusterVolumeEntity = (GlusterVolumeEntity)getEntity();
-		setItems(glusterVolumeEntity.getOptions().getOptions());
-	}
+    public void setAddParameterCommand(UICommand command) {
+        this.addParameterCommand = command;
+    }
 
-	@Override
-	public void ExecuteCommand(UICommand command) {
-		super.ExecuteCommand(command);
-		if(command.equals(getAddParameterCommand())){
-			addParameter();
-		}
-		else if(command.equals(getRemoveParameterCommand())){
-			removeParameter();
-		}
-	}
+    public void setRemoveParameterCommand(UICommand command) {
+        this.removeParameterCommand = command;
+    }
+
+    public UICommand getRemoveParameterCommand() {
+        return removeParameterCommand;
+    }
+
+    @Override
+    protected String getListName() {
+        // TODO Auto-generated method stub
+        return "VolumeParameterListModel";
+    }
+
+    public VolumeParameterListModel()
+    {
+        setAddParameterCommand(new UICommand("Add", this));
+        setRemoveParameterCommand(new UICommand("Remove", this));
+    }
+
+    private void addParameter() {
+        // TODO Auto-generated method stub
+
+    }
+
+    private void removeParameter() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void OnEntityChanged() {
+        if(getEntity() == null) {
+            return;
+        }
+        super.OnEntityChanged();
+        GlusterVolumeEntity glusterVolumeEntity = (GlusterVolumeEntity)getEntity();
+        setItems(glusterVolumeEntity.getOptions().getOptions());
+    }
+
+    @Override
+    public void ExecuteCommand(UICommand command) {
+        super.ExecuteCommand(command);
+        if(command.equals(getAddParameterCommand())){
+            addParameter();
+        }
+        else if(command.equals(getRemoveParameterCommand())){
+            removeParameter();
+        }
+    }
 }

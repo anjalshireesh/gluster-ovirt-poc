@@ -1,6 +1,5 @@
 package org.ovirt.engine.ui.uicommonweb.models;
 
-import java.util.Collections;
 import org.ovirt.engine.core.compat.*;
 import org.ovirt.engine.ui.uicompat.*;
 import org.ovirt.engine.core.common.businessentities.*;
@@ -9,11 +8,9 @@ import org.ovirt.engine.core.common.queries.*;
 import org.ovirt.engine.core.common.action.*;
 import org.ovirt.engine.ui.frontend.*;
 import org.ovirt.engine.ui.uicommonweb.*;
-import org.ovirt.engine.ui.uicommonweb.models.*;
 import org.ovirt.engine.core.common.*;
 
 
-import org.ovirt.engine.ui.uicompat.*;
 import org.ovirt.engine.ui.uicommonweb.models.autocomplete.*;
 import org.ovirt.engine.ui.uicommonweb.models.bookmarks.*;
 import org.ovirt.engine.ui.uicommonweb.models.clusters.*;
@@ -29,12 +26,10 @@ import org.ovirt.engine.ui.uicommonweb.models.tags.*;
 import org.ovirt.engine.ui.uicommonweb.models.templates.*;
 import org.ovirt.engine.ui.uicommonweb.models.users.*;
 import org.ovirt.engine.ui.uicommonweb.models.vms.*;
-import org.ovirt.engine.core.common.businessentities.*;
 
 import org.ovirt.engine.ui.uicommonweb.models.configure.roles_ui.*;
 import org.ovirt.engine.core.common.interfaces.*;
 import org.ovirt.engine.core.common.users.*;
-import org.ovirt.engine.ui.uicommonweb.*;
 
 import org.ovirt.engine.core.common.businessentities.AuditLog;
 import org.ovirt.engine.core.common.businessentities.StorageDomainType;
@@ -526,7 +521,7 @@ public class CommonModel extends ListModel
         hostList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Hosts || model.getType() == SystemTreeItemType.Host || model.getType() == SystemTreeItemType.Storage || model.getType() == SystemTreeItemType.System);
 
         storageList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Host || model.getType() == SystemTreeItemType.Storages || model.getType() == SystemTreeItemType.Storage || model.getType() == SystemTreeItemType.System);
-        
+
         volumeListModel.setIsAvailable(model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Volumes ? true : false);
 
 
@@ -747,10 +742,9 @@ public class CommonModel extends ListModel
         JUICOMMENT_END --- */
         eventList = new EventListModel();
         list.add(eventList);
-        
+
         volumeListModel = new VolumeListModel();
         list.add(volumeListModel);
-        
 
         setItems(list);
 
@@ -1125,7 +1119,7 @@ public class CommonModel extends ListModel
     public RoleListModel getRoleListModel() {
         return roleListModel;
     }
-    
+
     public SystemPermissionListModel getSystemPermissionListModel() {
         return systemPermissionListModel;
     }
