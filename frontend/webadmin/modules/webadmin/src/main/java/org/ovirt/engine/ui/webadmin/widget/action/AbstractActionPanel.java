@@ -36,7 +36,7 @@ import com.google.gwt.user.client.ui.Widget;
  * <ul>
  * <li>{@link #actionPanel} widget into which action button widgets will be rendered
  * </ul>
- * 
+ *
  * @param <T>
  *            Action panel item type.
  */
@@ -93,7 +93,7 @@ public abstract class AbstractActionPanel<T> extends Composite implements HasEle
 
         // Set button element ID for better accessibility
         newActionButton.asWidget().getElement().setId(
-                ElementIdUtils.createElementId(elementId, buttonDef.getTitle()));
+                ElementIdUtils.createElementId(elementId, buttonDef.getUniqueId()));
 
         // Add the button to the action panel
         if (!buttonDef.isAvailableOnlyFromContext()) {

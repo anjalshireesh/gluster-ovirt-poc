@@ -1,5 +1,6 @@
 package org.ovirt.engine.core.vdsbroker.proxy;
 
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -10,10 +11,9 @@ import org.ovirt.engine.core.common.vdscommands.VDSParametersBase;
 import org.ovirt.engine.core.common.vdscommands.VDSReturnValue;
 import org.ovirt.engine.core.vdsbroker.ResourceManager;
 
-//C# TO JAVA CONVERTER TODO TASK: Java annotations will not correspond to .NET attributes:
-//[ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]
 @Stateless(name = "VdsBroker")
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+@Local(IResourceManager.class)
 public class ResourceManagerProxy implements IResourceManager {
 
     @Override

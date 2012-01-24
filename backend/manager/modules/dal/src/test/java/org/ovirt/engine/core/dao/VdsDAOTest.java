@@ -16,6 +16,7 @@ import org.ovirt.engine.core.compat.NGuid;
 
 public class VdsDAOTest extends BaseDAOTestCase {
     private static final Guid EXISTING_VDS_ID = new Guid("afce7a39-8e8c-4819-ba9c-796d316592e7");
+
      private static final String IP_ADDRESS = "192.168.122.17";
     private VdsDAO dao;
     private VDS existingVds;
@@ -215,5 +216,15 @@ public class VdsDAOTest extends BaseDAOTestCase {
         for (VDS vds : result) {
             assertEquals(existingVds.getstorage_pool_id(), vds.getstorage_pool_id());
         }
+	}
+
+    /**
+     * Ensures that the VDS instances are returned according to spm priority
+     */
+    @Test
+    public void testGetListForSpmSelection() {
+        final Guid STORAGE_POOL_ID = new Guid("6d849ebf-755f-4552-ad09-9a090cda105d");
+        List<VDS> result = dao.getListForSpmSelection(STORAGE_POOL_ID);
+        assertTrue(result.get(0).getVdsSpmPriority() >= result.get(1).getVdsSpmPriority());
     }
 }

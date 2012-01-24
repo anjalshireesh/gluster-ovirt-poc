@@ -18,8 +18,6 @@ import org.ovirt.engine.core.dal.dbbroker.DbFacade;
  * Guid containerId - id of VmTemplate, contains ImageTemplate
  */
 
-// C# TO JAVA CONVERTER TODO TASK: Java annotations will not correspond to .NET
-// attributes:
 @InternalCommandAttribute
 public class CreateSnapshotFromTemplateCommand<T extends CreateSnapshotFromTemplateParameters> extends
         CreateSnapshotCommand<T> {
@@ -85,6 +83,7 @@ public class CreateSnapshotFromTemplateCommand<T extends CreateSnapshotFromTempl
     @Override
     protected void EndWithFailure() {
         if (getDestinationDiskImage() != null) {
+            DbFacade.getInstance().getDiskDao().remove(getDestinationDiskImage().getimage_group_id());
             if (DbFacade.getInstance().getDiskImageDynamicDAO().get(getDestinationDiskImage().getId()) != null) {
                 DbFacade.getInstance().getDiskImageDynamicDAO().remove(getDestinationDiskImage().getId());
             }

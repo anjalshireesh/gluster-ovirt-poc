@@ -2,7 +2,6 @@ package org.ovirt.engine.ui.webadmin.widget.table.column;
 
 import com.google.gwt.cell.client.AbstractSafeHtmlCell;
 import com.google.gwt.cell.client.Cell;
-import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -10,19 +9,20 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.text.shared.SimpleSafeHtmlRenderer;
 import com.google.gwt.user.client.DOM;
 
 /**
  * A {@link Cell} used to render text, providing a tooltip in case the text does not fit within the parent element.
- * 
- * @see TextCell
+ *
+ * @see com.google.gwt.cell.client.TextCell
  */
 public class TextCellWithTooltip extends AbstractSafeHtmlCell<String> {
 
     interface CellTemplate extends SafeHtmlTemplates {
         @Template("<div id=\"{0}\">{1}</div>")
-        SafeHtml textContainer(String id, String text);
+        SafeHtml textContainer(String id, SafeHtml text);
     }
 
     public static final int UNLIMITED_LENGTH = -1;
@@ -75,7 +75,8 @@ public class TextCellWithTooltip extends AbstractSafeHtmlCell<String> {
         }
 
         // Enforce tooltip when the presented text doesn't match original value
-        boolean forceTooltip = (value != null && !value.equals(getRenderedValue(value)));
+        SafeHtml safeValue = value != null ? SafeHtmlUtils.fromSafeConstant(value) : null;
+        boolean forceTooltip = (safeValue != null && !safeValue.equals(getRenderedValue(value)));
 
         // If the parent element content overflows its area, provide tooltip to the element
         if (forceTooltip || contentOverflows(parent)) {
@@ -100,7 +101,7 @@ public class TextCellWithTooltip extends AbstractSafeHtmlCell<String> {
     /**
      * Returns the text value to be rendered by this cell.
      */
-    String getRenderedValue(final String text) {
+    SafeHtml getRenderedValue(final String text) {
         String result = text;
 
         // Check if the text needs to be shortened
@@ -109,7 +110,7 @@ public class TextCellWithTooltip extends AbstractSafeHtmlCell<String> {
             result = result + TOO_LONG_TEXT_POSTFIX;
         }
 
-        return result;
+        return SafeHtmlUtils.fromSafeConstant(result);
     }
 
     /**

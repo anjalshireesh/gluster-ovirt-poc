@@ -1,24 +1,39 @@
 package org.ovirt.engine.ui.uicommonweb.models.datacenters;
-import java.util.Collections;
-import org.ovirt.engine.core.compat.*;
-import org.ovirt.engine.ui.uicompat.*;
-import org.ovirt.engine.core.common.businessentities.*;
-import org.ovirt.engine.core.common.vdscommands.*;
-import org.ovirt.engine.core.common.queries.*;
-import org.ovirt.engine.core.common.action.*;
-import org.ovirt.engine.ui.frontend.*;
-import org.ovirt.engine.ui.uicommonweb.*;
-import org.ovirt.engine.ui.uicommonweb.models.*;
-import org.ovirt.engine.core.common.*;
 
-import org.ovirt.engine.core.common.interfaces.*;
-import org.ovirt.engine.core.common.businessentities.*;
-
-import org.ovirt.engine.core.common.queries.*;
-import org.ovirt.engine.core.common.*;
-import org.ovirt.engine.ui.uicommonweb.dataprovider.*;
-import org.ovirt.engine.ui.uicommonweb.*;
-import org.ovirt.engine.ui.uicommonweb.models.*;
+import org.ovirt.engine.core.common.VdcActionUtils;
+import org.ovirt.engine.core.common.action.DetachStorageDomainFromPoolParameters;
+import org.ovirt.engine.core.common.action.RemoveStorageDomainParameters;
+import org.ovirt.engine.core.common.action.StorageDomainPoolParametersBase;
+import org.ovirt.engine.core.common.action.VdcActionParametersBase;
+import org.ovirt.engine.core.common.action.VdcActionType;
+import org.ovirt.engine.core.common.businessentities.StorageDomainSharedStatus;
+import org.ovirt.engine.core.common.businessentities.StorageDomainStatus;
+import org.ovirt.engine.core.common.businessentities.StorageDomainType;
+import org.ovirt.engine.core.common.businessentities.StorageFormatType;
+import org.ovirt.engine.core.common.businessentities.StorageType;
+import org.ovirt.engine.core.common.businessentities.VDS;
+import org.ovirt.engine.core.common.businessentities.storage_domains;
+import org.ovirt.engine.core.common.businessentities.storage_pool;
+import org.ovirt.engine.core.common.queries.StoragePoolQueryParametersBase;
+import org.ovirt.engine.core.common.queries.VdcQueryReturnValue;
+import org.ovirt.engine.core.common.queries.VdcQueryType;
+import org.ovirt.engine.core.compat.NotifyCollectionChangedEventArgs;
+import org.ovirt.engine.core.compat.PropertyChangedEventArgs;
+import org.ovirt.engine.core.compat.StringHelper;
+import org.ovirt.engine.core.compat.Version;
+import org.ovirt.engine.ui.frontend.AsyncQuery;
+import org.ovirt.engine.ui.frontend.Frontend;
+import org.ovirt.engine.ui.frontend.INewAsyncCallback;
+import org.ovirt.engine.ui.uicommonweb.Linq;
+import org.ovirt.engine.ui.uicommonweb.UICommand;
+import org.ovirt.engine.ui.uicommonweb.dataprovider.AsyncDataProvider;
+import org.ovirt.engine.ui.uicommonweb.models.ConfirmationModel;
+import org.ovirt.engine.ui.uicommonweb.models.EntityModel;
+import org.ovirt.engine.ui.uicommonweb.models.ListModel;
+import org.ovirt.engine.ui.uicommonweb.models.Model;
+import org.ovirt.engine.ui.uicommonweb.models.SearchableListModel;
+import org.ovirt.engine.ui.uicompat.FrontendMultipleActionAsyncResult;
+import org.ovirt.engine.ui.uicompat.IFrontendMultipleActionAsyncCallback;
 
 @SuppressWarnings("unused")
 public class DataCenterStorageListModel extends SearchableListModel
@@ -700,6 +715,7 @@ public class DataCenterStorageListModel extends SearchableListModel
 			Cancel();
 		}
 	}
+
     @Override
     protected String getListName() {
         return "DataCenterStorageListModel";

@@ -9,6 +9,7 @@ import org.ovirt.engine.core.compat.IEventListener;
 import org.ovirt.engine.ui.uicommonweb.models.EntityModel;
 import org.ovirt.engine.ui.uicommonweb.models.ListModel;
 import org.ovirt.engine.ui.webadmin.widget.HasEditorDriver;
+import org.ovirt.engine.ui.webadmin.widget.table.ElementIdCellTable;
 import org.ovirt.engine.ui.webadmin.widget.table.column.RadioboxCell;
 
 import com.google.gwt.cell.client.CheckboxCell;
@@ -18,6 +19,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.Header;
+import com.google.gwt.user.cellview.client.LoadingStateChangeEvent.LoadingState;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -27,10 +29,10 @@ import com.google.gwt.view.client.SingleSelectionModel;
 
 /**
  * A CellTable of a {@link ListModel} of {@link EntityModel}s
- * 
+ *
  * @param <M>
  */
-public class EntityModelCellTable<M extends ListModel> extends CellTable<EntityModel> implements HasEditorDriver<M> {
+public class EntityModelCellTable<M extends ListModel> extends ElementIdCellTable<EntityModel> implements HasEditorDriver<M> {
 
     /**
      * The ListModel
@@ -45,7 +47,7 @@ public class EntityModelCellTable<M extends ListModel> extends CellTable<EntityM
     private static final int DEFAULT_PAGESIZE = 1000;
     private static Resources DEFAULT_RESOURCES = GWT.create(CellTable.Resources.class);
     private static final int CHECK_COLUMN_WIDTH = 27;
-    
+
     /**
      * Create a new {@link EntityModelCellTable} with Single Selection
      */
@@ -55,7 +57,7 @@ public class EntityModelCellTable<M extends ListModel> extends CellTable<EntityM
 
     /**
      * Create a new {@link EntityModelCellTable} with Single Selection
-     * 
+     *
      * @param resources
      *            table's resources
      */
@@ -65,7 +67,7 @@ public class EntityModelCellTable<M extends ListModel> extends CellTable<EntityM
 
     /**
      * Create a new {@link EntityModelCellTable}
-     * 
+     *
      * @param multiSelection
      *            Whether to allow multi/single selection
      */
@@ -73,12 +75,16 @@ public class EntityModelCellTable<M extends ListModel> extends CellTable<EntityM
         this(multiSelection, (Resources) GWT.create(EntityModelCellTableResources.class));
     }
 
+    public EntityModelCellTable(boolean multiSelection, boolean hideCheckbox) {
+        this(multiSelection, (Resources) GWT.create(EntityModelCellTableResources.class), hideCheckbox);
+    }
+
     /**
      * Create a new {@link EntityModelCellTable}
-     * 
+     *
      * @param multiSelection
      *            Whether to allow multi/single selection
-     * 
+     *
      * @param resources
      *            table's resources
      */
@@ -159,7 +165,7 @@ public class EntityModelCellTable<M extends ListModel> extends CellTable<EntityM
 
     /**
      * Ad an EntityModelColumn to the Grid
-     * 
+     *
      * @param column
      * @param headerString
      */
@@ -193,6 +199,16 @@ public class EntityModelCellTable<M extends ListModel> extends CellTable<EntityM
     public void insertColumn(int beforeIndex, Column column, String headerString, String width) {
         super.insertColumn(beforeIndex, column, headerString);
         super.setColumnWidth(column, width);
+    }
+
+    public void setLoadingState(LoadingState state) {
+        super.onLoadingStateChanged(state);
+    }
+
+    @Override
+    public void insertColumn(int beforeIndex, Column col, Header header, Header footer) {
+        super.insertColumn(beforeIndex, col, header, footer);
+        configureElementId(col);
     }
 
     @SuppressWarnings("unchecked")

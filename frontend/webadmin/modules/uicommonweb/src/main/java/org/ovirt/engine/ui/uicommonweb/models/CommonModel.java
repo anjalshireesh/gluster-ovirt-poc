@@ -1,4 +1,5 @@
 package org.ovirt.engine.ui.uicommonweb.models;
+
 import java.util.Collections;
 import org.ovirt.engine.core.compat.*;
 import org.ovirt.engine.ui.uicompat.*;
@@ -39,335 +40,383 @@ import org.ovirt.engine.ui.uicommonweb.*;
 public class CommonModel extends ListModel
 {
 
-	public static EventDefinition SignedOutEventDefinition;
-	private Event privateSignedOutEvent;
-	public Event getSignedOutEvent()
-	{
-		return privateSignedOutEvent;
-	}
-	private void setSignedOutEvent(Event value)
-	{
-		privateSignedOutEvent = value;
-	}
+    public static EventDefinition SignedOutEventDefinition;
+    private Event privateSignedOutEvent;
 
+    public Event getSignedOutEvent()
+    {
+        return privateSignedOutEvent;
+    }
 
+    private void setSignedOutEvent(Event value)
+    {
+        privateSignedOutEvent = value;
+    }
 
-	private UICommand privateSearchCommand;
-	public UICommand getSearchCommand()
-	{
-		return privateSearchCommand;
-	}
-	private void setSearchCommand(UICommand value)
-	{
-		privateSearchCommand = value;
-	}
-	private UICommand privateConfigureCommand;
-	public UICommand getConfigureCommand()
-	{
-		return privateConfigureCommand;
-	}
-	private void setConfigureCommand(UICommand value)
-	{
-		privateConfigureCommand = value;
-	}
-	private UICommand privateAboutCommand;
-	public UICommand getAboutCommand()
-	{
-		return privateAboutCommand;
-	}
-	private void setAboutCommand(UICommand value)
-	{
-		privateAboutCommand = value;
-	}
-	private UICommand privateSignOutCommand;
-	public UICommand getSignOutCommand()
-	{
-		return privateSignOutCommand;
-	}
-	private void setSignOutCommand(UICommand value)
-	{
-		privateSignOutCommand = value;
-	}
-	private UICommand privateClearSearchStringCommand;
-	public UICommand getClearSearchStringCommand()
-	{
-		return privateClearSearchStringCommand;
-	}
-	private void setClearSearchStringCommand(UICommand value)
-	{
-		privateClearSearchStringCommand = value;
-	}
+    private UICommand privateSearchCommand;
 
+    public UICommand getSearchCommand()
+    {
+        return privateSearchCommand;
+    }
 
+    private void setSearchCommand(UICommand value)
+    {
+        privateSearchCommand = value;
+    }
 
-	public java.util.List<SearchableListModel> getItems()
-	{
-		return (java.util.List<SearchableListModel>)super.getItems();
-	}
-	public void setItems(java.util.List<SearchableListModel> value)
-	{
-		super.setItems(value);
-	}
+    private UICommand privateConfigureCommand;
 
-	public SearchableListModel getSelectedItem()
-	{
-		return (SearchableListModel)super.getSelectedItem();
-	}
-	public void setSelectedItem(SearchableListModel value)
-	{
-		super.setSelectedItem(value);
-	}
+    public UICommand getConfigureCommand()
+    {
+        return privateConfigureCommand;
+    }
 
+    private void setConfigureCommand(UICommand value)
+    {
+        privateConfigureCommand = value;
+    }
 
-	private BookmarkListModel privateBookmarkList;
-	public BookmarkListModel getBookmarkList()
-	{
-		return privateBookmarkList;
-	}
-	private void setBookmarkList(BookmarkListModel value)
-	{
-		privateBookmarkList = value;
-	}
-	private TagListModel privateTagList;
-	public TagListModel getTagList()
-	{
-		return privateTagList;
-	}
-	private void setTagList(TagListModel value)
-	{
-		privateTagList = value;
-	}
-	private SystemTreeModel privateSystemTree;
-	public SystemTreeModel getSystemTree()
-	{
-		return privateSystemTree;
-	}
-	private void setSystemTree(SystemTreeModel value)
-	{
-		privateSystemTree = value;
-	}
-	private SearchableListModel privateEventList;
-	public SearchableListModel getEventList()
-	{
-		return privateEventList;
-	}
-	private void setEventList(SearchableListModel value)
-	{
-		privateEventList = value;
-	}
-	private AlertListModel privateAlertList;
-	public AlertListModel getAlertList()
-	{
-		return privateAlertList;
-	}
-	private void setAlertList(AlertListModel value)
-	{
-		privateAlertList = value;
-	}
-	private SearchSuggestModel privateAutoCompleteModel;
-	public SearchSuggestModel getAutoCompleteModel()
-	{
-		return privateAutoCompleteModel;
-	}
-	private void setAutoCompleteModel(SearchSuggestModel value)
-	{
-		privateAutoCompleteModel = value;
-	}
+    private UICommand privateAboutCommand;
 
+    public UICommand getAboutCommand()
+    {
+        return privateAboutCommand;
+    }
 
-	private String searchStringPrefix;
-	public String getSearchStringPrefix()
-	{
-		return searchStringPrefix;
-	}
-	public void setSearchStringPrefix(String value)
-	{
-		if (!StringHelper.stringsEqual(searchStringPrefix, value))
-		{
-			searchStringPrefix = value;
-			SearchStringPrefixChanged();
-			OnPropertyChanged(new PropertyChangedEventArgs("SearchStringPrefix"));
-		}
-	}
+    private void setAboutCommand(UICommand value)
+    {
+        privateAboutCommand = value;
+    }
 
-	private boolean hasSearchStringPrefix;
-	public boolean getHasSearchStringPrefix()
-	{
-		return hasSearchStringPrefix;
-	}
-	private void setHasSearchStringPrefix(boolean value)
-	{
-		if (hasSearchStringPrefix != value)
-		{
-			hasSearchStringPrefix = value;
-			OnPropertyChanged(new PropertyChangedEventArgs("HasSearchStringPrefix"));
-		}
-	}
+    private UICommand privateSignOutCommand;
 
-	private String searchString;
-	public String getSearchString()
-	{
-		return searchString;
-	}
-	public void setSearchString(String value)
-	{
-		if (!StringHelper.stringsEqual(searchString, value))
-		{
-			searchString = value;
-			SearchStringChanged();
-			OnPropertyChanged(new PropertyChangedEventArgs("SearchString"));
-		}
-	}
+    public UICommand getSignOutCommand()
+    {
+        return privateSignOutCommand;
+    }
 
-	private VdcUser loggedInUser;
-	public VdcUser getLoggedInUser()
-	{
-		return loggedInUser;
-	}
-	public void setLoggedInUser(VdcUser value)
-	{
-		if (loggedInUser != value)
-		{
-			loggedInUser = value;
-			OnPropertyChanged(new PropertyChangedEventArgs("LoggedInUser"));
-		}
-	}
+    private void setSignOutCommand(UICommand value)
+    {
+        privateSignOutCommand = value;
+    }
 
-	private java.util.List<AuditLog> privateEvents;
-	public java.util.List<AuditLog> getEvents()
-	{
-		return privateEvents;
-	}
-	public void setEvents(java.util.List<AuditLog> value)
-	{
-		privateEvents = value;
-	}
+    private UICommand privateClearSearchStringCommand;
 
-	private AuditLog lastEvent;
-	public AuditLog getLastEvent()
-	{
-		return lastEvent;
-	}
-	public void setLastEvent(AuditLog value)
-	{
-		if (lastEvent != value)
-		{
-			lastEvent = value;
-			OnPropertyChanged(new PropertyChangedEventArgs("LastEvent"));
-		}
-	}
+    public UICommand getClearSearchStringCommand()
+    {
+        return privateClearSearchStringCommand;
+    }
 
-	private AuditLog lastAlert;
-	public AuditLog getLastAlert()
-	{
-		return lastAlert;
-	}
-	public void setLastAlert(AuditLog value)
-	{
-		if (lastAlert != value)
-		{
-			lastAlert = value;
-			OnPropertyChanged(new PropertyChangedEventArgs("LastAlert"));
-		}
-	}
+    private void setClearSearchStringCommand(UICommand value)
+    {
+        privateClearSearchStringCommand = value;
+    }
 
-	private boolean hasSelectedTags;
-	public boolean getHasSelectedTags()
-	{
-		return hasSelectedTags;
-	}
-	public void setHasSelectedTags(boolean value)
-	{
-		if (hasSelectedTags != value)
-		{
-			hasSelectedTags = value;
-			OnPropertyChanged(new PropertyChangedEventArgs("HasSelectedTags"));
-		}
-	}
+    @Override
+    public java.util.List<SearchableListModel> getItems()
+    {
+        return (java.util.List<SearchableListModel>) super.getItems();
+    }
 
+    public void setItems(java.util.List<SearchableListModel> value)
+    {
+        super.setItems(value);
+    }
 
-	static
-	{
-		SignedOutEventDefinition = new EventDefinition("SingedOut", CommonModel.class);
-	}
+    @Override
+    public SearchableListModel getSelectedItem()
+    {
+        return (SearchableListModel) super.getSelectedItem();
+    }
 
-	public CommonModel()
-	{
-		setSignedOutEvent(new Event(SignedOutEventDefinition));
+    public void setSelectedItem(SearchableListModel value)
+    {
+        super.setSelectedItem(value);
+    }
 
-		UICommand tempVar = new UICommand("Search", this);
-		tempVar.setIsDefault(true);
-		setSearchCommand(tempVar);
-		setAboutCommand(new UICommand("About", this));
-		setSignOutCommand(new UICommand("SignOut", this));
-		setConfigureCommand(new UICommand("Configure", this));
-		setClearSearchStringCommand(new UICommand("ClearSearchString", this));
+    private BookmarkListModel privateBookmarkList;
 
-		setAutoCompleteModel(new SearchSuggestModel());
+    public BookmarkListModel getBookmarkList()
+    {
+        return privateBookmarkList;
+    }
 
-		setBookmarkList(new BookmarkListModel());
-		getBookmarkList().getNavigatedEvent().addListener(this);
+    private void setBookmarkList(BookmarkListModel value)
+    {
+        privateBookmarkList = value;
+    }
 
-		setTagList(new TagListModel());
-		getTagList().getSelectedItemsChangedEvent().addListener(this);
+    private TagListModel privateTagList;
 
-		setSystemTree(new SystemTreeModel());
-		getSystemTree().getSelectedItemChangedEvent().addListener(this);
-		getSystemTree().getSearchCommand().Execute();
+    public TagListModel getTagList()
+    {
+        return privateTagList;
+    }
 
-		setEventList(new EventListModel());
-		getEventList().getSearchCommand().Execute();
+    private void setTagList(TagListModel value)
+    {
+        privateTagList = value;
+    }
 
-		setAlertList(new AlertListModel());
-		getAlertList().getSearchCommand().Execute();
+    private SystemTreeModel privateSystemTree;
 
-		InitItems();
+    public SystemTreeModel getSystemTree()
+    {
+        return privateSystemTree;
+    }
 
-		setLoggedInUser(Frontend.getLoggedInUser());
-	}
+    private void setSystemTree(SystemTreeModel value)
+    {
+        privateSystemTree = value;
+    }
 
-	private void UpdateHasSelectedTags()
-	{
-		java.util.ArrayList<TagModel> selectedTags = getTagList().getSelectedItems() != null ? Linq.<TagModel>Cast(getTagList().getSelectedItems()) : new java.util.ArrayList<TagModel>();
+    private SearchableListModel privateEventList;
 
-		setHasSelectedTags(getSelectedItem() != null && selectedTags.size() > 0);
-	}
+    public SearchableListModel getEventList()
+    {
+        return privateEventList;
+    }
 
-	private void TagListModel_SelectedItemsChanged(Object sender, EventArgs e)
-	{
-		//Reset system tree to the root item.
-		getSystemTree().getSelectedItemChangedEvent().removeListener(this);
-		getSystemTree().getResetCommand().Execute();
-		getSystemTree().getSelectedItemChangedEvent().addListener(this);
+    private void setEventList(SearchableListModel value)
+    {
+        privateEventList = value;
+    }
 
-		boolean hadSelectedTags = getHasSelectedTags();
-		UpdateHasSelectedTags();
+    private AlertListModel privateAlertList;
 
+    public AlertListModel getAlertList()
+    {
+        return privateAlertList;
+    }
 
-		dataCenterList.setIsAvailable(!getHasSelectedTags());
-		clusterList.setIsAvailable(!getHasSelectedTags());
-		hostList.setIsAvailable(true);
-		storageList.setIsAvailable(!getHasSelectedTags());
-		vmList.setIsAvailable(true);
+    private void setAlertList(AlertListModel value)
+    {
+        privateAlertList = value;
+    }
 
-		if (poolList != null)
-		{
-			poolList.setIsAvailable(!getHasSelectedTags());
-		}
+    private SearchSuggestModel privateAutoCompleteModel;
 
-		templateList.setIsAvailable(!getHasSelectedTags());
-		userList.setIsAvailable(true);
-		eventList.setIsAvailable(!getHasSelectedTags());
-		/* --- JUICOMMENT_BEGIN
-		monitor.setIsAvailable(!getHasSelectedTags());
-		JUICOMMENT_END --- */
+    public SearchSuggestModel getAutoCompleteModel()
+    {
+        return privateAutoCompleteModel;
+    }
 
-		//Switch the selected item as neccessary.
-		ListModel oldSelectedItem = getSelectedItem();
-		if (getHasSelectedTags() && oldSelectedItem != hostList && oldSelectedItem != vmList && oldSelectedItem != userList)
-		{
-			setSelectedItem(vmList);
-		}
+    private void setAutoCompleteModel(SearchSuggestModel value)
+    {
+        privateAutoCompleteModel = value;
+    }
+
+    private String searchStringPrefix;
+
+    public String getSearchStringPrefix()
+    {
+        return searchStringPrefix;
+    }
+
+    public void setSearchStringPrefix(String value)
+    {
+        if (!StringHelper.stringsEqual(searchStringPrefix, value))
+        {
+            searchStringPrefix = value;
+            SearchStringPrefixChanged();
+            OnPropertyChanged(new PropertyChangedEventArgs("SearchStringPrefix"));
+        }
+    }
+
+    private boolean hasSearchStringPrefix;
+
+    public boolean getHasSearchStringPrefix()
+    {
+        return hasSearchStringPrefix;
+    }
+
+    private void setHasSearchStringPrefix(boolean value)
+    {
+        if (hasSearchStringPrefix != value)
+        {
+            hasSearchStringPrefix = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("HasSearchStringPrefix"));
+        }
+    }
+
+    private String searchString;
+
+    public String getSearchString()
+    {
+        return searchString;
+    }
+
+    public void setSearchString(String value)
+    {
+        if (!StringHelper.stringsEqual(searchString, value))
+        {
+            searchString = value;
+            SearchStringChanged();
+            OnPropertyChanged(new PropertyChangedEventArgs("SearchString"));
+        }
+    }
+
+    private VdcUser loggedInUser;
+
+    public VdcUser getLoggedInUser()
+    {
+        return loggedInUser;
+    }
+
+    public void setLoggedInUser(VdcUser value)
+    {
+        if (loggedInUser != value)
+        {
+            loggedInUser = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("LoggedInUser"));
+        }
+    }
+
+    private java.util.List<AuditLog> privateEvents;
+
+    public java.util.List<AuditLog> getEvents()
+    {
+        return privateEvents;
+    }
+
+    public void setEvents(java.util.List<AuditLog> value)
+    {
+        privateEvents = value;
+    }
+
+    private AuditLog lastEvent;
+
+    public AuditLog getLastEvent()
+    {
+        return lastEvent;
+    }
+
+    public void setLastEvent(AuditLog value)
+    {
+        if (lastEvent != value)
+        {
+            lastEvent = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("LastEvent"));
+        }
+    }
+
+    private AuditLog lastAlert;
+
+    public AuditLog getLastAlert()
+    {
+        return lastAlert;
+    }
+
+    public void setLastAlert(AuditLog value)
+    {
+        if (lastAlert != value)
+        {
+            lastAlert = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("LastAlert"));
+        }
+    }
+
+    private boolean hasSelectedTags;
+
+    public boolean getHasSelectedTags()
+    {
+        return hasSelectedTags;
+    }
+
+    public void setHasSelectedTags(boolean value)
+    {
+        if (hasSelectedTags != value)
+        {
+            hasSelectedTags = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("HasSelectedTags"));
+        }
+    }
+
+    static
+    {
+        SignedOutEventDefinition = new EventDefinition("SingedOut", CommonModel.class);
+    }
+
+    public CommonModel()
+    {
+        setSignedOutEvent(new Event(SignedOutEventDefinition));
+
+        UICommand tempVar = new UICommand("Search", this);
+        tempVar.setIsDefault(true);
+        setSearchCommand(tempVar);
+        setAboutCommand(new UICommand("About", this));
+        setSignOutCommand(new UICommand("SignOut", this));
+        setConfigureCommand(new UICommand("Configure", this));
+        setClearSearchStringCommand(new UICommand("ClearSearchString", this));
+
+        setAutoCompleteModel(new SearchSuggestModel());
+
+        setBookmarkList(new BookmarkListModel());
+        getBookmarkList().getNavigatedEvent().addListener(this);
+
+        setTagList(new TagListModel());
+        getTagList().getSelectedItemsChangedEvent().addListener(this);
+
+        setSystemTree(new SystemTreeModel());
+        getSystemTree().getSelectedItemChangedEvent().addListener(this);
+        getSystemTree().getSearchCommand().Execute();
+
+        setEventList(new EventListModel());
+        getEventList().getSearchCommand().Execute();
+
+        setAlertList(new AlertListModel());
+        getAlertList().getSearchCommand().Execute();
+
+        InitItems();
+
+        setLoggedInUser(Frontend.getLoggedInUser());
+    }
+
+    private void UpdateHasSelectedTags()
+    {
+        java.util.ArrayList<TagModel> selectedTags =
+                getTagList().getSelectedItems() != null ? Linq.<TagModel> Cast(getTagList().getSelectedItems())
+                        : new java.util.ArrayList<TagModel>();
+
+        setHasSelectedTags(getSelectedItem() != null && selectedTags.size() > 0);
+    }
+
+    private void TagListModel_SelectedItemsChanged(Object sender, EventArgs e)
+    {
+        // Reset system tree to the root item.
+        getSystemTree().getSelectedItemChangedEvent().removeListener(this);
+        getSystemTree().getResetCommand().Execute();
+        getSystemTree().getSelectedItemChangedEvent().addListener(this);
+
+        boolean hadSelectedTags = getHasSelectedTags();
+        UpdateHasSelectedTags();
+
+        dataCenterList.setIsAvailable(!getHasSelectedTags());
+        clusterList.setIsAvailable(!getHasSelectedTags());
+        hostList.setIsAvailable(true);
+        storageList.setIsAvailable(!getHasSelectedTags());
+        vmList.setIsAvailable(true);
+
+        if (poolList != null)
+        {
+            poolList.setIsAvailable(!getHasSelectedTags());
+        }
+
+        templateList.setIsAvailable(!getHasSelectedTags());
+        userList.setIsAvailable(true);
+        eventList.setIsAvailable(!getHasSelectedTags());
+        /*
+         * --- JUICOMMENT_BEGIN monitor.setIsAvailable(!getHasSelectedTags()); JUICOMMENT_END ---
+         */
+
+        // Switch the selected item as neccessary.
+        ListModel oldSelectedItem = getSelectedItem();
+        if (getHasSelectedTags() && oldSelectedItem != hostList && oldSelectedItem != vmList
+                && oldSelectedItem != userList)
+        {
+            setSelectedItem(vmList);
+        }
         // Update search string only when selecting or de-selecting tags
 		else if (getHasSelectedTags() || hadSelectedTags)
 		{
@@ -1042,3 +1091,4 @@ public class CommonModel extends ListModel
 		return systemPermissionListModel;
 	}
 }
+

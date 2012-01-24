@@ -608,40 +608,6 @@
         </row>
     </table>
 
-    <table name="vm_templates">
-        <column>vmt_guid</column>
-        <column>name</column>
-        <column>mem_size_mb</column>
-        <column>os</column>
-        <column>creation_date</column>
-        <column>child_Count</column>
-        <column>num_of_sockets</column>
-        <column>cpu_per_socket</column>
-        <column>description</column>
-        <column>vds_group_id</column>
-        <column>domain</column>
-        <column>num_of_monitors</column>
-        <column>status</column>
-        <column>usb_policy</column>
-        <column>time_zone</column>
-        <column>is_auto_suspend</column>
-        <column>fail_back</column>
-        <column>vm_type</column>
-        <column>hypervisor_type</column>
-        <column>operation_mode</column>
-        <column>nice_level</column>
-        <column>default_boot_sequence</column>
-        <column>default_display_type</column>
-        <column>priority</column>
-        <column>auto_startup</column>
-        <column>is_stateless</column>
-        <column>iso_path</column>
-        <column>initrd_url</column>
-        <column>kernel_url</column>
-        <column>kernel_params</column>
-        <column>origin</column>
-    </table>
-
     <table name="vds_static">
         <column>vds_id</column>
         <column>vds_name</column>
@@ -661,6 +627,7 @@
         <column>pm_enabled</column>
         <column>_create_date</column>
         <column>_update_date</column>
+        <column>vds_spm_priority</column>
         <row>
             <value>afce7a39-8e8c-4819-ba9c-796d316592e6</value>
             <value>magenta-vdsc</value>
@@ -680,6 +647,7 @@
             <value>0</value>
             <value>2010-11-17 17:25:39</value>
             <value>2010-12-01 09:52:57</value>
+            <value>8</value>
             <value>21</value>
         </row>
         <row>
@@ -701,6 +669,7 @@
             <value>0</value>
             <value>2010-11-17 17:25:39</value>
             <value>2010-12-01 09:52:57</value>
+            <value>6</value>
             <value>21</value>
         </row>
     </table>
@@ -1710,7 +1679,6 @@
 
     <table name="disks">
         <column>disk_id</column>
-        <column>status</column>
         <column>internal_drive_mapping</column>
         <column>active_image_id</column>
         <column>disk_type</column>
@@ -1719,7 +1687,6 @@
         <column>propagate_errors</column>
         <row>
             <value>1b26a52b-b60f-44cb-9f46-3ef333b04a34</value>
-            <value>OK</value>
             <value>2</value>
             <value>c9a559d9-8666-40d1-9967-759502b19f0b</value>
             <value>System</value>
@@ -2274,12 +2241,6 @@
             <value>103cfd1d-18b1-4790-8a0c-1e52621b0076</value>
             <value>77296e00-0cad-4e5a-9299-008a7b6f4354</value>
         </row>
-    </table>
-
-    <table name="vm_template_image_map">
-        <column>it_guid</column>
-        <column>vmt_guid</column>
-        <column>internal_drive_mapping</column>
     </table>
 
     <table name="stateless_vm_image_map">

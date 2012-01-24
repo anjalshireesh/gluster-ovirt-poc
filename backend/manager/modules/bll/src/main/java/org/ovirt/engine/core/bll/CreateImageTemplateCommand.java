@@ -89,6 +89,7 @@ public class CreateImageTemplateCommand<T extends CreateImageTemplateParameters>
                 newImage.getactual_size(), newImage.getdescription(), null);
         DbFacade.getInstance().getDiskImageTemplateDAO().save(dt);
         DbFacade.getInstance().getDiskImageDAO().save(newImage);
+        DbFacade.getInstance().getDiskDao().save(newImage.getDisk());
 
         DiskImageDynamic diskDynamic = new DiskImageDynamic();
         diskDynamic.setId(newImage.getId());
@@ -139,6 +140,7 @@ public class CreateImageTemplateCommand<T extends CreateImageTemplateParameters>
         DbFacade.getInstance().getDiskImageTemplateDAO().remove(getDestinationImageId());
         DbFacade.getInstance().getDiskImageDAO().remove(getDestinationImageId());
         if (getDestinationDiskImage() != null) {
+            DbFacade.getInstance().getDiskDao().remove(getDestinationDiskImage().getimage_group_id());
             if (DbFacade.getInstance().getDiskImageDynamicDAO().get(getDestinationDiskImage().getId()) != null) {
                 DbFacade.getInstance().getDiskImageDynamicDAO().remove(getDestinationDiskImage().getId());
             }

@@ -14,6 +14,7 @@ import org.ovirt.engine.ui.webadmin.gin.ClientGinjectorProvider;
 import org.ovirt.engine.ui.webadmin.place.ApplicationPlaces;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.AbstractSubTabPresenter;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.tab.HostSelectionChangeEvent;
+import org.ovirt.engine.ui.webadmin.uicommon.model.CommonModelChangeEvent;
 import org.ovirt.engine.ui.webadmin.uicommon.model.DetailModelProvider;
 import org.ovirt.engine.ui.webadmin.widget.tab.ModelBoundTabData;
 
@@ -62,6 +63,7 @@ public class SubTabHostGeneralPresenter extends AbstractSubTabPresenter<VDS, Hos
 
     // We need this to get the text of the alert messages:
     private ApplicationMessages messages;
+    private ViewDef view;
 
     @TabInfo(container = HostSubTabPanelPresenter.class)
     static TabData getTabData(ClientGinjector ginjector) {
@@ -79,28 +81,33 @@ public class SubTabHostGeneralPresenter extends AbstractSubTabPresenter<VDS, Hos
     {
         // Call the parent constructor:
         super(eventBus, view, proxy, placeManager, modelProvider);
+        this.view = view;
 
         // Inject a reference to the messages:
         messages = ClientGinjectorProvider.instance().getApplicationMessages();
+    }
+
+    public void onCommonModelChange(CommonModelChangeEvent event) {
+        super.onCommonModelChange(event);
 
         // Initialize the list of alerts:
-        final HostGeneralModel model = modelProvider.getModel();
+        final HostGeneralModel model = getModelProvider().getModel();
         updateAlerts(view, model);
 
         // Listen for changes in the properties of the model in order
         // to update the alerts panel:
         model.getPropertyChangedEvent().addListener(
-            new IEventListener() {
-                public void eventRaised(Event ev, Object sender, EventArgs args) {
-                    if (args instanceof PropertyChangedEventArgs) {
-                        PropertyChangedEventArgs changedArgs = (PropertyChangedEventArgs) args;
-                        if (changedArgs.PropertyName.contains("Alert")) {
-                            updateAlerts(view, model);
+                new IEventListener() {
+                    public void eventRaised(Event ev, Object sender, EventArgs args) {
+                        if (args instanceof PropertyChangedEventArgs) {
+                            PropertyChangedEventArgs changedArgs = (PropertyChangedEventArgs) args;
+                            if (changedArgs.PropertyName.contains("Alert")) {
+                                updateAlerts(view, model);
+                            }
                         }
                     }
                 }
-            }
-        );
+                );
     }
 
     /**
@@ -190,13 +197,13 @@ public class SubTabHostGeneralPresenter extends AbstractSubTabPresenter<VDS, Hos
         // Add a listener to the anchor so that the command is executed when
         // it is clicked:
         betweenAnchor.addClickHandler(
-            new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    command.Execute();
+                new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        command.Execute();
+                    }
                 }
-            }
-        );
+                );
 
         // Create the label for the text after the tag:
         final Label afterLabel = new Label(afterText);

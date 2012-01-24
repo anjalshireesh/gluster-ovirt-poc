@@ -2,6 +2,7 @@ package org.ovirt.engine.core.common.businessentities;
 
 import java.io.Serializable;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -16,29 +17,24 @@ import org.ovirt.engine.core.common.validation.group.UpdateEntity;
 public class DiskImageBase extends IVdcQueryable implements Serializable {
 
     private static final long serialVersionUID = 4913899921353163969L;
+
+    @NotNull(message = "VALIDATION.VOLUME_TYPE.NOT_NULL", groups = { CreateEntity.class, UpdateEntity.class })
     private VolumeType volumeType = VolumeType.Sparse;
-    private String internalDriveMapping;
-    private PropagateErrors propagateErrors = PropagateErrors.Off;
     private boolean boot;
-    private boolean wipeAfterDelete;
+
+    @Valid
+    private Disk disk = new Disk();
 
     @NotNull(message = "VALIDATION.VOLUME_FORMAT.NOT_NULL", groups = { CreateEntity.class, UpdateEntity.class })
     private VolumeFormat volumeFormat;
 
-    @NotNull(message = "VALIDATION.DISK_TYPE.NOT_NULL", groups = { CreateEntity.class, UpdateEntity.class })
-    private DiskType mdisk_type;
-
-    @NotNull(message = "VALIDATION.DISK_INTERFACE.NOT_NULL", groups = { CreateEntity.class, UpdateEntity.class })
-    private DiskInterface diskInterface;
 
 
     public DiskImageBase() {
         size = 0;
         volumeType = VolumeType.Sparse;
-        propagateErrors = PropagateErrors.Off;
     }
 
-    @NotNull(message = "VALIDATION.VOLUME_TYPE.NOT_NULL", groups = { CreateEntity.class, UpdateEntity.class })
     @XmlElement
     public VolumeType getvolume_type() {
         return volumeType;
@@ -57,13 +53,12 @@ public class DiskImageBase extends IVdcQueryable implements Serializable {
         volumeFormat = value;
     }
 
-    @XmlElement
     public DiskType getdisk_type() {
-        return mdisk_type;
+        return disk.getDiskType();
     }
 
     public void setdisk_type(DiskType value) {
-        mdisk_type = value;
+        disk.setDiskType(value);
     }
 
     private long size = 0L;
@@ -77,13 +72,12 @@ public class DiskImageBase extends IVdcQueryable implements Serializable {
         this.size = value;
     }
 
-    @XmlElement
     public String getinternal_drive_mapping() {
-        return this.internalDriveMapping;
+        return Integer.toString(disk.getInternalDriveMapping());
     }
 
     public void setinternal_drive_mapping(String value) {
-        this.internalDriveMapping = value;
+        disk.setInternalDriveMapping(Integer.parseInt(value));
     }
 
     /**
@@ -98,13 +92,12 @@ public class DiskImageBase extends IVdcQueryable implements Serializable {
         setsize(value * (1024 * 1024 * 1024));
     }
 
-    @XmlElement
     public DiskInterface getdisk_interface() {
-        return diskInterface;
+        return disk.getDiskInterface();
     }
 
     public void setdisk_interface(DiskInterface value) {
-        diskInterface = value;
+        disk.setDiskInterface(value);
     }
 
     @XmlElement
@@ -116,22 +109,27 @@ public class DiskImageBase extends IVdcQueryable implements Serializable {
         boot = value;
     }
 
-    @XmlElement
     public boolean getwipe_after_delete() {
-        return wipeAfterDelete;
+        return disk.isWipeAfterDelete();
     }
 
     public void setwipe_after_delete(boolean value) {
-        wipeAfterDelete = value;
+        disk.setWipeAfterDelete(value);
     }
 
-    @XmlElement
     public PropagateErrors getpropagate_errors() {
-        return propagateErrors;
+        return disk.getPropagateErrors();
     }
 
     public void setpropagate_errors(PropagateErrors value) {
-        propagateErrors = value;
+        disk.setPropagateErrors(value);
     }
 
+    public Disk getDisk() {
+        return disk;
+    }
+
+    public void setDisk(Disk disk) {
+        this.disk = disk;
+    }
 }

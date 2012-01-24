@@ -1,25 +1,30 @@
 package org.ovirt.engine.ui.uicommonweb.models;
-import java.util.Collections;
-import org.ovirt.engine.core.compat.*;
-import org.ovirt.engine.ui.uicompat.*;
-import org.ovirt.engine.core.common.businessentities.*;
-import org.ovirt.engine.core.common.vdscommands.*;
-import org.ovirt.engine.core.common.queries.*;
-import org.ovirt.engine.core.common.action.*;
-import org.ovirt.engine.ui.frontend.*;
-import org.ovirt.engine.ui.uicommonweb.*;
-import org.ovirt.engine.ui.uicommonweb.models.*;
-import org.ovirt.engine.core.common.*;
 
-import org.ovirt.engine.ui.uicompat.*;
-import org.ovirt.engine.core.common.businessentities.*;
-
-import org.ovirt.engine.ui.uicommonweb.dataprovider.*;
-import org.ovirt.engine.ui.uicommonweb.*;
+import org.ovirt.engine.core.common.businessentities.VDS;
+import org.ovirt.engine.core.common.businessentities.VDSGroup;
+import org.ovirt.engine.core.common.businessentities.storage_domains;
+import org.ovirt.engine.core.common.businessentities.storage_pool;
+import org.ovirt.engine.core.common.queries.StoragePoolQueryParametersBase;
+import org.ovirt.engine.core.common.queries.VdcQueryParametersBase;
+import org.ovirt.engine.core.common.queries.VdcQueryReturnValue;
+import org.ovirt.engine.core.common.queries.VdcQueryType;
+import org.ovirt.engine.core.compat.Event;
+import org.ovirt.engine.core.compat.EventArgs;
+import org.ovirt.engine.core.compat.EventDefinition;
+import org.ovirt.engine.core.compat.Guid;
+import org.ovirt.engine.core.compat.PropertyChangedEventArgs;
+import org.ovirt.engine.ui.frontend.AsyncQuery;
+import org.ovirt.engine.ui.frontend.Frontend;
+import org.ovirt.engine.ui.frontend.INewAsyncCallback;
+import org.ovirt.engine.ui.uicommonweb.UICommand;
+import org.ovirt.engine.ui.uicommonweb.dataprovider.AsyncDataProvider;
+import org.ovirt.engine.ui.uicompat.FrontendMultipleQueryAsyncResult;
+import org.ovirt.engine.ui.uicompat.IFrontendMultipleQueryAsyncCallback;
 
 @SuppressWarnings("unused")
 public class SystemTreeModel extends SearchableListModel implements IFrontendMultipleQueryAsyncCallback
 {
+
 
 	public static EventDefinition ResetRequestedEventDefinition;
 	private Event privateResetRequestedEvent;
@@ -357,6 +362,7 @@ public class SystemTreeModel extends SearchableListModel implements IFrontendMul
 		}
 		setItems(new java.util.ArrayList<SystemTreeItemModel>(java.util.Arrays.asList(new SystemTreeItemModel[] { systemItem })));
 	}
+
     @Override
     protected String getListName() {
         return "SystemTreeModel";

@@ -158,7 +158,7 @@ public abstract class CommandBase<T extends VdcActionParametersBase> extends Aud
     /**
      * @param compensationContext the compensationContext to set
      */
-    protected void setCompensationContext(CompensationContext compensationContext) {
+    public void setCompensationContext(CompensationContext compensationContext) {
         this.compensationContext = compensationContext;
     }
 
@@ -202,13 +202,17 @@ public abstract class CommandBase<T extends VdcActionParametersBase> extends Aud
         String tempVar = getDescription();
         getReturnValue().setDescription((tempVar != null) ? tempVar : getReturnValue().getDescription());
         setActionMessageParameters();
-        if (acquireLock() && (getReturnValue().getCanDoAction() || InternalCanDoAction())) {
-            getReturnValue().setCanDoAction(true);
-            getReturnValue().setIsSyncronious(true);
-            getParameters().setTaskStartTime(System.currentTimeMillis());
-            Execute();
-        } else {
-            getReturnValue().setCanDoAction(false);
+        try {
+            if (acquireLock() && (getReturnValue().getCanDoAction() || InternalCanDoAction())) {
+                getReturnValue().setCanDoAction(true);
+                getReturnValue().setIsSyncronious(true);
+                getParameters().setTaskStartTime(System.currentTimeMillis());
+                Execute();
+            } else {
+                getReturnValue().setCanDoAction(false);
+            }
+        } finally {
+            freeLock();
         }
         return getReturnValue();
     }

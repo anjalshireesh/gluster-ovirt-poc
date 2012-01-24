@@ -682,7 +682,7 @@ public interface ApplicationConstants extends Constants {
 
     @DefaultStringValue("Collapse All")
     String treeCollapseAll();
-    
+
     @DefaultStringValue("Mail Recipient:")
     String manageEventsPopupEmailLabel();
 
@@ -690,17 +690,41 @@ public interface ApplicationConstants extends Constants {
     String manageEventsPopupTitleLabel();
 
     @DefaultStringValue("Summary")
-	String volumeGeneralSubTabLabel();
+    String volumeGeneralSubTabLabel();
 
     @DefaultStringValue("Volume Options")
-	String volumeParameterSubTabLabel();
+    String volumeParameterSubTabLabel();
 
     @DefaultStringValue("Bricks")
-	String volumeBrickSubTabLabel();
+    String volumeBrickSubTabLabel();
 
     @DefaultStringValue("Permissions")
-	String volumePermissionSubTabLabel();
+    String volumePermissionSubTabLabel();
 
     @DefaultStringValue("Events")
-	String volumeEventSubTabLabel();
+    String volumeEventSubTabLabel();
+
+    @DefaultStringValue("Required actions:")
+    String guidePopupRequiredActionsLabel();
+
+    @DefaultStringValue("Optional actions:")
+    String guidePopupOptionalActionsLabel();
+
+    @DefaultStringValue("There are still unconfigured entities:")
+    String guidePopupUnconfiguredLabel();
+
+    @DefaultStringValue("Configuration completed.")
+    String guidePopupConfigurationCompletedLabel();
+
+    @DefaultStringValue("Data Center created.")
+    String guidePopupDataCenterCreatedLabel();
+
+    @DefaultStringValue("Cluster created.")
+    String guidePopupClusterCreatedLabel();
+
+    @DefaultStringValue("Virtual Machine created.")
+    String guidePopupVMCreatedLabel();
+
+    @DefaultStringValue("Cluster:")
+    String moveHostPopupClusterLabel();
 }

@@ -22,6 +22,7 @@ import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.cluster.Cluster
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.cluster.ClusterNewNetworkPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.cluster.ClusterPolicyPopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.cluster.ClusterPopupPresenterWidget;
+import org.ovirt.engine.ui.webadmin.section.main.presenter.popup.guide.GuidePopupPresenterWidget;
 import org.ovirt.engine.ui.webadmin.uicommon.model.DetailModelProvider;
 import org.ovirt.engine.ui.webadmin.uicommon.model.DetailTabModelProvider;
 import org.ovirt.engine.ui.webadmin.uicommon.model.MainModelProvider;
@@ -42,6 +43,7 @@ public class ClusterModule extends AbstractGinModule {
     @Singleton
     public MainModelProvider<VDSGroup, ClusterListModel> getClusterListProvider(ClientGinjector ginjector,
             final Provider<ClusterPopupPresenterWidget> popupProvider,
+            final Provider<GuidePopupPresenterWidget> guidePopupProvider,
             final Provider<RemoveConfirmationPopupPresenterWidget> removeConfirmPopupProvider) {
         return new MainTabModelProvider<VDSGroup, ClusterListModel>(ginjector, ClusterListModel.class) {
             @Override
@@ -49,6 +51,8 @@ public class ClusterModule extends AbstractGinModule {
                 if (lastExecutedCommand == getModel().getNewCommand()
                         || lastExecutedCommand == getModel().getEditCommand()) {
                     return popupProvider.get();
+                } else if (lastExecutedCommand == getModel().getGuideCommand()) {
+                    return guidePopupProvider.get();
                 } else {
                     return super.getModelPopup(lastExecutedCommand);
                 }
@@ -99,8 +103,8 @@ public class ClusterModule extends AbstractGinModule {
     @Provides
     @Singleton
     public SearchableDetailModelProvider<network, ClusterListModel, ClusterNetworkListModel> getClusterNetworkListProvider(ClientGinjector ginjector,
-    		final Provider<ClusterNewNetworkPopupPresenterWidget> popupProvider,
-    		final Provider<ClusterManageNetworkPopupPresenterWidget> managePopupProvider) {
+            final Provider<ClusterNewNetworkPopupPresenterWidget> popupProvider,
+            final Provider<ClusterManageNetworkPopupPresenterWidget> managePopupProvider) {
         return new SearchableDetailTabModelProvider<network, ClusterListModel, ClusterNetworkListModel>(ginjector,
                 ClusterListModel.class,
                 ClusterNetworkListModel.class) {
@@ -108,7 +112,7 @@ public class ClusterModule extends AbstractGinModule {
             protected AbstractModelBoundPopupPresenterWidget<? extends Model, ?> getModelPopup(UICommand lastExecutedCommand) {
                 if (lastExecutedCommand == getModel().getNewNetworkCommand()) {
                     return popupProvider.get();
-                }else if (lastExecutedCommand == getModel().getManageCommand()) {
+                } else if (lastExecutedCommand == getModel().getManageCommand()) {
                     return managePopupProvider.get();
                 }
                 else {

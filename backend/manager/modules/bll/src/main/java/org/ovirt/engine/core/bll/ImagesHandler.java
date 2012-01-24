@@ -24,9 +24,6 @@ import org.ovirt.engine.core.compat.backendcompat.Path;
 import org.ovirt.engine.core.dal.VdcBllMessages;
 import org.ovirt.engine.core.dal.dbbroker.DbFacade;
 
-//VB & C# TO JAVA CONVERTER NOTE: There is no Java equivalent to C# namespace aliases:
-//using Timer = System.Timers.Timer;
-
 public final class ImagesHandler {
     public static final Guid BlankImageTemplateId = new Guid("00000000-0000-0000-0000-000000000000");
     public static final String DefaultDriveName = "1";
@@ -121,8 +118,7 @@ public final class ImagesHandler {
         for (DiskImage image : images) {
             DiskImage fromIrs;
             try {
-                Guid storageDomainId = !domainId.equals(Guid.Empty) ? domainId : image.getstorage_id() != null ? image
-                        .getstorage_id().getValue() : Guid.Empty;
+                Guid storageDomainId = image.getstorage_id() != null ? image.getstorage_id().getValue() : domainId;
                 Guid imageGroupId = image.getimage_group_id() != null ? image.getimage_group_id().getValue()
                         : Guid.Empty;
                 fromIrs = (DiskImage) Backend

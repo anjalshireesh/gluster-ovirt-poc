@@ -188,8 +188,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.ejb</groupId>
-			<artifactId>ejb-api</artifactId>
+            <groupId>org.jboss.spec.javax.ejb</groupId>
+            <artifactId>jboss-ejb-api_3.1_spec</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
@@ -286,6 +286,9 @@
 				</configuration> </plugin> <plugin> <artifactId>maven-compiler-plugin</artifactId> 
 				<configuration> <source>${maven.compiler.source}</source> <target>${maven.compiler.target}</target> 
 				</configuration> </plugin> -->
+			<plugin>
+			    <artifactId>maven-checkstyle-plugin</artifactId>
+			</plugin>
 		</plugins>
 	</build>
 

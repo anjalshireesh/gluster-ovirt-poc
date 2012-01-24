@@ -1,4 +1,5 @@
 package org.ovirt.engine.ui.uicommonweb.models.users;
+
 import java.util.Collections;
 import java.util.MissingResourceException;
 
@@ -326,6 +327,7 @@ public class UserEventNotifierListModel extends SearchableListModel
 			Cancel();
 		}
 	}
+
     @Override
     protected String getListName() {
         return "UserEventNotifierListModel";

@@ -20,6 +20,7 @@ import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.compat.RefObject;
 import org.ovirt.engine.core.compat.StringHelper;
 import org.ovirt.engine.core.dal.dbbroker.DbFacade;
+import org.ovirt.engine.core.dao.DiskDao;
 
 /**
  * Base class for all image handling commands
@@ -329,11 +330,28 @@ public abstract class BaseImagesCommand<T extends ImagesActionsParametersBase> e
             diskDynamic.setId(image.getId());
             diskDynamic.setactual_size(image.getactual_size());
             DbFacade.getInstance().getDiskImageDynamicDAO().save(diskDynamic);
+            saveDiskIfNotExists(image);
         } catch (RuntimeException ex) {
             log.error("AddDiskImageToDB::Failed adding new created snapshot into the db", ex);
             throw new VdcBLLException(VdcBllErrors.DB, ex);
         }
 
+    }
+
+    /**
+     * Save the disk from the given image info, only if the disk doesn't exist already.
+     *
+     * @param image
+     *            The image to take the disk's details from.
+     */
+    protected void saveDiskIfNotExists(DiskImage image) {
+        if (!getDiskDao().exists(image.getimage_group_id())) {
+            getDiskDao().save(image.getDisk());
+        }
+    }
+
+    protected DiskDao getDiskDao() {
+        return DbFacade.getInstance().getDiskDao();
     }
 
     protected void LockImage() {
@@ -402,7 +420,7 @@ public abstract class BaseImagesCommand<T extends ImagesActionsParametersBase> e
 
     protected void UndoActionOnSourceAndDestination() {
         if (getDestinationDiskImage() != null) {
-            RemoveSnapshotFromDB(getDestinationImageId());
+            RemoveSnapshotFromDB(getDestinationDiskImage());
         }
 
         if (getDiskImage() != null) {
@@ -416,15 +434,20 @@ public abstract class BaseImagesCommand<T extends ImagesActionsParametersBase> e
      */
 
     protected void RemoveSnapshot(DiskImage snapshot) {
-        RemoveSnapshotFromDB(snapshot.getId());
+        RemoveSnapshotFromDB(snapshot);
         AdditionalImageRemoveTreatment(snapshot);
     }
 
     protected void AdditionalImageRemoveTreatment(DiskImage snapshot) {
     }
 
-    protected void RemoveSnapshotFromDB(Guid snapshotGUID) {
-        DbFacade.getInstance().getDiskImageDAO().remove(snapshotGUID);
+    protected void RemoveSnapshotFromDB(DiskImage snapshot) {
+        DbFacade.getInstance().getDiskImageDAO().remove(snapshot.getId());
+        List<DiskImage> imagesForDisk =
+                DbFacade.getInstance().getDiskImageDAO().getAllSnapshotsForImageGroup(snapshot.getimage_group_id());
+        if (imagesForDisk == null || imagesForDisk.isEmpty()) {
+            getDiskDao().remove(snapshot.getimage_group_id());
+        }
     }
 
     public static void GetImageChildren(Guid snapshot, RefObject<java.util.ArrayList<Guid>> children) {

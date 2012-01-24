@@ -12,6 +12,7 @@ import org.ovirt.engine.core.common.action.MoveOrCopyImageGroupParameters;
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.action.VdcReturnValueBase;
 import org.ovirt.engine.core.common.businessentities.CopyVolumeType;
+import org.ovirt.engine.core.common.businessentities.Disk;
 import org.ovirt.engine.core.common.businessentities.DiskImage;
 import org.ovirt.engine.core.common.businessentities.DiskImageDynamic;
 import org.ovirt.engine.core.common.businessentities.DiskImageTemplate;
@@ -283,6 +284,12 @@ public class ImportVmTemplateCommand<T extends ImprotVmTemplateParameters> exten
             getCompensationContext().snapshotNewEntity(image);
             getCompensationContext().snapshotNewEntity(dt);
 
+            if (!DbFacade.getInstance().getDiskDao().exists(image.getimage_group_id())) {
+                Disk disk = image.getDisk();
+                DbFacade.getInstance().getDiskDao().save(disk);
+                getCompensationContext().snapshotNewEntity(disk);
+            }
+
             DiskImageDynamic diskDynamic = new DiskImageDynamic();
             diskDynamic.setId(image.getId());
             diskDynamic.setactual_size(image.getactual_size());
@@ -342,6 +349,7 @@ public class ImportVmTemplateCommand<T extends ImprotVmTemplateParameters> exten
             DbFacade.getInstance().getDiskImageDynamicDAO().remove(image.getId());
             DbFacade.getInstance().getDiskImageTemplateDAO().remove(image.getId());
             DbFacade.getInstance().getDiskImageDAO().remove(image.getId());
+            DbFacade.getInstance().getDiskDao().remove(image.getimage_group_id());
         }
     }
 

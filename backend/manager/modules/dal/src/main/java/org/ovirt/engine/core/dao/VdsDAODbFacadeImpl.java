@@ -118,6 +118,12 @@ public class VdsDAODbFacadeImpl extends BaseDAODbFacade implements VdsDAO {
                 new VdsRowMapper(),
                 getCustomMapSqlParameterSource()
                         .addValue("storage_pool_id", storagePoolId));
+	}
+
+    public List<VDS> getListForSpmSelection(Guid storagePoolId) {
+        return getCallsHandler().executeReadList("GetUpAndPrioritizedVds",
+                new VdsRowMapper(),
+                getCustomMapSqlParameterSource().addValue("storage_pool_id", storagePoolId));
     }
 
     static final class VdsRowMapper implements ParameterizedRowMapper<VDS> {
@@ -231,6 +237,7 @@ public class VdsDAODbFacadeImpl extends BaseDAODbFacade implements VdsDAO {
             entity.setNonOperationalReason(NonOperationalReason.forValue(rs
                     .getInt("non_operational_reason")));
             entity.setOtpValidity(rs.getLong("otp_validity"));
+            entity.setVdsSpmPriority(rs.getInt("vds_spm_priority"));
             return entity;
         }
     }

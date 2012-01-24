@@ -20,7 +20,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 
 /**
  * Button definition that adapts to UiCommon {@link UICommand commands}.
- * 
+ *
  * @param <T>
  *            Action panel item type.
  */
@@ -153,6 +153,11 @@ public abstract class UiCommandButtonDefinition<T> implements ActionButtonDefini
     @Override
     public String getTitle() {
         return title.asString();
+    }
+
+    @Override
+    public String getUniqueId() {
+        return command.getName();
     }
 
     @Override

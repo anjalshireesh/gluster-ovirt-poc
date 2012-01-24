@@ -40,13 +40,8 @@ storage_domain_static_view.storage as storage_path,
     images.volume_type as volume_type,
     images.volume_format as volume_format,
     images.boot as boot,
+    images.imageStatus as imageStatus,
     disks.disk_id as image_group_id,
-    CASE WHEN disks.status = 'OK' THEN 1
-         WHEN disks.status = 'LOCKED' THEN 2
-         WHEN disks.status = 'INVALID' THEN 3
-         WHEN disks.status = 'ILLEGAL' THEN 4
-         ELSE 0
-    END AS imageStatus,
     CAST (disks.internal_drive_mapping AS VARCHAR(50)) as internal_drive_mapping,
     CASE WHEN disks.disk_type = 'System' THEN 1
          WHEN disks.disk_type = 'Data' THEN 2
@@ -436,7 +431,7 @@ SELECT     vds_groups.vds_group_id as vds_group_id, vds_groups.name as vds_group
                       vds_groups.selection_algorithm as selection_algorithm, vds_static.vds_id as vds_id, vds_static.vds_name as vds_name, vds_static.ip as ip, vds_static.vds_unique_id as vds_unique_id,
                       vds_static.host_name as host_name, vds_static.port as port, vds_static.vds_strength as vds_strength, vds_static.server_SSL_enabled as server_SSL_enabled, vds_static.vds_type as vds_type,
                       vds_static.pm_type as pm_type, vds_static.pm_user as pm_user, vds_static.pm_password as pm_password, vds_static.pm_port as pm_port,
-                      vds_static.pm_options as pm_options, vds_static.pm_enabled as pm_enabled, vds_dynamic.hooks as hooks,vds_dynamic.status as status, vds_dynamic.cpu_cores as cpu_cores, vds_dynamic.cpu_model as cpu_model,
+                      vds_static.pm_options as pm_options, vds_static.pm_enabled as pm_enabled, vds_static.vds_spm_priority as vds_spm_priority, vds_dynamic.hooks as hooks,vds_dynamic.status as status, vds_dynamic.cpu_cores as cpu_cores, vds_dynamic.cpu_model as cpu_model,
                       vds_dynamic.cpu_speed_mh as cpu_speed_mh, vds_dynamic.if_total_speed as if_total_speed, vds_dynamic.kvm_enabled as kvm_enabled, vds_dynamic.physical_mem_mb as physical_mem_mb,
                       vds_dynamic.pending_vcpus_count as pending_vcpus_count, vds_dynamic.pending_vmem_size as pending_vmem_size,vds_dynamic.mem_commited as mem_commited, vds_dynamic.vm_active as vm_active, vds_dynamic.vm_count as vm_count,
                       vds_dynamic.vm_migrating as vm_migrating, vds_dynamic.vms_cores_count as vms_cores_count, vds_dynamic.cpu_over_commit_time_stamp as cpu_over_commit_time_stamp,
@@ -895,24 +890,30 @@ FROM       vm_interface_statistics;
 
 CREATE OR REPLACE VIEW dwh_vm_disk_configuration_history_view
 AS
-SELECT     	images.image_guid AS vm_disk_id,
-			images.storage_id as storage_domain_id,
-			cast(images.internal_drive_mapping as smallint) as vm_internal_drive_mapping,
-			images.description as vm_disk_description,
-			cast(images.size / 1048576 as int) as vm_disk_size_mb,
-			cast(images.volume_type as smallint) AS vm_disk_type,
-			cast(images.volume_format as smallint) AS vm_disk_format,
-			cast(images.disk_interface as smallint) as vm_disk_interface,
-			images._create_date AS create_date,
-            images._update_date AS update_date
-FROM	images
-			INNER JOIN
-				disk_image_dynamic ON images.image_guid = disk_image_dynamic.image_id
-WHERE     (_create_date >
+SELECT i.image_guid AS vm_disk_id,
+       i.storage_id as storage_domain_id,
+       cast(d.internal_drive_mapping as smallint) as vm_internal_drive_mapping,
+       i.description as vm_disk_description,
+       cast(i.size / 1048576 as int) as vm_disk_size_mb,
+       cast(i.volume_type as smallint) AS vm_disk_type,
+       cast(i.volume_format as smallint) AS vm_disk_format,
+       CASE
+           WHEN d.disk_interface = 'IDE' THEN cast(0 as smallint)
+           WHEN d.disk_interface = 'SCSI' THEN cast(1 as smallint)
+           WHEN d.disk_interface = 'VirtIO' THEN cast(2 as smallint)
+       END AS disk_interface,
+       i._create_date AS create_date,
+       i._update_date AS update_date
+FROM   images as i
+           INNER JOIN
+	       disk_image_dynamic ON i.image_guid = disk_image_dynamic.image_id
+           INNER JOIN
+               disks as d ON i.image_group_id = d.disk_id
+WHERE     (i._create_date >
                           (SELECT     var_datetime
                            FROM         dwh_history_timekeeping
                            WHERE      (var_name = 'lastSync'))) OR
-          (_update_date >
+          (i._update_date >
                           (SELECT     var_datetime
                            FROM         dwh_history_timekeeping AS history_timekeeping_1
                            WHERE      (var_name = 'lastSync')));

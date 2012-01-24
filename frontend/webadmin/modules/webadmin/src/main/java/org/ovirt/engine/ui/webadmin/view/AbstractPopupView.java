@@ -10,7 +10,7 @@ import com.gwtplatform.mvp.client.PopupViewImpl;
  * Base class for views meant to be displayed as popups.
  * <p>
  * Similar to {@link AbstractView}, holds the reference to the actual UI widget.
- * 
+ *
  * @param <T>
  *            Popup view widget type.
  */
@@ -28,9 +28,6 @@ public abstract class AbstractPopupView<T extends PopupPanel> extends PopupViewI
 
     protected void initWidget(T widget) {
         this.widget = widget;
-
-        // Hide the popup when GWTP place transition starts
-        setAutoHideOnNavigationEventEnabled(true);
 
         // All popups are modal by default
         widget.setModal(true);

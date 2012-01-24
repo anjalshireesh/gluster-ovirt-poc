@@ -1,4 +1,5 @@
 package org.ovirt.engine.ui.uicommonweb.models.configure;
+
 import org.ovirt.engine.core.common.VdcObjectType;
 import org.ovirt.engine.core.common.action.PermissionsOperationsParametes;
 import org.ovirt.engine.core.common.action.VdcActionParametersBase;

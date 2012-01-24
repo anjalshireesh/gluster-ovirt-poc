@@ -25,7 +25,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 
 /**
  * Base class for sub tab presenters.
- * 
+ *
  * @param <T>
  *            Main tab table row data type.
  * @param <M>
@@ -205,5 +205,8 @@ public abstract class AbstractSubTabPresenter<T, M extends ListWithDetailsModel,
                 }
             }
         });
+    }
+    protected DetailModelProvider<M, D> getModelProvider() {
+        return modelProvider;
     }
 }

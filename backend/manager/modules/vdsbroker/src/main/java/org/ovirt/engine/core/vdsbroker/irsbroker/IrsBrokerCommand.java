@@ -19,6 +19,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.ovirt.engine.core.common.AuditLogType;
 import org.ovirt.engine.core.common.businessentities.AsyncTaskStatus;
 import org.ovirt.engine.core.common.businessentities.AsyncTaskStatusEnum;
+import org.ovirt.engine.core.common.businessentities.BusinessEntitiesDefinitions;
 import org.ovirt.engine.core.common.businessentities.NonOperationalReason;
 import org.ovirt.engine.core.common.businessentities.SpmStatus;
 import org.ovirt.engine.core.common.businessentities.SpmStatusResult;
@@ -386,7 +387,8 @@ public abstract class IrsBrokerCommand<P extends IrsBaseVDSCommandParameters> ex
                 } else if (domainPoolMap.getstatus() != StorageDomainStatus.Locked
                         && domainPoolMap.getstatus() != data.getstatus()) {
                     DbFacade.getInstance().getStoragePoolIsoMapDAO().update(data.getStoragePoolIsoMapData());
-                    if (data.getstatus() != null && data.getstatus() == StorageDomainStatus.InActive
+                    if (data.getstatus() != null && (data.getstatus() == StorageDomainStatus.InActive ||
+                            data.getstatus() == StorageDomainStatus.Maintenance)
                             && domainFromDb.getstorage_domain_type() == StorageDomainType.Master) {
                         storage_pool pool = DbFacade.getInstance().getStoragePoolDAO()
                                 .get(domainPoolMap.getstorage_pool_id().getValue());
@@ -594,23 +596,6 @@ public abstract class IrsBrokerCommand<P extends IrsBaseVDSCommandParameters> ex
             }
         }
 
-        private List<VDS> GetVdssInPool() {
-            Guid curVdsId = (mCurrentVdsId != null) ? mCurrentVdsId : Guid.Empty;
-            // LINQ 31899
-            // DbFacade.Instance.GetAllFrom_vds().Where( s => s.status ==
-            // VDSStatus.Up && s.storage_pool_id == _storagePoolId &&
-            // !TriedVdssList.Contains(s.vds_id) && s.vds_id != curVdsId);
-            List<VDS> allVds = DbFacade.getInstance().getVdsDAO().getAll();
-            List<VDS> vdsInPool = new ArrayList<VDS>();
-            for (VDS vds : allVds) {
-                if (VDSStatus.Up == vds.getstatus() && _storagePoolId.equals(vds.getstorage_pool_id())
-                        && !mTriedVdssList.contains(vds.getvds_id()) && !vds.getvds_id().equals(curVdsId)) {
-                    vdsInPool.add(vds);
-                }
-            }
-            return vdsInPool;
-        }
-
         private List<VDS> GetNonOperationalVdssInPool() {
             List<VDS> allVds = DbFacade.getInstance().getVdsDAO().getAll();
             List<VDS> nonOperationalvdsInPool = new ArrayList<VDS>();
@@ -626,9 +611,7 @@ public abstract class IrsBrokerCommand<P extends IrsBaseVDSCommandParameters> ex
          * Returns True if there are other vdss in pool
          */
         public boolean getHasVdssForSpmSelection() {
-            // LINQ 31899
-            // GetVdssInPool().Count() > 0;
-            return (GetVdssInPool().size() > 0);
+            return (GetPrioritizedVdsInPool().size() > 0);
         }
 
         private String gethostFromVds() {
@@ -642,7 +625,7 @@ public abstract class IrsBrokerCommand<P extends IrsBaseVDSCommandParameters> ex
                 return null;
             }
 
-            List<VDS> vdsByPool = GetVdssInPool();
+            List<VDS> prioritizedVdsInPool = GetPrioritizedVdsInPool();
 
             // If VDS is in initialize status, wait for it to be up (or until
             // configurable timeout is reached)
@@ -662,67 +645,84 @@ public abstract class IrsBrokerCommand<P extends IrsBaseVDSCommandParameters> ex
                 }
             }
             VDS selectedVds = null;
-            // SpmStatusResult spmStatus = null;
-            // LINQ 29456
-            // if ((vdsByPool.Count != 0))
-            if (vdsByPool.size() != 0) {
-                // get a random index within [0,size()-1]
-                int randomIndex = (int) (Math.random() * (vdsByPool.size()));
-                // LINQ 29456
-                // vdsByPool.ToList()[rnd.Next(vdsByPool.Count())];
-                selectedVds = vdsByPool.get(randomIndex);
+            SpmStatusResult spmStatus = null;
 
+            if (prioritizedVdsInPool != null && prioritizedVdsInPool.size() > 0) {
+                selectedVds = prioritizedVdsInPool.get(0);
             } else if (!curVdsId.equals(Guid.Empty) && !getTriedVdssList().contains(curVdsId)) {
                 selectedVds = DbFacade.getInstance().getVdsDAO().get(curVdsId);
-                if (selectedVds.getstatus() != VDSStatus.Up) {
+                if (selectedVds.getstatus() != VDSStatus.Up
+                        || selectedVds.getVdsSpmPriority() == BusinessEntitiesDefinitions.HOST_MIN_SPM_PRIORITY) {
                     selectedVds = null;
                 }
             }
-            // if (selectedVds != null) {
-            // mCurrentVdsId = selectedVds.getvds_id();
-            // // Stores origin host id in case and will be needed to disconnect from storage pool
-            // Guid selectedVdsId = selectedVds.getvds_id();
-            // Integer selectedVdsSpmId = selectedVds.getvds_spm_id();
-            //
-            // VDSReturnValue returnValueFromVds = ResourceManager.getInstance().runVdsCommand(
-            // VDSCommandType.SpmStatus,
-            // new SpmStatusVDSCommandParameters(selectedVds.getvds_id(), _storagePoolId));
-            // spmStatus = (SpmStatusResult) returnValueFromVds.getReturnValue();
-            // if (spmStatus != null) {
-            // boolean performedPoolConnect = false;
-            // log.infoFormat("hostFromVds::selectedVds - {0}, spmStatus {1}, storage pool {2}",
-            // selectedVds.getvds_name(), spmStatus.getSpmStatus().toString(), storagePool.getname());
-            // if (spmStatus.getSpmStatus() == SpmStatus.Unknown_Pool) {
-            // Guid masterId = DbFacade.getInstance().getStorageDomainDAO()
-            // .getMasterStorageDomainIdForPool(_storagePoolId);
-            // VDSReturnValue connectResult = ResourceManager.getInstance().runVdsCommand(
-            // VDSCommandType.ConnectStoragePool,
-            // new ConnectStoragePoolVDSCommandParameters(selectedVds.getvds_id(), _storagePoolId,
-            // selectedVds.getvds_spm_id(), masterId, storagePool.getmaster_domain_version()));
-            // if (!connectResult.getSucceeded()
-            // && connectResult.getExceptionObject() instanceof IRSNoMasterDomainException) {
-            // throw connectResult.getExceptionObject();
-            // } else if (!connectResult.getSucceeded()) {
-            // // if connect to pool fails throw exception for
-            // // failover
-            // throw new IRSNonOperationalException("Could not connect host to Data Center(Storage issue)");
-            // }
-            // performedPoolConnect = true;
-            // // refresh spmStatus result
-            // spmStatus = (SpmStatusResult) ResourceManager
-            // .getInstance()
-            // .runVdsCommand(VDSCommandType.SpmStatus,
-            // new SpmStatusVDSCommandParameters(selectedVds.getvds_id(), _storagePoolId))
-            // .getReturnValue();
-            // log.infoFormat(
-            // "hostFromVds::Connected host to pool - selectedVds - {0}, spmStatus {1}, storage pool {2}",
-            // selectedVds.getvds_name(),
-            // spmStatus.getSpmStatus().toString(),
-            // storagePool.getname());
-            // }
-            // RefObject<VDS> tempRefObject = new RefObject<VDS>(selectedVds);
-            // spmStatus = HandleSpmStatusResult(curVdsId, vdsByPool, storagePool, tempRefObject, spmStatus);
-            // selectedVds = tempRefObject.argvalue;
+
+            if (selectedVds != null) {
+                mCurrentVdsId = selectedVds.getvds_id();
+                // Stores origin host id in case and will be needed to disconnect from storage pool
+                Guid selectedVdsId = selectedVds.getvds_id();
+                Integer selectedVdsSpmId = selectedVds.getvds_spm_id();
+
+                VDSReturnValue returnValueFromVds = ResourceManager.getInstance().runVdsCommand(
+                        VDSCommandType.SpmStatus,
+                        new SpmStatusVDSCommandParameters(selectedVds.getvds_id(), _storagePoolId));
+                spmStatus = (SpmStatusResult) returnValueFromVds.getReturnValue();
+                if (spmStatus != null) {
+                    boolean performedPoolConnect = false;
+                    log.infoFormat("hostFromVds::selectedVds - {0}, spmStatus {1}, storage pool {2}",
+                            selectedVds.getvds_name(), spmStatus.getSpmStatus().toString(), storagePool.getname());
+                    if (spmStatus.getSpmStatus() == SpmStatus.Unknown_Pool) {
+                        Guid masterId = DbFacade.getInstance().getStorageDomainDAO()
+                                .getMasterStorageDomainIdForPool(_storagePoolId);
+                        VDSReturnValue connectResult = ResourceManager.getInstance().runVdsCommand(
+                                VDSCommandType.ConnectStoragePool,
+                                new ConnectStoragePoolVDSCommandParameters(selectedVds.getvds_id(), _storagePoolId,
+                                        selectedVds.getvds_spm_id(), masterId, storagePool.getmaster_domain_version()));
+                        if (!connectResult.getSucceeded()
+                                && connectResult.getExceptionObject() instanceof IRSNoMasterDomainException) {
+                            throw connectResult.getExceptionObject();
+                        } else if (!connectResult.getSucceeded()) {
+                            // if connect to pool fails throw exception for
+                            // failover
+                            throw new IRSNonOperationalException("Could not connect host to Data Center(Storage issue)");
+                        }
+                        performedPoolConnect = true;
+                        // refresh spmStatus result
+                        spmStatus = (SpmStatusResult) ResourceManager
+                                .getInstance()
+                                .runVdsCommand(VDSCommandType.SpmStatus,
+                                        new SpmStatusVDSCommandParameters(selectedVds.getvds_id(), _storagePoolId))
+                                .getReturnValue();
+                        log.infoFormat(
+                                "hostFromVds::Connected host to pool - selectedVds - {0}, spmStatus {1}, storage pool {2}",
+                                selectedVds.getvds_name(),
+                                spmStatus.getSpmStatus().toString(),
+                                storagePool.getname());
+                    }
+                    RefObject<VDS> tempRefObject = new RefObject<VDS>(selectedVds);
+                    spmStatus =
+                            HandleSpmStatusResult(curVdsId, prioritizedVdsInPool, storagePool, tempRefObject, spmStatus);
+                    selectedVds = tempRefObject.argvalue;
+
+                    if (selectedVds != null) {
+                        RefObject<VDS> tempRefObject2 = new RefObject<VDS>(selectedVds);
+                        RefObject<SpmStatusResult> tempRefObject3 = new RefObject<SpmStatusResult>(spmStatus);
+                        returnValue = HandleSelectedVdsForSPM(storagePool, tempRefObject2, tempRefObject3, prevStatus);
+                        selectedVds = tempRefObject2.argvalue;
+                        spmStatus = tempRefObject3.argvalue;
+                    } else {
+                        mCurrentVdsId = null;
+                    }
+                    if (performedPoolConnect && selectedVds == null) {
+                        // if could not start spm on this host and connected to
+                        // pool here
+                        // then disconnect
+                        ResourceManager.getInstance().runVdsCommand(
+                                VDSCommandType.DisconnectStoragePool,
+                                new DisconnectStoragePoolVDSCommandParameters(selectedVdsId, _storagePoolId,
+                                        selectedVdsSpmId));
+                    }
+                } else {
 
             if (selectedVds != null) {
                 RefObject<VDS> tempRefObject2 = new RefObject<VDS>(selectedVds);
@@ -752,6 +752,21 @@ public abstract class IrsBrokerCommand<P extends IrsBaseVDSCommandParameters> ex
             // }
             // }
             return returnValue;
+        }
+
+        private List<VDS> GetPrioritizedVdsInPool() {
+            Guid curVdsId = (mCurrentVdsId != null) ? mCurrentVdsId : Guid.Empty;
+            // Gets a list of the hosts in the storagePool, that are "UP", ordered
+            // by vds_spm_priority (not including -1) and secondly ordered by RANDOM(), to
+            // deal with the case that there are several hosts with the same priority.
+            List<VDS> allVds = DbFacade.getInstance().getVdsDAO().getListForSpmSelection(_storagePoolId);
+            List<VDS> vdsRelevantForSpmSelection = new ArrayList<VDS>();
+            for (VDS vds : allVds) {
+                if (!mTriedVdssList.contains(vds.getvds_id()) && !vds.getvds_id().equals(curVdsId)) {
+                    vdsRelevantForSpmSelection.add(vds);
+                }
+            }
+            return vdsRelevantForSpmSelection;
         }
 
         private boolean _isSpmStartCalled;
@@ -851,6 +866,10 @@ public abstract class IrsBrokerCommand<P extends IrsBaseVDSCommandParameters> ex
                         // spmId).FirstOrDefault();
                         for (VDS tempVds : vdsByPool) {
                             if (tempVds.getvds_spm_id() == spmId) {
+                                log.infoFormat("Found spm host {0}, host name: {1}, according to spmId: {2}.",
+                                        tempVds.getvds_id(),
+                                        tempVds.getvds_name(),
+                                        spmId);
                                 spmVds = tempVds;
                                 break;
                             }

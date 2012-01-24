@@ -1,31 +1,86 @@
 package org.ovirt.engine.ui.uicommonweb.models.vms;
+
 import java.util.Collections;
-import org.ovirt.engine.core.compat.*;
-import org.ovirt.engine.ui.uicompat.*;
-import org.ovirt.engine.core.common.businessentities.*;
-import org.ovirt.engine.core.common.vdscommands.*;
-import org.ovirt.engine.core.common.queries.*;
-import org.ovirt.engine.core.common.action.*;
-import org.ovirt.engine.ui.frontend.*;
-import org.ovirt.engine.ui.uicommonweb.*;
-import org.ovirt.engine.ui.uicommonweb.models.*;
-import org.ovirt.engine.core.common.*;
 
-import org.ovirt.engine.ui.uicommonweb.models.configure.*;
-import org.ovirt.engine.ui.uicommonweb.models.hosts.HostListModel;
-import org.ovirt.engine.ui.uicommonweb.models.storage.StorageModel;
-import org.ovirt.engine.ui.uicommonweb.models.storage.VmBackupModel;
-import org.ovirt.engine.ui.uicommonweb.models.tags.*;
-import org.ovirt.engine.ui.uicommonweb.models.userportal.*;
-import org.ovirt.engine.core.common.*;
-import org.ovirt.engine.core.common.interfaces.*;
-import org.ovirt.engine.core.common.businessentities.*;
-
-import org.ovirt.engine.core.common.queries.*;
-import org.ovirt.engine.ui.uicompat.*;
-import org.ovirt.engine.ui.uicommonweb.dataprovider.*;
-import org.ovirt.engine.ui.uicommonweb.*;
-import org.ovirt.engine.ui.uicommonweb.models.*;
+import org.ovirt.engine.core.common.VdcActionUtils;
+import org.ovirt.engine.core.common.action.AddVmFromScratchParameters;
+import org.ovirt.engine.core.common.action.AddVmFromTemplateParameters;
+import org.ovirt.engine.core.common.action.AddVmTemplateParameters;
+import org.ovirt.engine.core.common.action.AttachEntityToTagParameters;
+import org.ovirt.engine.core.common.action.ChangeDiskCommandParameters;
+import org.ovirt.engine.core.common.action.ChangeVMClusterParameters;
+import org.ovirt.engine.core.common.action.HibernateVmParameters;
+import org.ovirt.engine.core.common.action.MigrateVmParameters;
+import org.ovirt.engine.core.common.action.MigrateVmToServerParameters;
+import org.ovirt.engine.core.common.action.MoveVmParameters;
+import org.ovirt.engine.core.common.action.RemoveVmParameters;
+import org.ovirt.engine.core.common.action.RunVmOnceParams;
+import org.ovirt.engine.core.common.action.RunVmParams;
+import org.ovirt.engine.core.common.action.ShutdownVmParameters;
+import org.ovirt.engine.core.common.action.StopVmParameters;
+import org.ovirt.engine.core.common.action.StopVmTypeEnum;
+import org.ovirt.engine.core.common.action.VdcActionParametersBase;
+import org.ovirt.engine.core.common.action.VdcActionType;
+import org.ovirt.engine.core.common.action.VdcReturnValueBase;
+import org.ovirt.engine.core.common.action.VmManagementParametersBase;
+import org.ovirt.engine.core.common.businessentities.DiskImage;
+import org.ovirt.engine.core.common.businessentities.DiskImageBase;
+import org.ovirt.engine.core.common.businessentities.DisplayType;
+import org.ovirt.engine.core.common.businessentities.MigrationSupport;
+import org.ovirt.engine.core.common.businessentities.StorageDomainStatus;
+import org.ovirt.engine.core.common.businessentities.StorageDomainType;
+import org.ovirt.engine.core.common.businessentities.UsbPolicy;
+import org.ovirt.engine.core.common.businessentities.VDS;
+import org.ovirt.engine.core.common.businessentities.VDSGroup;
+import org.ovirt.engine.core.common.businessentities.VM;
+import org.ovirt.engine.core.common.businessentities.VmNetworkInterface;
+import org.ovirt.engine.core.common.businessentities.VmOsType;
+import org.ovirt.engine.core.common.businessentities.VmTemplate;
+import org.ovirt.engine.core.common.businessentities.VmType;
+import org.ovirt.engine.core.common.businessentities.VolumeType;
+import org.ovirt.engine.core.common.businessentities.storage_domains;
+import org.ovirt.engine.core.common.businessentities.storage_pool;
+import org.ovirt.engine.core.common.interfaces.SearchType;
+import org.ovirt.engine.core.common.queries.GetAllFromExportDomainQueryParamenters;
+import org.ovirt.engine.core.common.queries.GetVmByVmIdParameters;
+import org.ovirt.engine.core.common.queries.SearchParameters;
+import org.ovirt.engine.core.common.queries.VdcQueryReturnValue;
+import org.ovirt.engine.core.common.queries.VdcQueryType;
+import org.ovirt.engine.core.compat.Event;
+import org.ovirt.engine.core.compat.EventArgs;
+import org.ovirt.engine.core.compat.Guid;
+import org.ovirt.engine.core.compat.NGuid;
+import org.ovirt.engine.core.compat.ObservableCollection;
+import org.ovirt.engine.core.compat.PropertyChangedEventArgs;
+import org.ovirt.engine.core.compat.StringFormat;
+import org.ovirt.engine.core.compat.StringHelper;
+import org.ovirt.engine.ui.frontend.AsyncQuery;
+import org.ovirt.engine.ui.frontend.Frontend;
+import org.ovirt.engine.ui.frontend.INewAsyncCallback;
+import org.ovirt.engine.ui.uicommonweb.Cloner;
+import org.ovirt.engine.ui.uicommonweb.DataProvider;
+import org.ovirt.engine.ui.uicommonweb.Linq;
+import org.ovirt.engine.ui.uicommonweb.TagsEqualityComparer;
+import org.ovirt.engine.ui.uicommonweb.UICommand;
+import org.ovirt.engine.ui.uicommonweb.dataprovider.AsyncDataProvider;
+import org.ovirt.engine.ui.uicommonweb.models.ConfirmationModel;
+import org.ovirt.engine.ui.uicommonweb.models.EntityModel;
+import org.ovirt.engine.ui.uicommonweb.models.ISupportSystemTreeContext;
+import org.ovirt.engine.ui.uicommonweb.models.ListModel;
+import org.ovirt.engine.ui.uicommonweb.models.ListWithDetailsModel;
+import org.ovirt.engine.ui.uicommonweb.models.Model;
+import org.ovirt.engine.ui.uicommonweb.models.SystemTreeItemModel;
+import org.ovirt.engine.ui.uicommonweb.models.configure.ChangeCDModel;
+import org.ovirt.engine.ui.uicommonweb.models.configure.PermissionListModel;
+import org.ovirt.engine.ui.uicommonweb.models.tags.TagListModel;
+import org.ovirt.engine.ui.uicommonweb.models.tags.TagModel;
+import org.ovirt.engine.ui.uicommonweb.models.userportal.AttachCdModel;
+import org.ovirt.engine.ui.uicompat.Assembly;
+import org.ovirt.engine.ui.uicompat.FrontendActionAsyncResult;
+import org.ovirt.engine.ui.uicompat.FrontendMultipleActionAsyncResult;
+import org.ovirt.engine.ui.uicompat.IFrontendActionAsyncCallback;
+import org.ovirt.engine.ui.uicompat.IFrontendMultipleActionAsyncCallback;
+import org.ovirt.engine.ui.uicompat.ResourceManager;
 
 @SuppressWarnings("unused")
 public class VmListModel extends ListWithDetailsModel implements ISupportSystemTreeContext
@@ -2876,6 +2931,7 @@ public class VmListModel extends ListWithDetailsModel implements ISupportSystemT
 		systemTreeSelectedItem = value;
 		OnPropertyChanged(new PropertyChangedEventArgs("SystemTreeSelectedItem"));
 	}
+
     @Override
     protected String getListName() {
         return "VmListModel";

@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.HasConstrainedValue;
 
 /**
  * Adapts {@link TakesValueWithChangeHandlersEditor} with {@link HasConstrainedValue} interface.
- * 
+ *
  * @param <T>
  *            The type being edited.
  */

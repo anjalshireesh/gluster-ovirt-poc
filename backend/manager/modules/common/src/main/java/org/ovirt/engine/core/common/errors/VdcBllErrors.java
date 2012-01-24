@@ -10,8 +10,6 @@ import javax.xml.bind.annotation.XmlType;
  * The purpose of this enumaration is to contain all the errors exposed by the VdcBLL. The error codes are not
  * sequential in order to be able to add error codes as development evolves.
  */
-// C# TO JAVA CONVERTER TODO TASK: Java annotations will not correspond to .NET
-// attributes:
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "VdcBllErrors")
 public enum VdcBllErrors {
@@ -332,7 +330,6 @@ public enum VdcBllErrors {
     // oVirt errors
     ENGINE(5001),
     DB(5002),
-    LICENSE(5003),
     // The VDS does not exist in memory
     RESOURCE_MANAGER_VDS_NOT_FOUND(5004),
     IRS_IMAGE_STATUS_ILLEGAL(5006),
@@ -343,7 +340,6 @@ public enum VdcBllErrors {
     MAC_POOL_INITIALIZATION_FAILED(5010),
     MAC_POOL_NOT_INITIALIZED(5011),
     MAC_POOL_NO_MACS_LEFT(5012),
-    DB_INIT(5013),
     VM_POOL_CANNOT_ALLOCATE_VM(5014),
     // Could not allocate VDS for a new VM to run on
     RESOURCE_MANAGER_CANT_ALLOC_VDS_MIGRATION(5015),

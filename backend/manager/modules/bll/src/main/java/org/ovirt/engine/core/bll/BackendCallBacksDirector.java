@@ -23,9 +23,6 @@ import org.ovirt.engine.core.utils.threadpool.ThreadPoolUtil;
 import org.ovirt.engine.core.utils.timer.OnTimerMethodAnnotation;
 import org.ovirt.engine.core.utils.timer.SchedulerUtilQuartzImpl;
 
-//VB & C# TO JAVA CONVERTER NOTE: There is no Java equivalent to C# namespace aliases:
-//using Timer=System.Timers.Timer;
-
 /**
  * Class, responcible to backend callbacks treatment. Contains proxies to
  * frontends, registerd to backend events
@@ -226,11 +223,10 @@ public final class BackendCallBacksDirector {
                     Guid[] guidArray = callBack.getQueryIDs();
                     if (guidArray.length > 0) {
                         AsyncQueryResults results = CallbackServer.Instance.GetAsyncQueryResults(guidArray);
-                        for (int i = 0; i < results.getQueryData().length; i++) {
-                            if (results.getQueryData()[i].getValue().length == 1
-                                    && results.getQueryData()[i].getValue()[0]
-                                            .getFaulted() != null) {
-                                UnregisterQuery(results.getQueryIDs()[i]);
+                        for (int i = 0; i < results.getQueryData().size(); i++) {
+                            if (results.getQueryData().get(i).getValue().size() == 1
+                                    && results.getQueryData().get(i).getValue().get(0).getFaulted() != null) {
+                                UnregisterQuery(results.getQueryIDs().get(i));
                             }
                         }
                         return results;
