@@ -10,8 +10,8 @@ import org.ovirt.engine.core.vdsbroker.xmlrpc.XmlRpcStruct;
 
 public class IrsServerWrapper implements IIrsServer {
 
-    private IrsServerConnector irsServer;
-    private HttpClient httpClient;
+    private final IrsServerConnector irsServer;
+    private final HttpClient httpClient;
 
     public IrsServerWrapper(IrsServerConnector innerImplementor, HttpClient httpClient) {
         this.irsServer = innerImplementor;
@@ -373,6 +373,13 @@ public class IrsServerWrapper implements IIrsServer {
     @Override
     public StatusOnlyReturnForXmlRpc glusterVolumeStop(String volumeName) {
         Map<String, Object> xmlRpcReturnValue = irsServer.glusterVolumeStop(volumeName);
+        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+        return wrapper;
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeDelete(String volumeName) {
+        Map<String, Object> xmlRpcReturnValue = irsServer.glusterVolumeDelete(volumeName);
         StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
         return wrapper;
     }

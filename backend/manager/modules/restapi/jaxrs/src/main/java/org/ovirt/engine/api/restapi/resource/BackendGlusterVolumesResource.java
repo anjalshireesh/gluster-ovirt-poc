@@ -16,6 +16,7 @@ import org.ovirt.engine.core.common.action.VdcReturnValueBase;
 import org.ovirt.engine.core.common.action.VdsGroupParametersBase;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.glusteractions.CreateGlusterVolumeParameters;
+import org.ovirt.engine.core.common.glusteractions.GlusterVolumeParameters;
 import org.ovirt.engine.core.compat.Guid;
 
 /**
@@ -73,7 +74,10 @@ public class BackendGlusterVolumesResource extends AbstractBackendCollectionReso
 
     @Override
     protected Response performRemove(String id) {
-        // TODO Invoke VDSM to remove the volume
-        return null;
+        //Delete Gluster Volume
+        Response res = performAction(VdcActionType.DeleteGlusterVolume,
+                new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), getGlusterVolumeSubResource(id).get().getVolumeName()));
+        return res;
+     // return performAction(VdcActionType.DeleteGlusterVolume, new VdsActionParameters(asGuid(id)));
     }
 }
