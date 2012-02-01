@@ -36,7 +36,7 @@ public class SubTabVolumeGeneralView extends AbstractSubTabFormView<GlusterVolum
     TextBoxLabel volumeType = new TextBoxLabel();
     TextBoxLabel replicaCount = new TextBoxLabel();
     TextBoxLabel numOfBricks = new TextBoxLabel();
-    
+
     FormBuilder formBuilder;
 
     @Inject

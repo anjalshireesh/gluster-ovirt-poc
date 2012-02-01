@@ -722,10 +722,10 @@ public class PresenterModule extends BasePresenterModule {
         bindPresenterWidget(ClusterPopupPresenterWidget.class,
                 ClusterPopupPresenterWidget.ViewDef.class,
                 ClusterPopupView.class);
-        
+
         bindPresenterWidget(VolumePopupPresenterWidget.class,
-        		VolumePopupPresenterWidget.ViewDef.class,
-        		VolumePopupView.class);
+                VolumePopupPresenterWidget.ViewDef.class,
+                VolumePopupView.class);
 
         bindPresenterWidget(ClusterPolicyPopupPresenterWidget.class,
                 ClusterPolicyPopupPresenterWidget.ViewDef.class,
@@ -886,25 +886,25 @@ public class PresenterModule extends BasePresenterModule {
                 SubTabVolumeBrickPresenter.ViewDef.class,
                 SubTabVolumeBrickView.class,
                 SubTabVolumeBrickPresenter.ProxyDef.class);
-        
+
         bindPresenter(SubTabVolumeParameterPresenter.class,
                 SubTabVolumeParameterPresenter.ViewDef.class,
                 SubTabVolumeParameterView.class,
                 SubTabVolumeParameterPresenter.ProxyDef.class);
-        
+
         bindPresenter(SubTabVolumePermissionPresenter.class,
                 SubTabVolumePermissionPresenter.ViewDef.class,
                 SubTabVolumePermissionView.class,
                 SubTabVolumePermissionPresenter.ProxyDef.class);
-        
+
         bindPresenter(SubTabVolumeEventPresenter.class,
                 SubTabVolumeEventPresenter.ViewDef.class,
                 SubTabVolumeEventView.class,
                 SubTabVolumeEventPresenter.ProxyDef.class);
-        
+
         bindPresenterWidget(AddBrickPopupPresenterWidget.class,
-        		AddBrickPopupPresenterWidget.ViewDef.class,
-        		AddBrickPopupView.class);
+                AddBrickPopupPresenterWidget.ViewDef.class,
+                AddBrickPopupView.class);
     }
 
 }

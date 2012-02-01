@@ -29,16 +29,16 @@ public class MainTabVolumeView extends AbstractMainTabWithDetailsTableView<Glust
     }
 
     void initTable() {
-    	getTable().addColumn(new VolumeStatusColumn(), "", "30px");
-    	TextColumnWithTooltip<GlusterVolumeEntity> nameColumn = new TextColumnWithTooltip<GlusterVolumeEntity>() {
+        getTable().addColumn(new VolumeStatusColumn(), "", "30px");
+        TextColumnWithTooltip<GlusterVolumeEntity> nameColumn = new TextColumnWithTooltip<GlusterVolumeEntity>() {
             @Override
             public String getValue(GlusterVolumeEntity object) {
                 return object.getName();
             }
         };
         getTable().addColumn(nameColumn, "Name");
-        
-        
+
+
         TextColumnWithTooltip<GlusterVolumeEntity> volumeTypeColumn = new TextColumnWithTooltip<GlusterVolumeEntity>() {
             @Override
             public String getValue(GlusterVolumeEntity object) {
@@ -46,7 +46,7 @@ public class MainTabVolumeView extends AbstractMainTabWithDetailsTableView<Glust
             }
         };
         getTable().addColumn(volumeTypeColumn, "Volume Type");
-        
+
         TextColumnWithTooltip<GlusterVolumeEntity> numOfBricksColumn = new TextColumnWithTooltip<GlusterVolumeEntity>() {
             @Override
             public String getValue(GlusterVolumeEntity object) {
@@ -54,7 +54,7 @@ public class MainTabVolumeView extends AbstractMainTabWithDetailsTableView<Glust
             }
         };
         getTable().addColumn(numOfBricksColumn, "Number of Bricks");
-        
+
         TextColumnWithTooltip<GlusterVolumeEntity> transportColumn = new TextColumnWithTooltip<GlusterVolumeEntity>() {
             @Override
             public String getValue(GlusterVolumeEntity object) {
@@ -62,7 +62,7 @@ public class MainTabVolumeView extends AbstractMainTabWithDetailsTableView<Glust
             }
         };
         getTable().addColumn(transportColumn, "Transport Type");
-        
+
         TextColumnWithTooltip<GlusterVolumeEntity> statusColumn = new TextColumnWithTooltip<GlusterVolumeEntity>() {
             @Override
             public String getValue(GlusterVolumeEntity object) {
@@ -70,7 +70,7 @@ public class MainTabVolumeView extends AbstractMainTabWithDetailsTableView<Glust
             }
         };
         getTable().addColumn(statusColumn, "Status");
-        
+
         getTable().addActionButton(new UiCommandButtonDefinition<GlusterVolumeEntity>("Create Volume") {
             @Override
             protected UICommand resolveCommand() {

@@ -35,11 +35,11 @@ public class AddBrickPopupView extends AbstractModelBoundPopupView<AddBrickModel
     interface ViewIdHandler extends ElementIdHandler<AddBrickPopupView> {
         ViewIdHandler idHandler = GWT.create(ViewIdHandler.class);
     }
-    
+
     @UiField(provided = true)
     @Ignore
     EntityModelCellTable<ListModel> brickList;
-        
+
     @Inject
     public AddBrickPopupView(EventBus eventBus, ApplicationResources resources, ApplicationConstants constants) {
         super(eventBus, resources);
@@ -52,18 +52,18 @@ public class AddBrickPopupView extends AbstractModelBoundPopupView<AddBrickModel
 
 
     private void initBrickList() {
-		brickList = new EntityModelCellTable<ListModel>(true);
-		brickList.addEntityModelColumn(new EntityModelTextColumn<EntityModel>() {
+        brickList = new EntityModelCellTable<ListModel>(true);
+        brickList.addEntityModelColumn(new EntityModelTextColumn<EntityModel>() {
             @Override
             public String getValue(EntityModel model) {
-            	return ((GlusterBrickEntity)model.getEntity()).getQualifiedName();
+                return ((GlusterBrickEntity)model.getEntity()).getQualifiedName();
             }
         }, "Bricks");
-	}
+    }
 
 
-	private void localize(ApplicationConstants constants) {
-        
+    private void localize(ApplicationConstants constants) {
+
     }
 
     @Override
@@ -72,15 +72,15 @@ public class AddBrickPopupView extends AbstractModelBoundPopupView<AddBrickModel
 
     @Override
     public void edit(AddBrickModel object) {
-    	brickList.setRowData(new ArrayList<EntityModel>());
+        brickList.setRowData(new ArrayList<EntityModel>());
         brickList.edit(object);
         object.initSelections();
-    	Driver.driver.edit(object);
+        Driver.driver.edit(object);
     }
 
     @Override
     public AddBrickModel flush() {
-    	brickList.flush();
-    	return Driver.driver.flush();
+        brickList.flush();
+        return Driver.driver.flush();
     }
 }

@@ -28,7 +28,7 @@ public class SubTabVolumeBrickView extends AbstractSubTabTableView<GlusterVolume
             }
         };
         getTable().addColumn(serverColumn, "Server");
-        
+
         TextColumnWithTooltip<GlusterBrickEntity> directoryColumn = new TextColumnWithTooltip<GlusterBrickEntity>() {
             @Override
             public String getValue(GlusterBrickEntity brick) {
@@ -36,7 +36,7 @@ public class SubTabVolumeBrickView extends AbstractSubTabTableView<GlusterVolume
             }
         };
         getTable().addColumn(directoryColumn, "Brick Directory");
-        
+
         TextColumnWithTooltip<GlusterBrickEntity> freeSpaceColumn = new TextColumnWithTooltip<GlusterBrickEntity>() {
             @Override
             public String getValue(GlusterBrickEntity brick) {
@@ -44,7 +44,7 @@ public class SubTabVolumeBrickView extends AbstractSubTabTableView<GlusterVolume
             }
         };
         getTable().addColumn(freeSpaceColumn, "Free Space (GB)");
-        
+
         TextColumnWithTooltip<GlusterBrickEntity> totalSpaceColumn = new TextColumnWithTooltip<GlusterBrickEntity>() {
             @Override
             public String getValue(GlusterBrickEntity brick) {
@@ -52,7 +52,7 @@ public class SubTabVolumeBrickView extends AbstractSubTabTableView<GlusterVolume
             }
         };
         getTable().addColumn(totalSpaceColumn, "Total Space (GB)");
-        
+
         TextColumnWithTooltip<GlusterBrickEntity> statusColumn = new TextColumnWithTooltip<GlusterBrickEntity>() {
             @Override
             public String getValue(GlusterBrickEntity brick) {
