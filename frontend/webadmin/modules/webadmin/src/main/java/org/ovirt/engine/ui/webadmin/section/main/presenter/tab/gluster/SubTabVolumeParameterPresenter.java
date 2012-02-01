@@ -24,24 +24,24 @@ import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.gwtplatform.mvp.client.proxy.TabContentProxyPlace;
 
 public class SubTabVolumeParameterPresenter extends AbstractSubTabPresenter<GlusterVolumeEntity, VolumeListModel, VolumeParameterListModel, SubTabVolumeParameterPresenter.ViewDef, SubTabVolumeParameterPresenter.ProxyDef> {
-	
-	@TabInfo(container = VolumeSubTabPanelPresenter.class)
+
+    @TabInfo(container = VolumeSubTabPanelPresenter.class)
     static TabData getTabData(ClientGinjector ginjector) {
         return new ModelBoundTabData(ginjector.getApplicationConstants().volumeParameterSubTabLabel(), 2,
                 ginjector.getSubTabVolumeParameterModelProvider());
     }
 
     @Inject
-	public SubTabVolumeParameterPresenter(
-			EventBus eventBus,
-			ViewDef view,
-			ProxyDef proxy,
-			PlaceManager placeManager,
-			SearchableDetailModelProvider<GlusterVolumeOption, VolumeListModel, VolumeParameterListModel> modelProvider) {
-		super(eventBus, view, proxy, placeManager, modelProvider);
-	}
+    public SubTabVolumeParameterPresenter(
+            EventBus eventBus,
+            ViewDef view,
+            ProxyDef proxy,
+            PlaceManager placeManager,
+            SearchableDetailModelProvider<GlusterVolumeOption, VolumeListModel, VolumeParameterListModel> modelProvider) {
+        super(eventBus, view, proxy, placeManager, modelProvider);
+    }
 
-	@ProxyCodeSplit
+    @ProxyCodeSplit
     @NameToken(ApplicationPlaces.volumeParameterSubTabPlace)
     public interface ProxyDef extends TabContentProxyPlace<SubTabVolumeParameterPresenter> {
     }
@@ -49,16 +49,16 @@ public class SubTabVolumeParameterPresenter extends AbstractSubTabPresenter<Glus
     public interface ViewDef extends AbstractSubTabPresenter.ViewDef<GlusterVolumeEntity> {
     }
 
-	@Override
-	protected PlaceRequest getMainTabRequest() {
-		return new PlaceRequest(ApplicationPlaces.volumeMainTabPlace);
-	}
+    @Override
+    protected PlaceRequest getMainTabRequest() {
+        return new PlaceRequest(ApplicationPlaces.volumeMainTabPlace);
+    }
 
-	@Override
-	protected void revealInParent() {
-		RevealContentEvent.fire(this, VolumeSubTabPanelPresenter.TYPE_SetTabContent, this);
-	}
-	
+    @Override
+    protected void revealInParent() {
+        RevealContentEvent.fire(this, VolumeSubTabPanelPresenter.TYPE_SetTabContent, this);
+    }
+
     @ProxyEvent
     public void onVolumeSelectionChange(VolumeSelectionChangeEvent event) {
         updateMainTabSelection(event.getSelectedItems());

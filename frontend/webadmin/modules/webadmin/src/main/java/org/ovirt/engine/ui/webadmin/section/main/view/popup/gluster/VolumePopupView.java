@@ -38,15 +38,15 @@ public class VolumePopupView extends AbstractModelBoundPopupView<VolumeModel> im
     interface ViewIdHandler extends ElementIdHandler<VolumePopupView> {
         ViewIdHandler idHandler = GWT.create(ViewIdHandler.class);
     }
-    
+
     @UiField
     PushButton addBrickButton;
-    
+
     @UiHandler("addBrickButton")
     void handleAddBrickButtonClick(ClickEvent event) {
-    	volumeModel.getAddBrickCommand().Execute();
+        volumeModel.getAddBrickCommand().Execute();
     }
-    
+
     @UiField(provided = true)
     @Path(value = "dataCenter.selectedItem")
     @WithElementId("dataCenter")
@@ -66,7 +66,7 @@ public class VolumePopupView extends AbstractModelBoundPopupView<VolumeModel> im
     @Path(value = "typeList.selectedItem")
     @WithElementId
     ListModelListBoxEditor<Object> typeListEditor;
-    
+
     @UiField
     @Path(value = "bricks.entity")
     @WithElementId
@@ -76,29 +76,29 @@ public class VolumePopupView extends AbstractModelBoundPopupView<VolumeModel> im
     @Path(value = "gluster_accecssProtocol.entity")
     @WithElementId
     EntityModelCheckBoxEditor gluster_accecssProtocolEditor;
-    
+
     @UiField
     @Path(value = "nfs_accecssProtocol.entity")
     @WithElementId
     EntityModelCheckBoxEditor nfs_accecssProtocolEditor;
-    
+
     @UiField
     @Path(value = "cifs_accecssProtocol.entity")
     @WithElementId
     EntityModelCheckBoxEditor cifs_accecssProtocolEditor;
-    
+
     @UiField
     @Path(value = "users.entity")
     @WithElementId
     EntityModelTextBoxEditor usersEditor;
-    
+
     @UiField
     @Path(value = "allowAccess.entity")
     @WithElementId
     EntityModelTextBoxEditor allowAccessEditor;
 
-	private VolumeModel volumeModel;
-        
+    private VolumeModel volumeModel;
+
     @Inject
     public VolumePopupView(EventBus eventBus, ApplicationResources resources, ApplicationConstants constants) {
         super(eventBus, resources);
@@ -111,11 +111,11 @@ public class VolumePopupView extends AbstractModelBoundPopupView<VolumeModel> im
     }
 
     private void initRadioButtonEditors() {
-		
-	}
 
-	private void initListBoxEditors() {
-		dataCenterEditor = new ListModelListBoxEditor<Object>(new NullSafeRenderer<Object>() {
+    }
+
+    private void initListBoxEditors() {
+        dataCenterEditor = new ListModelListBoxEditor<Object>(new NullSafeRenderer<Object>() {
             @Override
             public String renderNullSafe(Object object) {
                 return ((storage_pool) object).getname();
@@ -128,10 +128,10 @@ public class VolumePopupView extends AbstractModelBoundPopupView<VolumeModel> im
                 return ((VDSGroup) object).getname();
             }
         });
-	}
+    }
 
     private void localize(ApplicationConstants constants) {
-    	dataCenterEditor.setLabel("Data Center");
+        dataCenterEditor.setLabel("Data Center");
         clusterEditor.setLabel("Volume Cluster");
         nameEditor.setLabel(constants.clusterPopupNameLabel());
         typeListEditor.setLabel("Type");
@@ -141,7 +141,7 @@ public class VolumePopupView extends AbstractModelBoundPopupView<VolumeModel> im
         cifs_accecssProtocolEditor.setLabel("CIFS");
         usersEditor.setLabel("CIFS Users");
         allowAccessEditor.setLabel("Allow Access From");
-        
+
     }
 
     @Override
@@ -151,7 +151,7 @@ public class VolumePopupView extends AbstractModelBoundPopupView<VolumeModel> im
 
     @Override
     public void edit(final VolumeModel object) {
-    	this.volumeModel = object;
+        this.volumeModel = object;
         Driver.driver.edit(object);
     }
 

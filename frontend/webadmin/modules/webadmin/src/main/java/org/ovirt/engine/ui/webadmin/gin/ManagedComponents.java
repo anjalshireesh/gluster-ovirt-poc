@@ -228,7 +228,7 @@ public interface ManagedComponents {
     AsyncProvider<MainTabHostPresenter> getMainTabHostPresenter();
 
     MainModelProvider<VDS, HostListModel> getMainTabHostModelProvider();
-    
+
     AsyncProvider<MainTabVolumePresenter> getMainTabVolumePresenter();
 
     MainModelProvider<GlusterVolumeEntity, VolumeListModel> getMainTabVolumeModelProvider();
@@ -478,9 +478,9 @@ public interface ManagedComponents {
     AsyncProvider<SubTabUserGroupPresenter> getSubTabUserGroupPresenter();
 
     SearchableDetailModelProvider<UserGroup, UserListModel, UserGroupListModel> getSubTabUserGroupModelProvider();
-    
+
     // Volume
-    
+
     AsyncProvider<VolumeSubTabPanelPresenter> getVolumeSubTabPanelPresenter();
 
     //general
@@ -489,13 +489,13 @@ public interface ManagedComponents {
     DetailModelProvider<VolumeListModel, VolumeGeneralModel> getSubTabVolumeGeneralModelProvider();
     //bricks
     AsyncProvider<SubTabVolumeBrickPresenter> getSubTabVolumeBrickPresenter();
-    
+
     SearchableDetailModelProvider<GlusterBrickEntity, VolumeListModel, VolumeBrickListModel> getSubTabVolumeBrickModelProvider();
     //parameters
     AsyncProvider<SubTabVolumeParameterPresenter> getSubTabVolumeParameterPresenter();
 
     SearchableDetailModelProvider<GlusterVolumeOption, VolumeListModel, VolumeParameterListModel> getSubTabVolumeParameterModelProvider();
-    //permission   
+    //permission
     AsyncProvider<SubTabVolumePermissionPresenter> getSubTabVolumePermissionPresenter();
 
     SearchableDetailModelProvider<permissions, VolumeListModel, PermissionListModel> getSubTabVolumePermissionModelProvider();

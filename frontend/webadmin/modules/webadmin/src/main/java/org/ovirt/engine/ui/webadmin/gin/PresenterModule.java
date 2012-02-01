@@ -647,10 +647,10 @@ public class PresenterModule extends AbstractPresenterModule {
         bindPresenterWidget(ClusterPopupPresenterWidget.class,
                 ClusterPopupPresenterWidget.ViewDef.class,
                 ClusterPopupView.class);
-        
+
         bindPresenterWidget(VolumePopupPresenterWidget.class,
-        		VolumePopupPresenterWidget.ViewDef.class,
-        		VolumePopupView.class);
+                VolumePopupPresenterWidget.ViewDef.class,
+                VolumePopupView.class);
 
         bindPresenterWidget(ClusterPolicyPopupPresenterWidget.class,
                 ClusterPolicyPopupPresenterWidget.ViewDef.class,
@@ -761,21 +761,21 @@ public class PresenterModule extends AbstractPresenterModule {
                 TemplateNewPresenterWidget.ViewDef.class,
                 TemplateNewPopupView.class);
 
-		// Add/Edit Template's NIC
-		bindPresenterWidget(TemplateInterfacePopupPresenterWidget.class,
-				TemplateInterfacePopupPresenterWidget.ViewDef.class,
-				TemplateInterfacePopupView.class);
+        // Add/Edit Template's NIC
+        bindPresenterWidget(TemplateInterfacePopupPresenterWidget.class,
+                TemplateInterfacePopupPresenterWidget.ViewDef.class,
+                TemplateInterfacePopupView.class);
 
-		// Users Manage Events
-		bindPresenterWidget(ManageEventsPopupPresenterWidget.class,
-				ManageEventsPopupPresenterWidget.ViewDef.class,
-				ManageEventsPopupView.class);
-        
+        // Users Manage Events
+        bindPresenterWidget(ManageEventsPopupPresenterWidget.class,
+                ManageEventsPopupPresenterWidget.ViewDef.class,
+                ManageEventsPopupView.class);
+
      // Volume
         bindPresenter(VolumeSubTabPanelPresenter.class,
-        		VolumeSubTabPanelPresenter.ViewDef.class,
-        		VolumeSubTabPanelView.class,
-        		VolumeSubTabPanelPresenter.ProxyDef.class);
+                VolumeSubTabPanelPresenter.ViewDef.class,
+                VolumeSubTabPanelView.class,
+                VolumeSubTabPanelPresenter.ProxyDef.class);
         bindPresenter(SubTabVolumeGeneralPresenter.class,
                 SubTabVolumeGeneralPresenter.ViewDef.class,
                 SubTabVolumeGeneralView.class,
@@ -785,25 +785,25 @@ public class PresenterModule extends AbstractPresenterModule {
                 SubTabVolumeBrickPresenter.ViewDef.class,
                 SubTabVolumeBrickView.class,
                 SubTabVolumeBrickPresenter.ProxyDef.class);
-        
+
         bindPresenter(SubTabVolumeParameterPresenter.class,
                 SubTabVolumeParameterPresenter.ViewDef.class,
                 SubTabVolumeParameterView.class,
                 SubTabVolumeParameterPresenter.ProxyDef.class);
-        
+
         bindPresenter(SubTabVolumePermissionPresenter.class,
                 SubTabVolumePermissionPresenter.ViewDef.class,
                 SubTabVolumePermissionView.class,
                 SubTabVolumePermissionPresenter.ProxyDef.class);
-        
+
         bindPresenter(SubTabVolumeEventPresenter.class,
                 SubTabVolumeEventPresenter.ViewDef.class,
                 SubTabVolumeEventView.class,
                 SubTabVolumeEventPresenter.ProxyDef.class);
-        
+
         bindPresenterWidget(AddBrickPopupPresenterWidget.class,
-        		AddBrickPopupPresenterWidget.ViewDef.class,
-        		AddBrickPopupView.class);
+                AddBrickPopupPresenterWidget.ViewDef.class,
+                AddBrickPopupView.class);
         // Add/Edit Template's NIC
         bindPresenterWidget(TemplateInterfacePopupPresenterWidget.class,
                 TemplateInterfacePopupPresenterWidget.ViewDef.class,

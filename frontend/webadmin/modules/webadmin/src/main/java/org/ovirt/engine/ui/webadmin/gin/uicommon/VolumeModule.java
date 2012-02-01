@@ -40,16 +40,16 @@ public class VolumeModule extends AbstractGinModule {
 
     // Main List Model
 
-	@Provides
+    @Provides
     @Singleton
     public MainModelProvider<GlusterVolumeEntity, VolumeListModel> getVolumeListProvider(ClientGinjector ginjector,
             final Provider<VolumePopupPresenterWidget> popupProvider,
             final Provider<AddBrickPopupPresenterWidget> popupProvider2,
             final Provider<RemoveConfirmationPopupPresenterWidget> removeConfirmPopupProvider) {
         return new MainTabModelProvider<GlusterVolumeEntity, VolumeListModel>(ginjector, VolumeListModel.class) {
-        	private AbstractModelBoundPopupPresenterWidget<?, ?> window2;
-        	
-        	@Override
+            private AbstractModelBoundPopupPresenterWidget<?, ?> window2;
+
+            @Override
             protected AbstractModelBoundPopupPresenterWidget<? extends Model, ?> getModelPopup(UICommand lastExecutedCommand) {
                 if (lastExecutedCommand == getModel().getCreateVolumeCommand()) {
                     return popupProvider.get();
@@ -66,78 +66,78 @@ public class VolumeModule extends AbstractGinModule {
                     return super.getConfirmModelPopup(lastExecutedCommand);
                 }
             }
-            
+
             @Override
             protected void onCommonModelChange() {
-            	super.onCommonModelChange();
-            	getModel().getPropertyChangedEvent().addListener(new IEventListener() {
+                super.onCommonModelChange();
+                getModel().getPropertyChangedEvent().addListener(new IEventListener() {
                     @Override
                     public void eventRaised(Event ev, Object sender, EventArgs args) {
                         String propName = ((PropertyChangedEventArgs) args).PropertyName;
 
                         if ("Window2".equals(propName)) {
-                        	Model windowModel = getModel().getWindow2();
-                        	if(windowModel != null) {
-	                            // Resolve
-	                            window2 = popupProvider2.get();
-	                            revealPopup(windowModel, (AbstractModelBoundPopupPresenterWidget<Model, ?>)window2);
-                        	} else {
-                        		window2.hideAndUnbind();
-                	            window2 = null;
-                	            getModel().ForceRefresh();
-                        	}
-                        } 
+                            Model windowModel = getModel().getWindow2();
+                            if(windowModel != null) {
+                                // Resolve
+                                window2 = popupProvider2.get();
+                                revealPopup(windowModel, (AbstractModelBoundPopupPresenterWidget<Model, ?>)window2);
+                            } else {
+                                window2.hideAndUnbind();
+                                window2 = null;
+                                getModel().ForceRefresh();
+                            }
+                        }
                     }
                 });
             }
         };
     }
-	
 
-	@Provides
+
+    @Provides
     @Singleton
     public DetailModelProvider<VolumeListModel, VolumeGeneralModel> getVolumeGeneralProvider(ClientGinjector ginjector) {
         return new DetailTabModelProvider<VolumeListModel, VolumeGeneralModel>(ginjector,
-        		VolumeListModel.class,
-        		VolumeGeneralModel.class) {
+                VolumeListModel.class,
+                VolumeGeneralModel.class) {
             @Override
             protected AbstractModelBoundPopupPresenterWidget<? extends Model, ?> getModelPopup(UICommand lastExecutedCommand) {
-            	return super.getModelPopup(lastExecutedCommand);
+                return super.getModelPopup(lastExecutedCommand);
             }
         };
     }
-	
-	@Provides
+
+    @Provides
     @Singleton
     public SearchableDetailModelProvider<GlusterBrickEntity, VolumeListModel, VolumeBrickListModel> getVolumeBrickListProvider(ClientGinjector ginjector) {
         return new SearchableDetailTabModelProvider<GlusterBrickEntity, VolumeListModel, VolumeBrickListModel>(ginjector,
-        		VolumeListModel.class,
-        		VolumeBrickListModel.class){
-        	@Override
+                VolumeListModel.class,
+                VolumeBrickListModel.class){
+            @Override
             protected AbstractModelBoundPopupPresenterWidget<? extends Model, ?> getModelPopup(UICommand lastExecutedCommand) {
-            	return super.getModelPopup(lastExecutedCommand);
+                return super.getModelPopup(lastExecutedCommand);
             }
         };
     }
-	
-	@Provides
+
+    @Provides
     @Singleton
     public SearchableDetailModelProvider<GlusterVolumeOption, VolumeListModel, VolumeParameterListModel> getVolumeParameterListProvider(ClientGinjector ginjector) {
         return new SearchableDetailTabModelProvider<GlusterVolumeOption, VolumeListModel, VolumeParameterListModel>(ginjector,
-        		VolumeListModel.class,
-        		VolumeParameterListModel.class) {
-        	
+                VolumeListModel.class,
+                VolumeParameterListModel.class) {
+
         };
     }
-	
-	
-	@Provides
+
+
+    @Provides
     @Singleton
     public SearchableDetailModelProvider<permissions, VolumeListModel, PermissionListModel> getVolumePermissionListProvider(ClientGinjector ginjector,
             final Provider<PermissionsPopupPresenterWidget> popupProvider,
             final Provider<RemoveConfirmationPopupPresenterWidget> removeConfirmPopupProvider) {
         return new SearchableDetailTabModelProvider<permissions, VolumeListModel, PermissionListModel>(ginjector,
-        		VolumeListModel.class,
+                VolumeListModel.class,
                 PermissionListModel.class) {
             @Override
             protected AbstractModelBoundPopupPresenterWidget<? extends Model, ?> getModelPopup(UICommand lastExecutedCommand) {
@@ -165,13 +165,13 @@ public class VolumeModule extends AbstractGinModule {
     @Singleton
     public SearchableDetailModelProvider<AuditLog, VolumeListModel, VolumeEventListModel> getHostEventListProvider(ClientGinjector ginjector) {
         return new SearchableDetailTabModelProvider<AuditLog, VolumeListModel, VolumeEventListModel>(ginjector,
-        		VolumeListModel.class,
-        		VolumeEventListModel.class);
+                VolumeListModel.class,
+                VolumeEventListModel.class);
     }
-	
-	
-	@Override
-	protected void configure() {
-		
-	}
+
+
+    @Override
+    protected void configure() {
+
+    }
 }

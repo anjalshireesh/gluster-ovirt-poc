@@ -67,7 +67,7 @@ public interface ApplicationConstants extends Constants {
 
     @DefaultStringValue("Hosts")
     String hostMainTabLabel();
-    
+
     @DefaultStringValue("Volumes")
     String volumeMainTabLabel();
 

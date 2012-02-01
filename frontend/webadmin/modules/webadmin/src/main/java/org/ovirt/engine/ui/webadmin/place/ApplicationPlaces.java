@@ -28,13 +28,13 @@ public class ApplicationPlaces {
     public static String getHostMainTabPlace() {
         return hostMainTabPlace;
     }
-    
+
     public static final String volumeMainTabPlace = "volumes";
 
     public static String getVolumeMainTabPlace() {
         return volumeMainTabPlace;
     }
-    
+
     public static final String storageMainTabPlace = "storage";
 
     public static String getStorageMainTabPlace() {
@@ -192,17 +192,17 @@ public class ApplicationPlaces {
 
     public static final String userEventSubTabPlace = userMainTabPlace + SUB_TAB_PREFIX + "event";
 
-    
+
     // Volume
-    
+
     public static final String volumeGeneralSubTabPlace = volumeMainTabPlace + SUB_TAB_PREFIX + "general";
-    
+
     public static final String volumeParameterSubTabPlace = volumeMainTabPlace + SUB_TAB_PREFIX + "Parameter";
-    
+
     public static final String volumeBrickSubTabPlace = volumeMainTabPlace + SUB_TAB_PREFIX + "Brick";
-    
+
     public static final String volumePermissionSubTabPlace = volumeMainTabPlace + SUB_TAB_PREFIX + "Permission";
-    
+
     public static final String volumeEventSubTabPlace = volumeMainTabPlace + SUB_TAB_PREFIX + "Event";
-    
+
 }
