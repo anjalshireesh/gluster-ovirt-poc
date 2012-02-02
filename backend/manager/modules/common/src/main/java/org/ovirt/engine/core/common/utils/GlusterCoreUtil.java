@@ -39,7 +39,7 @@ public class GlusterCoreUtil {
     // return qualifiedDiskNames;
     // }
 
-    public static final List<String> getQualifiedBrickList(Set<GlusterBrickEntity> bricks) {
+    public static final List<String> getQualifiedBrickList(Collection<GlusterBrickEntity> bricks) {
         List<String> qualifiedBricks = new ArrayList<String>();
         for (GlusterBrickEntity GlusterBrick : bricks) {
             qualifiedBricks.add(GlusterBrick.getQualifiedName());

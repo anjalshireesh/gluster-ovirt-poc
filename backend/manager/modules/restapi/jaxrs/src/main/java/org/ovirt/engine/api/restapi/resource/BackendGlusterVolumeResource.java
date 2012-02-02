@@ -2,20 +2,27 @@ package org.ovirt.engine.api.restapi.resource;
 
 import static org.ovirt.engine.api.restapi.resource.BackendVmsResource.SUB_COLLECTIONS;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.core.Response;
 
 import org.ovirt.engine.api.model.Action;
+import org.ovirt.engine.api.model.GlusterBrick;
+import org.ovirt.engine.api.model.GlusterBricks;
 import org.ovirt.engine.api.model.GlusterVolume;
 import org.ovirt.engine.api.model.GlusterVolumes;
 import org.ovirt.engine.api.model.VM;
 import org.ovirt.engine.api.resource.GlusterVolumeBricksResource;
 import org.ovirt.engine.api.resource.GlusterVolumeResource;
 import org.ovirt.engine.core.common.action.VdcActionType;
+import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
+import org.ovirt.engine.core.common.glusteractions.GlusterVolumeBricksParameters;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeParameters;
 import org.ovirt.engine.core.compat.Guid;
 
 public class BackendGlusterVolumeResource extends AbstractBackendActionableResource<VM, org.ovirt.engine.core.common.businessentities.VM> implements
-        GlusterVolumeResource {
+GlusterVolumeResource {
 
     private final BackendGlusterVolumesResource parent;
     private final String clusterId;
@@ -90,6 +97,7 @@ public class BackendGlusterVolumeResource extends AbstractBackendActionableResou
         }
     }
 
+
     @Override
     public GlusterVolumeBricksResource getBricksResource() {
         return inject(new BackendGlusterBricksResource(getClusterId(), this));
@@ -97,5 +105,36 @@ public class BackendGlusterVolumeResource extends AbstractBackendActionableResou
 
     public String getClusterId() {
         return clusterId;
+    }
+
+    @Override
+    public Response addBrick(Action action) {
+        try {
+            return performAction(VdcActionType.AddBricksToGlusterVolume,
+                    new GlusterVolumeBricksParameters(Guid.createGuidFromString(getClusterId()), get()
+                            .getVolumeName(), mapCollection(action.getGlusterBricks())));
+        } catch (Exception e) {
+            return handleError(e, false);
+        }
+    }
+
+    @Override
+    public Response removeBrick(Action action) {
+        try {
+            return performAction(VdcActionType.RemoveBricksFromGlusterVolume,
+                    new GlusterVolumeBricksParameters(Guid.createGuidFromString(getClusterId()), get()
+                            .getVolumeName(), mapCollection(action.getGlusterBricks())));
+        } catch (Exception e) {
+            return handleError(e, false);
+        }
+    }
+
+    protected List<GlusterBrickEntity> mapCollection(GlusterBricks brickList) {
+        List<GlusterBrickEntity> collection = new ArrayList<GlusterBrickEntity>();
+        for (GlusterBrick brick : brickList.getGlusterBricks()) {
+            GlusterBrickEntity brickEntity = getMapper(GlusterBrick.class, GlusterBrickEntity.class).map(brick, null);
+            collection.add(brickEntity);
+        }
+        return collection;
     }
 }

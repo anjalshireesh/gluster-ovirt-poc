@@ -10,8 +10,8 @@ import org.ovirt.engine.core.vdsbroker.xmlrpc.XmlRpcStruct;
 
 public class IrsServerWrapper implements IIrsServer {
 
-    private IrsServerConnector irsServer;
-    private HttpClient httpClient;
+    private final IrsServerConnector irsServer;
+    private final HttpClient httpClient;
 
     public IrsServerWrapper(IrsServerConnector innerImplementor, HttpClient httpClient) {
         this.irsServer = innerImplementor;
@@ -336,8 +336,15 @@ public class IrsServerWrapper implements IIrsServer {
     }
 
     @Override
-    public StatusOnlyReturnForXmlRpc glusterVolumeAddBrick(String volumeName, String[] brickList) {
-        Map<String, Object> xmlRpcReturnValue = irsServer.glusterVolumeAddBrick(volumeName, brickList);
+    public StatusOnlyReturnForXmlRpc glusterVolumeAddBrick(String volumeName, String[] bricks) {
+        Map<String, Object> xmlRpcReturnValue = irsServer.glusterVolumeAddBrick(volumeName, bricks);
+        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+        return wrapper;
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeRemoveBrick(String volumeName, String[] bricks) {
+        Map<String, Object> xmlRpcReturnValue = irsServer.glusterVolumeRemoveBrick(volumeName, bricks);
         StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
         return wrapper;
     }

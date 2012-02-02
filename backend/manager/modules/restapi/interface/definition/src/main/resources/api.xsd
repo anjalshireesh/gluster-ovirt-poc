@@ -163,6 +163,7 @@
       <!-- should migration be forced if VM is pinned to host? -->
       <xs:element name="force" type="xs:boolean" minOccurs="0"/>
       <!-- ... etc., explicitly enumerate all the parameter types -->
+	  <xs:element name="gluster_bricks" type="GlusterBricks" minOccurs="0" />
     </xs:sequence>
   </xs:group>
 
@@ -196,7 +197,7 @@
             <!-- action-specific parameter(s) for the operation
                  (if required) -->
             <xs:group ref="ActionParameterGroup"/>
-
+            
           <!-- The following, and the BaseResource href/id attributes
                are used by the server when responding after an
                asynchronous operation or status query -->
