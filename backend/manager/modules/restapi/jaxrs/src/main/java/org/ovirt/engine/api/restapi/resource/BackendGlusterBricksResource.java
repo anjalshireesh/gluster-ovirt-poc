@@ -3,8 +3,6 @@
  */
 package org.ovirt.engine.api.restapi.resource;
 
-import javax.ws.rs.core.Response;
-
 import org.ovirt.engine.api.model.GlusterBrick;
 import org.ovirt.engine.api.model.GlusterBricks;
 import org.ovirt.engine.api.model.GlusterVolume;
