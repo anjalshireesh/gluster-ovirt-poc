@@ -9,16 +9,13 @@ import org.ovirt.engine.api.model.GlusterBrick;
 import org.ovirt.engine.api.model.GlusterBricks;
 import org.ovirt.engine.api.model.GlusterVolume;
 import org.ovirt.engine.api.resource.GlusterVolumeBricksResource;
-import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
-import org.ovirt.engine.core.common.glusteractions.AddBricksToGlusterVolumeParameters;
-import org.ovirt.engine.core.compat.Guid;
 
 /**
  *
  */
 public class BackendGlusterBricksResource extends AbstractBackendCollectionResource<GlusterBrick, GlusterBrickEntity>
-        implements GlusterVolumeBricksResource {
+implements GlusterVolumeBricksResource {
 
     private final BackendGlusterVolumeResource parent;
     private final String clusterId;
@@ -51,9 +48,10 @@ public class BackendGlusterBricksResource extends AbstractBackendCollectionResou
                 String brickQualifiedName = brick.getHost() + ":" + brick.getHost();
                 brickList += (brickList.isEmpty() ? "," : "") + brick.getHost() + ":" + brick.getBrickDirectory();
             }
-            return performAction(VdcActionType.AddBricksToGlusterVolume,
-                    new AddBricksToGlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), parent.get()
-                            .getVolumeName(), brickList));
+            //            return performAction(VdcActionType.AddBricksToGlusterVolume,
+            //                    new GlusterVolumeBricksParameters(Guid.createGuidFromString(getClusterId()), parent.get()
+            //                            .getVolumeName(), brickList));
+            return null;
         } catch (Exception e) {
             return handleError(e, false);
         }

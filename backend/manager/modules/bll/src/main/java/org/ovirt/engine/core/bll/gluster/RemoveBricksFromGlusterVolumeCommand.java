@@ -8,15 +8,15 @@ import org.ovirt.engine.core.common.vdscommands.VDSCommandType;
 import org.ovirt.engine.core.common.vdscommands.VDSReturnValue;
 import org.ovirt.engine.core.dal.VdcBllMessages;
 
-public class AddBricksToGlusterVolumeCommand extends GlusterCommandBase<GlusterVolumeBricksParameters> {
+public class RemoveBricksFromGlusterVolumeCommand extends GlusterCommandBase<GlusterVolumeBricksParameters> {
 
-    public AddBricksToGlusterVolumeCommand(GlusterVolumeBricksParameters params) {
+    public RemoveBricksFromGlusterVolumeCommand(GlusterVolumeBricksParameters params) {
         super(params);
     }
 
     @Override
     protected boolean canDoAction() {
-        addCanDoActionMessage(VdcBllMessages.VAR__ACTION__ADD);
+        addCanDoActionMessage(VdcBllMessages.VAR__ACTION__REMOVE);
         addCanDoActionMessage(VdcBllMessages.VAR__TYPE__GLUSTER_BRICK);
         return super.canDoAction();
     }
@@ -24,12 +24,11 @@ public class AddBricksToGlusterVolumeCommand extends GlusterCommandBase<GlusterV
     @Override
     protected void executeCommand() {
         VDSReturnValue returnValue =
-            Backend
-            .getInstance()
+            Backend.getInstance()
             .getResourceManager()
-            .RunVdsCommand(
-                    VDSCommandType.AddBricksToGlusterVolume,
-                    new GlusterVolumeBricksVDSParameters(getVdsGroup().getstorage_pool_id().getValue(),
+            .RunVdsCommand(VDSCommandType.RemoveBricksFromGlusterVolume,
+                    new GlusterVolumeBricksVDSParameters(getVdsGroup().getstorage_pool_id()
+                            .getValue(),
                             getParameters().getVolumeName(),
                             getParameters().getBricks()));
         setSucceeded(returnValue.getSucceeded());
@@ -38,9 +37,9 @@ public class AddBricksToGlusterVolumeCommand extends GlusterCommandBase<GlusterV
     @Override
     public AuditLogType getAuditLogTypeValue() {
         if(getSucceeded()) {
-            return AuditLogType.GLUSTER_VOLUME_ADD_BRICK;
+            return AuditLogType.GLUSTER_VOLUME_REMOVE_BRICK;
         } else {
-            return AuditLogType.GLUSTER_VOLUME_ADD_BRICK_FAILED;
+            return AuditLogType.GLUSTER_VOLUME_REMOVE_BRICK_FAILED;
         }
     }
 }
