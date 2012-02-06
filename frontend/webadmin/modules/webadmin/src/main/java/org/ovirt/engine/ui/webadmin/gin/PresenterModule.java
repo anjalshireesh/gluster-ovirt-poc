@@ -804,14 +804,5 @@ public class PresenterModule extends AbstractPresenterModule {
         bindPresenterWidget(AddBrickPopupPresenterWidget.class,
                 AddBrickPopupPresenterWidget.ViewDef.class,
                 AddBrickPopupView.class);
-        // Add/Edit Template's NIC
-        bindPresenterWidget(TemplateInterfacePopupPresenterWidget.class,
-                TemplateInterfacePopupPresenterWidget.ViewDef.class,
-                TemplateInterfacePopupView.class);
-
-        // Users Manage Events
-        bindPresenterWidget(ManageEventsPopupPresenterWidget.class,
-                ManageEventsPopupPresenterWidget.ViewDef.class,
-                ManageEventsPopupView.class);
     }
 }
