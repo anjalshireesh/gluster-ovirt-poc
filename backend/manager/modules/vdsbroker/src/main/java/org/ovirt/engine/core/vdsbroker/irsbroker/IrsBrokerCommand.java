@@ -70,8 +70,6 @@ import org.ovirt.engine.core.vdsbroker.vdsbroker.VDSNetworkException;
 import org.ovirt.engine.core.vdsbroker.xmlrpc.XmlRpcRunTimeException;
 import org.ovirt.engine.core.vdsbroker.xmlrpc.XmlRpcStruct;
 import org.ovirt.engine.core.vdsbroker.xmlrpc.XmlRpcUtils;
-import org.ovirt.engine.core.common.vdscommands.ConnectStoragePoolVDSCommandParameters;
-import org.ovirt.engine.core.common.vdscommands.DisconnectStoragePoolVDSCommandParameters;
 
 @Logged(errorLevel = LogLevel.ERROR)
 public abstract class IrsBrokerCommand<P extends IrsBaseVDSCommandParameters> extends BrokerCommandBase<P> {
@@ -659,72 +657,72 @@ public abstract class IrsBrokerCommand<P extends IrsBaseVDSCommandParameters> ex
                 }
             }
 
-            if (selectedVds != null) {
-                mCurrentVdsId = selectedVds.getvds_id();
-                // Stores origin host id in case and will be needed to disconnect from storage pool
-                Guid selectedVdsId = selectedVds.getvds_id();
-                Integer selectedVdsSpmId = selectedVds.getvds_spm_id();
-
-                VDSReturnValue returnValueFromVds = ResourceManager.getInstance().runVdsCommand(
-                        VDSCommandType.SpmStatus,
-                        new SpmStatusVDSCommandParameters(selectedVds.getvds_id(), _storagePoolId));
-                spmStatus = (SpmStatusResult) returnValueFromVds.getReturnValue();
-                if (spmStatus != null) {
-                    boolean performedPoolConnect = false;
-                    log.infoFormat("hostFromVds::selectedVds - {0}, spmStatus {1}, storage pool {2}",
-                            selectedVds.getvds_name(), spmStatus.getSpmStatus().toString(), storagePool.getname());
-                    if (spmStatus.getSpmStatus() == SpmStatus.Unknown_Pool) {
-                        Guid masterId = DbFacade.getInstance().getStorageDomainDAO()
-                                .getMasterStorageDomainIdForPool(_storagePoolId);
-                        VDSReturnValue connectResult = ResourceManager.getInstance().runVdsCommand(
-                                VDSCommandType.ConnectStoragePool,
-                                new ConnectStoragePoolVDSCommandParameters(selectedVds.getvds_id(), _storagePoolId,
-                                        selectedVds.getvds_spm_id(), masterId, storagePool.getmaster_domain_version()));
-                        if (!connectResult.getSucceeded()
-                                && connectResult.getExceptionObject() instanceof IRSNoMasterDomainException) {
-                            throw connectResult.getExceptionObject();
-                        } else if (!connectResult.getSucceeded()) {
-                            // if connect to pool fails throw exception for
-                            // failover
-                            throw new IRSNonOperationalException("Could not connect host to Data Center(Storage issue)");
-                        }
-                        performedPoolConnect = true;
-                        // refresh spmStatus result
-                        spmStatus = (SpmStatusResult) ResourceManager
-                                .getInstance()
-                                .runVdsCommand(VDSCommandType.SpmStatus,
-                                        new SpmStatusVDSCommandParameters(selectedVds.getvds_id(), _storagePoolId))
-                                .getReturnValue();
-                        log.infoFormat(
-                                "hostFromVds::Connected host to pool - selectedVds - {0}, spmStatus {1}, storage pool {2}",
-                                selectedVds.getvds_name(),
-                                spmStatus.getSpmStatus().toString(),
-                                storagePool.getname());
-                    }
-                    RefObject<VDS> tempRefObject = new RefObject<VDS>(selectedVds);
-                    spmStatus =
-                            HandleSpmStatusResult(curVdsId, prioritizedVdsInPool, storagePool, tempRefObject, spmStatus);
-                    selectedVds = tempRefObject.argvalue;
-
-                    if (selectedVds != null) {
-                        RefObject<VDS> tempRefObject2 = new RefObject<VDS>(selectedVds);
-                        RefObject<SpmStatusResult> tempRefObject3 = new RefObject<SpmStatusResult>(spmStatus);
-                        returnValue = HandleSelectedVdsForSPM(storagePool, tempRefObject2, tempRefObject3, prevStatus);
-                        selectedVds = tempRefObject2.argvalue;
-                        spmStatus = tempRefObject3.argvalue;
-                    } else {
-                        mCurrentVdsId = null;
-                    }
-                    if (performedPoolConnect && selectedVds == null) {
-                        // if could not start spm on this host and connected to
-                        // pool here
-                        // then disconnect
-                        ResourceManager.getInstance().runVdsCommand(
-                                VDSCommandType.DisconnectStoragePool,
-                                new DisconnectStoragePoolVDSCommandParameters(selectedVdsId, _storagePoolId,
-                                        selectedVdsSpmId));
-                    }
-                } else {
+//            if (selectedVds != null) {
+//                mCurrentVdsId = selectedVds.getvds_id();
+//                // Stores origin host id in case and will be needed to disconnect from storage pool
+//                Guid selectedVdsId = selectedVds.getvds_id();
+//                Integer selectedVdsSpmId = selectedVds.getvds_spm_id();
+//
+//                VDSReturnValue returnValueFromVds = ResourceManager.getInstance().runVdsCommand(
+//                        VDSCommandType.SpmStatus,
+//                        new SpmStatusVDSCommandParameters(selectedVds.getvds_id(), _storagePoolId));
+//                spmStatus = (SpmStatusResult) returnValueFromVds.getReturnValue();
+//                if (spmStatus != null) {
+//                    boolean performedPoolConnect = false;
+//                    log.infoFormat("hostFromVds::selectedVds - {0}, spmStatus {1}, storage pool {2}",
+//                            selectedVds.getvds_name(), spmStatus.getSpmStatus().toString(), storagePool.getname());
+//                    if (spmStatus.getSpmStatus() == SpmStatus.Unknown_Pool) {
+//                        Guid masterId = DbFacade.getInstance().getStorageDomainDAO()
+//                                .getMasterStorageDomainIdForPool(_storagePoolId);
+//                        VDSReturnValue connectResult = ResourceManager.getInstance().runVdsCommand(
+//                                VDSCommandType.ConnectStoragePool,
+//                                new ConnectStoragePoolVDSCommandParameters(selectedVds.getvds_id(), _storagePoolId,
+//                                        selectedVds.getvds_spm_id(), masterId, storagePool.getmaster_domain_version()));
+//                        if (!connectResult.getSucceeded()
+//                                && connectResult.getExceptionObject() instanceof IRSNoMasterDomainException) {
+//                            throw connectResult.getExceptionObject();
+//                        } else if (!connectResult.getSucceeded()) {
+//                            // if connect to pool fails throw exception for
+//                            // failover
+//                            throw new IRSNonOperationalException("Could not connect host to Data Center(Storage issue)");
+//                        }
+//                        performedPoolConnect = true;
+//                        // refresh spmStatus result
+//                        spmStatus = (SpmStatusResult) ResourceManager
+//                                .getInstance()
+//                                .runVdsCommand(VDSCommandType.SpmStatus,
+//                                        new SpmStatusVDSCommandParameters(selectedVds.getvds_id(), _storagePoolId))
+//                                .getReturnValue();
+//                        log.infoFormat(
+//                                "hostFromVds::Connected host to pool - selectedVds - {0}, spmStatus {1}, storage pool {2}",
+//                                selectedVds.getvds_name(),
+//                                spmStatus.getSpmStatus().toString(),
+//                                storagePool.getname());
+//                    }
+//                    RefObject<VDS> tempRefObject = new RefObject<VDS>(selectedVds);
+//                    spmStatus =
+//                            HandleSpmStatusResult(curVdsId, prioritizedVdsInPool, storagePool, tempRefObject, spmStatus);
+//                    selectedVds = tempRefObject.argvalue;
+//
+//                    if (selectedVds != null) {
+//                        RefObject<VDS> tempRefObject2 = new RefObject<VDS>(selectedVds);
+//                        RefObject<SpmStatusResult> tempRefObject3 = new RefObject<SpmStatusResult>(spmStatus);
+//                        returnValue = HandleSelectedVdsForSPM(storagePool, tempRefObject2, tempRefObject3, prevStatus);
+//                        selectedVds = tempRefObject2.argvalue;
+//                        spmStatus = tempRefObject3.argvalue;
+//                    } else {
+//                        mCurrentVdsId = null;
+//                    }
+//                    if (performedPoolConnect && selectedVds == null) {
+//                        // if could not start spm on this host and connected to
+//                        // pool here
+//                        // then disconnect
+//                        ResourceManager.getInstance().runVdsCommand(
+//                                VDSCommandType.DisconnectStoragePool,
+//                                new DisconnectStoragePoolVDSCommandParameters(selectedVdsId, _storagePoolId,
+//                                        selectedVdsSpmId));
+//                    }
+//                } else {
                     if (selectedVds != null) {
                         RefObject<VDS> tempRefObject2 = new RefObject<VDS>(selectedVds);
                         // RefObject<SpmStatusResult> tempRefObject3 = new RefObject<SpmStatusResult>(spmStatus);
@@ -752,8 +750,8 @@ public abstract class IrsBrokerCommand<P extends IrsBaseVDSCommandParameters> ex
                     // }
                     // }
                     // }
-                }
-            }
+                //}
+            //}
             return returnValue;
         }
 
@@ -1086,7 +1084,7 @@ public abstract class IrsBrokerCommand<P extends IrsBaseVDSCommandParameters> ex
         private final Map<Guid, HashSet<Guid>> _vdssInProblem = new HashMap<Guid, HashSet<Guid>>();
         private final Map<Guid, HashSet<Guid>> _domainsInProblem = new ConcurrentHashMap<Guid, HashSet<Guid>>();
         private final Map<Guid, String> _timers = new HashMap<Guid, String>();
-        private AtomicBoolean duringReconstructMaster = new AtomicBoolean(false);
+        private final AtomicBoolean duringReconstructMaster = new AtomicBoolean(false);
         private final Object _lockObject = new Object();
         private final ReentrantLock _lockObjForDbSave = new ReentrantLock();
 
@@ -1111,83 +1109,83 @@ public abstract class IrsBrokerCommand<P extends IrsBaseVDSCommandParameters> ex
                 final java.util.ArrayList<VDSDomainsData> data) {
 
             Set<Guid> domainsInProblems =
-                    (Set<Guid>) TransactionSupport.executeInScope(TransactionScopeOption.Suppress,
-                            new TransactionMethod<Set<Guid>>() {
-                                @Override
-                                public Set<Guid> runInTransaction() {
+                    TransactionSupport.executeInScope(TransactionScopeOption.Suppress,
+                    new TransactionMethod<Set<Guid>>() {
+                        @Override
+                        public Set<Guid> runInTransaction() {
 
-                                    Set<Guid> domainsInProblems = null;
-                                    storage_pool storagePool =
-                                            DbFacade.getInstance().getStoragePoolDAO().get(_storagePoolId);
-                                    if (storagePool != null
-                                            && (storagePool.getstatus() == StoragePoolStatus.Up || storagePool.getstatus() == StoragePoolStatus.Problematic)) {
+                            Set<Guid> domainsInProblems = null;
+                            storage_pool storagePool =
+                                    DbFacade.getInstance().getStoragePoolDAO().get(_storagePoolId);
+                            if (storagePool != null
+                                    && (storagePool.getstatus() == StoragePoolStatus.Up || storagePool.getstatus() == StoragePoolStatus.Problematic)) {
 
-                                        try {
+                                try {
 
-                                            // build a list of all domains in pool
-                                            // which are in status Active or Unknown
-                                            Set<Guid> domainsInPool = new HashSet<Guid>(
-                                                    DbFacade.getInstance().getStorageDomainStaticDAO().getAllIds(
-                                                            _storagePoolId, StorageDomainStatus.Active));
-                                            domainsInPool.addAll(DbFacade.getInstance()
-                                                    .getStorageDomainStaticDAO()
-                                                    .getAllIds(
-                                                            _storagePoolId, StorageDomainStatus.Unknown));
+                                    // build a list of all domains in pool
+                                    // which are in status Active or Unknown
+                                    Set<Guid> domainsInPool = new HashSet<Guid>(
+                                            DbFacade.getInstance().getStorageDomainStaticDAO().getAllIds(
+                                                    _storagePoolId, StorageDomainStatus.Active));
+                                    domainsInPool.addAll(DbFacade.getInstance()
+                                            .getStorageDomainStaticDAO()
+                                            .getAllIds(
+                                                    _storagePoolId, StorageDomainStatus.Unknown));
 
-                                            // build a list of all the domains in
-                                            // pool (domainsInPool) that are not
-                                            // visible by the host.
-                                            List<Guid> domainsInPoolThatNonVisibleByVds = new ArrayList<Guid>();
-                                            Set<Guid> dataDomainIds = new HashSet<Guid>();
-                                            for (VDSDomainsData tempData : data) {
-                                                dataDomainIds.add(tempData.getDomainId());
-                                            }
-                                            for (Guid tempDomainId : domainsInPool) {
-                                                if (!dataDomainIds.contains(tempDomainId)) {
-                                                    domainsInPoolThatNonVisibleByVds.add(tempDomainId);
-                                                }
-                                            }
-
-                                            // build a list of domains that the host
-                                            // reports as in problem (code!=0) or (code==0
-                                            // && lastChecl >
-                                            // ConfigValues.MaxStorageVdsTimeoutCheckSec)
-                                            // and are contained in the Active or
-                                            // Unknown domains in pool
-                                            List<Guid> domainsSeenByVdsInProblem = new ArrayList<Guid>();
-                                            for (VDSDomainsData tempData : data) {
-                                                if (domainsInPool.contains(tempData.getDomainId())) {
-                                                    if (tempData.getCode() != 0) {
-                                                        domainsSeenByVdsInProblem.add(tempData.getDomainId());
-                                                    } else if (tempData.getLastCheck() > Config
-                                                            .<Double> GetValue(ConfigValues.MaxStorageVdsTimeoutCheckSec)) {
-                                                        domainsSeenByVdsInProblem.add(tempData.getDomainId());
-                                                    } else if (tempData.getDelay() > Config.<Double> GetValue(ConfigValues.MaxStorageVdsDelayCheckSec)) {
-                                                        AuditLogableBase logable = new AuditLogableBase();
-                                                        logable.setVdsId(vdsId);
-                                                        logable.setStorageDomainId(tempData.getDomainId());
-                                                        logable.AddCustomValue("Delay",
-                                                                Double.toString(tempData.getDelay()));
-                                                        AuditLogDirector.log(logable,
-                                                                AuditLogType.VDS_DOMAIN_DELAY_INTERVAL);
-                                                    }
-                                                }
-                                            }
-
-                                            // build a list of all potential domains
-                                            // in problem
-                                            domainsInProblems = new HashSet<Guid>();
-                                            domainsInProblems.addAll(domainsInPoolThatNonVisibleByVds);
-                                            domainsInProblems.addAll(domainsSeenByVdsInProblem);
-
-                                        } catch (RuntimeException ex) {
-                                            log.error("error in UpdateVdsDomainsData", ex);
-                                        }
-
+                                    // build a list of all the domains in
+                                    // pool (domainsInPool) that are not
+                                    // visible by the host.
+                                    List<Guid> domainsInPoolThatNonVisibleByVds = new ArrayList<Guid>();
+                                    Set<Guid> dataDomainIds = new HashSet<Guid>();
+                                    for (VDSDomainsData tempData : data) {
+                                        dataDomainIds.add(tempData.getDomainId());
                                     }
-                                    return domainsInProblems;
+                                    for (Guid tempDomainId : domainsInPool) {
+                                        if (!dataDomainIds.contains(tempDomainId)) {
+                                            domainsInPoolThatNonVisibleByVds.add(tempDomainId);
+                                        }
+                                    }
+
+                                    // build a list of domains that the host
+                                    // reports as in problem (code!=0) or (code==0
+                                    // && lastChecl >
+                                    // ConfigValues.MaxStorageVdsTimeoutCheckSec)
+                                    // and are contained in the Active or
+                                    // Unknown domains in pool
+                                    List<Guid> domainsSeenByVdsInProblem = new ArrayList<Guid>();
+                                    for (VDSDomainsData tempData : data) {
+                                        if (domainsInPool.contains(tempData.getDomainId())) {
+                                            if (tempData.getCode() != 0) {
+                                                domainsSeenByVdsInProblem.add(tempData.getDomainId());
+                                            } else if (tempData.getLastCheck() > Config
+                                                    .<Double> GetValue(ConfigValues.MaxStorageVdsTimeoutCheckSec)) {
+                                                domainsSeenByVdsInProblem.add(tempData.getDomainId());
+                                            } else if (tempData.getDelay() > Config.<Double> GetValue(ConfigValues.MaxStorageVdsDelayCheckSec)) {
+                                                AuditLogableBase logable = new AuditLogableBase();
+                                                logable.setVdsId(vdsId);
+                                                logable.setStorageDomainId(tempData.getDomainId());
+                                                logable.AddCustomValue("Delay",
+                                                        Double.toString(tempData.getDelay()));
+                                                AuditLogDirector.log(logable,
+                                                        AuditLogType.VDS_DOMAIN_DELAY_INTERVAL);
+                                            }
+                                        }
+                                    }
+
+                                    // build a list of all potential domains
+                                    // in problem
+                                    domainsInProblems = new HashSet<Guid>();
+                                    domainsInProblems.addAll(domainsInPoolThatNonVisibleByVds);
+                                    domainsInProblems.addAll(domainsSeenByVdsInProblem);
+
+                                } catch (RuntimeException ex) {
+                                    log.error("error in UpdateVdsDomainsData", ex);
                                 }
-                            });
+
+                            }
+                            return domainsInProblems;
+                        }
+                    });
             if (domainsInProblems != null) {
                 synchronized (_lockObject) {
                     // during reconstruct master we do not want to update
