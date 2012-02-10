@@ -70,6 +70,10 @@ public class GlusterDiskEntity extends GlusterDeviceEntity {
         return partitions;
     }
 
+    public void addPartition(GlusterPartitionEntity partition) {
+        partitions.add(partition);
+    }
+
     public boolean hasPartitions() {
         return (partitions != null && partitions.size() > 0);
     }
