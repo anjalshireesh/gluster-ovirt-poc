@@ -42,6 +42,7 @@ public class GlusterDiskListReturnForXmlRpc extends StatusReturnForXmlRpc {
 
             Map<String, Object> partitionMap = (Map<String, Object>)temp.get(partitionName);
             populateDevice(partition, partitionMap);
+            disk.addPartition(partition);
         }
 
         return disk;
