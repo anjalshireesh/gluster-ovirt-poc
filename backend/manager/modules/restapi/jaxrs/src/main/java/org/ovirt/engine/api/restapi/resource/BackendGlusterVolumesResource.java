@@ -3,6 +3,8 @@
  */
 package org.ovirt.engine.api.restapi.resource;
 
+import java.util.List;
+
 import javax.ws.rs.core.Response;
 
 import org.ovirt.engine.api.model.GlusterVolume;
@@ -34,11 +36,11 @@ public class BackendGlusterVolumesResource extends AbstractBackendCollectionReso
         VdcReturnValueBase result =
                 backend.RunAction(VdcActionType.ListGlusterVolumes,
                         new VdsGroupParametersBase(Guid.createGuidFromString(getClusterId())));
-        GlusterVolumeEntity[] volumes = (GlusterVolumeEntity[])result.getActionReturnValue();
+        List<GlusterVolumeEntity> volumes = (List<GlusterVolumeEntity>)result.getActionReturnValue();
         return mapCollection(volumes);
     }
 
-    protected GlusterVolumes mapCollection(GlusterVolumeEntity[] entities) {
+    protected GlusterVolumes mapCollection(List<GlusterVolumeEntity> entities) {
         GlusterVolumes collection = new GlusterVolumes();
         for (GlusterVolumeEntity entity : entities) {
             collection.getGlusterVolumes().add(populate(map(entity), entity));
