@@ -13,19 +13,20 @@ import org.ovirt.engine.api.model.GlusterBricks;
 import org.ovirt.engine.api.model.GlusterVolume;
 import org.ovirt.engine.api.model.GlusterVolumes;
 import org.ovirt.engine.api.model.VM;
-import org.ovirt.engine.api.model.VolumeOption;
 import org.ovirt.engine.api.resource.GlusterVolumeBricksResource;
 import org.ovirt.engine.api.resource.GlusterVolumeResource;
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
+import org.ovirt.engine.core.common.constants.GlusterConstants.GLUSTER_TASK_OPERATION;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeBricksParameters;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeOptionParameters;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeParameters;
+import org.ovirt.engine.core.common.glusteractions.GlusterVolumeReplaceBrickParameters;
 import org.ovirt.engine.core.compat.Guid;
 
 public class BackendGlusterVolumeResource extends AbstractBackendActionableResource<VM, org.ovirt.engine.core.common.businessentities.VM> implements
-        GlusterVolumeResource {
+GlusterVolumeResource {
 
     private final BackendGlusterVolumesResource parent;
     private final String clusterId;
@@ -55,25 +56,25 @@ public class BackendGlusterVolumeResource extends AbstractBackendActionableResou
     @Override
     public Response start(Action action) {
         return performAction(VdcActionType.StartGlusterVolume,
-                    new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), get().getVolumeName()));
+                new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), get().getVolumeName()));
     }
 
     @Override
     public Response stop(Action action) {
         return performAction(VdcActionType.StopGlusterVolume,
-                    new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), get().getVolumeName()));
+                new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), get().getVolumeName()));
     }
 
     @Override
     public Response rebalanceStart(Action action) {
         return performAction(VdcActionType.RebalanceGlusterVolumeStart,
-                    new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), get().getVolumeName()));
+                new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), get().getVolumeName()));
     }
 
     @Override
     public Response rebalanceStop(Action action) {
         return performAction(VdcActionType.RebalanceGlusterVolumeStop,
-                    new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), get().getVolumeName()));
+                new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), get().getVolumeName()));
     }
 
     @Override
@@ -88,23 +89,23 @@ public class BackendGlusterVolumeResource extends AbstractBackendActionableResou
     @Override
     public Response addBrick(Action action) {
         return performAction(VdcActionType.AddBricksToGlusterVolume,
-                    new GlusterVolumeBricksParameters(Guid.createGuidFromString(getClusterId()), get()
-                            .getVolumeName(), mapCollection(action.getGlusterBricks())));
+                new GlusterVolumeBricksParameters(Guid.createGuidFromString(getClusterId()), get()
+                        .getVolumeName(), mapCollection(action.getGlusterBricks())));
     }
 
     @Override
     public Response removeBrick(Action action) {
         return performAction(VdcActionType.RemoveBricksFromGlusterVolume,
-                    new GlusterVolumeBricksParameters(Guid.createGuidFromString(getClusterId()), get()
-                            .getVolumeName(), mapCollection(action.getGlusterBricks())));
+                new GlusterVolumeBricksParameters(Guid.createGuidFromString(getClusterId()), get()
+                        .getVolumeName(), mapCollection(action.getGlusterBricks())));
     }
 
     @Override
     public Response setVolumeOption(Action action) {
         return performAction(VdcActionType.SetGlusterVolumeOption,
-                    new GlusterVolumeOptionParameters(Guid.createGuidFromString(getClusterId()),
-                            get().getVolumeName(),
-                            getMapper(VolumeOption.class, GlusterVolumeOption.class).map(action.getVolumeOption(), null)));
+                new GlusterVolumeOptionParameters(Guid.createGuidFromString(getClusterId()),
+                        get().getVolumeName(),
+                        getMapper(VolumeOption.class, GlusterVolumeOption.class).map(action.getVolumeOption(), null)));
     }
 
     protected List<GlusterBrickEntity> mapCollection(GlusterBricks brickList) {
@@ -114,5 +115,24 @@ public class BackendGlusterVolumeResource extends AbstractBackendActionableResou
             collection.add(brickEntity);
         }
         return collection;
+    }
+
+    protected GlusterBrickEntity mapCollection(GlusterBrick brick) {
+        return getMapper(GlusterBrick.class, GlusterBrickEntity.class).map(brick, null);
+    }
+
+    @Override
+    public Response replaceBrick(Action action) {
+        try {
+            return performAction(VdcActionType.ReplaceGlusterVolumeBrick,
+                    new GlusterVolumeReplaceBrickParameters(Guid.createGuidFromString(getClusterId()),
+                            get()
+                            .getVolumeName(),
+                            mapCollection(action.getSourceBrick()),
+                            mapCollection(action.getTargetBrick()),
+                            GLUSTER_TASK_OPERATION.valueOf(action.getOperation().toUpperCase())));
+        } catch (Exception e) {
+            return handleError(e, false);
+        }
     }
 }

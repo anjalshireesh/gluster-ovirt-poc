@@ -19,7 +19,7 @@ public interface GlusterVolumeResource {
     @Formatted
     public GlusterVolume get();
 
-    @Path("{action: (start|stop|rebalanceStart|rebalanceStop|addBrick|removeBrick|setOption)}/{oid}")
+    @Path("{action: (start|stop|rebalanceStart|rebalanceStop|addBrick|removeBrick|setOption|replaceBrick)}/{oid}")
     public ActionResource getActionSubresource(@PathParam("action") String action, @PathParam("oid") String oid);
 
     @Path("glusterbricks")
@@ -73,4 +73,11 @@ public interface GlusterVolumeResource {
     @Actionable
     @Path("setOption")
     public Response setVolumeOption(Action action);
+
+    @POST
+    @Formatted
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_X_YAML })
+    @Actionable
+    @Path("replaceBrick")
+    public Response replaceBrick(Action action);
 }
