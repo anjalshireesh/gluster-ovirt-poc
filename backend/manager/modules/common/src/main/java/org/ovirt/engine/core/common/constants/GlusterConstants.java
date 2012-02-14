@@ -50,7 +50,7 @@ public class GlusterConstants {
     public static final String STATS_PERIOD_1MONTH = "1m";
     public static final String STATS_PERIOD_1YEAR = "1y";
 
-    public enum VOLUME_OPERATION {
+    public enum GLUSTER_TASK_OPERATION {
         START,
         ABORT,
         PAUSE,

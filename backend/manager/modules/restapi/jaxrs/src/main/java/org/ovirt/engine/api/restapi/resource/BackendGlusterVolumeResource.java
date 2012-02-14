@@ -18,8 +18,7 @@ import org.ovirt.engine.api.resource.GlusterVolumeResource;
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
-import org.ovirt.engine.core.common.constants.GlusterConstants;
-import org.ovirt.engine.core.common.constants.GlusterConstants.VOLUME_OPERATION;
+import org.ovirt.engine.core.common.constants.GlusterConstants.GLUSTER_TASK_OPERATION;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeBricksParameters;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeOptionParameters;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeParameters;
@@ -122,22 +121,6 @@ GlusterVolumeResource {
         return getMapper(GlusterBrick.class, GlusterBrickEntity.class).map(brick, null);
     }
 
-    public VOLUME_OPERATION getReplaceBrickOperation(String action) {
-        if (action.equalsIgnoreCase(GlusterConstants.START)) {
-            return GlusterConstants.VOLUME_OPERATION.START;
-        } else if (action.equalsIgnoreCase(GlusterConstants.ABORT)) {
-            return GlusterConstants.VOLUME_OPERATION.ABORT;
-        } else if (action.equalsIgnoreCase(GlusterConstants.STATUS)) {
-            return GlusterConstants.VOLUME_OPERATION.STATUS;
-        } else if (action.equalsIgnoreCase(GlusterConstants.PAUSE)) {
-            return GlusterConstants.VOLUME_OPERATION.PAUSE;
-        } else if (action.equalsIgnoreCase(GlusterConstants.COMMIT)) {
-            return GlusterConstants.VOLUME_OPERATION.COMMIT;
-        } else {
-            return null;
-        }
-    }
-
     @Override
     public Response replaceBrick(Action action) {
         try {
@@ -147,7 +130,7 @@ GlusterVolumeResource {
                             .getVolumeName(),
                             mapCollection(action.getSourceBrick()),
                             mapCollection(action.getTargetBrick()),
-                            getReplaceBrickOperation(action.getOperation())));
+                            GLUSTER_TASK_OPERATION.valueOf(action.getOperation().toUpperCase())));
         } catch (Exception e) {
             return handleError(e, false);
         }
