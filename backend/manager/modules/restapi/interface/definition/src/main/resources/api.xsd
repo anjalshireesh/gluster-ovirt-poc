@@ -170,6 +170,10 @@
 	  <xs:element name="gluster_bricks" type="GlusterBricks" minOccurs="0" />
 	  <!--  ... Gluster Volume set option parameter   -->
 	  <xs:element name="volume_option" type="VolumeOption" minOccurs="0" maxOccurs="1" />
+	  <!-- replace brick action -->
+	  <xs:element name="source_brick" type="GlusterBrick" minOccurs="0" />
+	  <xs:element name="target_brick" type="GlusterBrick" minOccurs="0" />
+	  <xs:element name="operation" type="xs:string" minOccurs="0" />
     </xs:sequence>
   </xs:group>
 
