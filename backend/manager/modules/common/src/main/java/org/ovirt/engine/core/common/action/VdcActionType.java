@@ -251,7 +251,8 @@ public enum VdcActionType {
     ListGlusterBricks(1407),
     RemoveBricksFromGlusterVolume(1408, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
     DeleteGlusterVolume(1409, ActionGroup.GLUSTER_DELETE_VOLUME),
-    SetGlusterVolumeOption(1410, ActionGroup.GLUSTER_VOLUME_OPERATIONS);
+    SetGlusterVolumeOption(1410, ActionGroup.GLUSTER_VOLUME_OPERATIONS),
+    ReplaceGlusterVolumeBrick(1409, ActionGroup.GLUSTER_VOLUME_OPERATIONS);
 
     private int intValue;
     private ActionGroup actionGroup;
