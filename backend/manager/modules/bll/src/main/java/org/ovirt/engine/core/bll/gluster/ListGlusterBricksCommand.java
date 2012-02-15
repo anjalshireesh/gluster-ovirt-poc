@@ -70,14 +70,14 @@ public class ListGlusterBricksCommand extends GlusterCommandBase<GlusterVolumePa
             if(returnValue.getSucceeded()) {
                 GlusterDiskEntity[] disks = (GlusterDiskEntity[])returnValue.getReturnValue();
                 for(GlusterDiskEntity disk : disks) {
-                    if(disk.isReady()) {
-                        addBrickToList(bricks, host, disk);
-                    } else if(disk.hasPartitions()) {
-                        for(GlusterPartitionEntity partition : disk.getPartitions()) {
-                            if(partition.isReady()) {
+                    if (disk.hasPartitions()) {
+                        for (GlusterPartitionEntity partition : disk.getPartitions()) {
+                            if (partition.isReady()) {
                                 addBrickToList(bricks, host, partition);
                             }
                         }
+                    } else if (disk.isReady()) {
+                        addBrickToList(bricks, host, disk);
                     }
                 }
             }
