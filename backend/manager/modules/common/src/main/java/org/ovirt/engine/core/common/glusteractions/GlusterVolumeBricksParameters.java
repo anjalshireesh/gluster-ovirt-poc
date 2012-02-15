@@ -8,8 +8,8 @@ import org.ovirt.engine.core.compat.Guid;
 public class GlusterVolumeBricksParameters extends GlusterVolumeParameters {
 
     private List<GlusterBrickEntity> bricks;
-    public GlusterVolumeBricksParameters(Guid vdsGroupId, String volumeName, List<GlusterBrickEntity> Bricks) {
-        super(vdsGroupId, volumeName);
+    public GlusterVolumeBricksParameters(Guid clusterId, String volumeName, List<GlusterBrickEntity> Bricks) {
+        super(clusterId, volumeName);
         setBricks(Bricks);
 
     }
