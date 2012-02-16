@@ -125,6 +125,7 @@ public enum VDSCommandType {
     HotUnPlugDisk("org.ovirt.engine.core.vdsbroker.vdsbroker"),
     Snapshot("org.ovirt.engine.core.vdsbroker.vdsbroker");
     CreateGlusterVolume("org.ovirt.engine.core.vdsbroker.glusterbroker"),
+    DeleteGlusterVolume("org.ovirt.engine.core.vdsbroker.glusterbroker"),
     AddBricksToGlusterVolume("org.ovirt.engine.core.vdsbroker.glusterbroker"),
     StartGlusterVolume("org.ovirt.engine.core.vdsbroker.glusterbroker"),
     StopGlusterVolume("org.ovirt.engine.core.vdsbroker.glusterbroker"),
