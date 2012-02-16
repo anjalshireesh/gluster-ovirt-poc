@@ -359,6 +359,7 @@ public enum VdcBllErrors {
     // Gluster errors
     VOLUME_CREATION_FAILED(6000),
     GLUSTER_COMMAND_FAILED(6010),
+    GLUSTER_VOLUME_DELETE_FAILED(6120),
 
     // error to indicate backend does not recognize the session
     SESSION_ERROR(9999), ;
