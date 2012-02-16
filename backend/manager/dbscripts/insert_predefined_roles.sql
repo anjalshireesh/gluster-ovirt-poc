@@ -130,6 +130,8 @@ INSERT INTO roles_groups(role_id,action_group_id) VALUES(v_super_user_id_0001,70
 INSERT INTO roles_groups(role_id,action_group_id) VALUES(v_super_user_id_0001,900);
 --CONFIGURE_GLUSTER_MANIPULATE_VOLUME
 INSERT INTO roles_groups(role_id,action_group_id) VALUES(v_super_user_id_0001,901);
+--CONFIGURE_GLUSTER_DELETE_VOLUME
+INSERT INTO roles_groups(role_id,action_group_id) VALUES(v_super_user_id_0001,902);
 
 delete from roles_groups where role_id = v_user_id_1001;
 INSERT INTO roles(id,name,description,is_readonly,role_type) select v_user_id_1001,'ENGINEUser','oVirt user',true,2 where not exists (select id,name,description,is_readonly,role_type from roles where id=v_user_id_1001 and name='ENGINEUser' and description='oVirt user' and is_readonly=true and role_type=2);

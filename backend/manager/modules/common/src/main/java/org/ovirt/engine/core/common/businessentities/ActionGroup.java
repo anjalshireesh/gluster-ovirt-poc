@@ -65,7 +65,8 @@ public enum ActionGroup {
 
     // Gluster Volume Action Group
     GLUSTER_CREATE_VOLUME(900, RoleType.ADMIN, VdcObjectType.GlusterVolume),
-    GLUSTER_VOLUME_OPERATIONS(901, RoleType.ADMIN, VdcObjectType.GlusterVolume);
+    GLUSTER_VOLUME_OPERATIONS(901, RoleType.ADMIN, VdcObjectType.GlusterVolume),
+    GLUSTER_DELETE_VOLUME(902, RoleType.ADMIN, VdcObjectType.GlusterVolume);
 
     private int id;
     private RoleType roleType;
