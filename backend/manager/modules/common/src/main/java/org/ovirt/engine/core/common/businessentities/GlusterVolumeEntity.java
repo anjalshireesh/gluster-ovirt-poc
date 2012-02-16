@@ -35,7 +35,7 @@ import org.ovirt.engine.core.common.utils.GlusterCoreUtil;
 import org.ovirt.engine.core.common.utils.StringUtil;
 import org.ovirt.engine.core.compat.Guid;
 
-public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity<String> {
+public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity<Guid> {
     public enum VOLUME_STATUS {
         ONLINE,
         OFFLINE
@@ -78,7 +78,7 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     private VOLUME_STATUS status;
     private int replicaCount;
     private int stripeCount;
-    private GlusterVolumeOptions options = new GlusterVolumeOptions();
+    private final Map<String, GlusterVolumeOption> options = new LinkedHashMap<String, GlusterVolumeOption>();
     private List<GlusterBrickEntity> bricks = new ArrayList<GlusterBrickEntity>();
     private List<String> cifsUsers = new ArrayList<String>();
     private Guid clusterId;
@@ -218,7 +218,7 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     }
 
     public String getAccessControlList() {
-        return options.get(OPTION_AUTH_ALLOW);
+        return options.get(OPTION_AUTH_ALLOW).getValue();
     }
 
     public void setAccessControlList(String accessControlList) {
@@ -226,7 +226,7 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     }
 
     public boolean isNfsEnabled() {
-        String nfsDisabled = options.get(OPTION_NFS_DISABLE);
+        String nfsDisabled = options.get(OPTION_NFS_DISABLE).getValue();
         if (nfsDisabled == null || nfsDisabled.equalsIgnoreCase(GlusterConstants.OFF)) {
             return true;
         } else {
@@ -234,21 +234,37 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
         }
     }
 
-    public GlusterVolumeOptions getOptions() {
-        return options;
+    public Collection<GlusterVolumeOption> getOptions() {
+        return options.values();
+    }
+
+    /**
+     * Returns value of given option key as set on the volume. <br>
+     * In case the option is not set, <code>null</code> will be returned.
+     */
+    public String getOptionValue(String optionKey) {
+        GlusterVolumeOption option = options.get(optionKey);
+        if(option == null) {
+            return null;
+        }
+        return option.getValue();
+    }
+
+    private void setOption(GlusterVolumeOption option) {
+        options.put(option.getKey(), option);
     }
 
     public void setOption(String key, String value) {
-        options.put(key, value);
-    }
-
-    public void setOptions(GlusterVolumeOptions options) {
-        this.options = options;
+        if(options.containsKey(key)) {
+            options.get(key).setValue(value);
+        } else {
+            options.put(key, new GlusterVolumeOption(key, value));
+        }
     }
 
     public void setOptions(String options) {
+        this.options.clear();
         if(options == null || options.trim().isEmpty()) {
-            this.options = new GlusterVolumeOptions();
             return;
         }
 
@@ -259,12 +275,18 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
         }
     }
 
-    public void setOptions(LinkedHashMap<String, String> options) {
-        List<GlusterVolumeOption> volumeOptions = new ArrayList<GlusterVolumeOption>();
-        for (Entry<String, String> entry : options.entrySet()) {
-            volumeOptions.add(new GlusterVolumeOption(entry.getKey(), entry.getValue()));
+    public void setOptions(Collection<GlusterVolumeOption> options) {
+        this.options.clear();
+        for(GlusterVolumeOption option : options) {
+            setOption(option);
         }
-        this.options.setOptions(volumeOptions);
+    }
+
+    public void setOptions(LinkedHashMap<String, String> options) {
+        this.options.clear();
+        for(Entry<String, String> entry : options.entrySet()) {
+            setOption(entry.getKey(), entry.getValue());
+        }
     }
 
     public void addBrick(GlusterBrickEntity GlusterBrick) {
@@ -391,9 +413,14 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
         if (!(getName().equals(volume.getName()) && getVolumeType() == volume.getVolumeType()
                 && getTransportType() == volume.getTransportType() && getStatus() == volume.getStatus()
                 && getReplicaCount() == volume.getReplicaCount()
-                && getStripeCount() == volume.getStripeCount()
-                && getOptions().equals(volume.getOptions()))) {
+                && getStripeCount() == volume.getStripeCount())) {
             return false;
+        }
+
+        for(GlusterVolumeOption option : getOptions()) {
+            if(!volume.getOptionValue(option.getKey()).equals(option.getValue())) {
+                return false;
+            }
         }
 
         for (ACCESS_PROTOCOL nasProtocol : getAccessProtocols()) {
@@ -439,7 +466,7 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
         setStripeCount(newVolume.getStripeCount());
         setAccessProtocols(newVolume.getAccessProtocols());
         setCifsUsers(newVolume.getCifsUsers());
-        getOptions().copyFrom(newVolume.getOptions());
+        setOptions(newVolume.getOptions());
     }
 
     @Override

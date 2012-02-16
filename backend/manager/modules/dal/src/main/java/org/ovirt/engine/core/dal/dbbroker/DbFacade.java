@@ -15,6 +15,7 @@ import org.ovirt.engine.core.common.businessentities.BusinessEntity;
 import org.ovirt.engine.core.common.businessentities.DiskImage;
 import org.ovirt.engine.core.common.businessentities.DiskImageDynamic;
 import org.ovirt.engine.core.common.businessentities.DiskImageTemplate;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.StorageDomainStatus;
 import org.ovirt.engine.core.common.businessentities.StorageDomainType;
 import org.ovirt.engine.core.common.businessentities.VdsDynamic;
@@ -88,6 +89,7 @@ import org.ovirt.engine.core.dao.VmPoolDAO;
 import org.ovirt.engine.core.dao.VmStaticDAO;
 import org.ovirt.engine.core.dao.VmStatisticsDAO;
 import org.ovirt.engine.core.dao.VmTemplateDAO;
+import org.ovirt.engine.core.dao.gluster.GlusterVolumeDAO;
 import org.ovirt.engine.core.utils.linq.LinqUtils;
 import org.ovirt.engine.core.utils.linq.Predicate;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -125,6 +127,7 @@ public class DbFacade {
             put(VmNetworkInterface.class, VmNetworkInterfaceDAO.class);
             put(VmNetworkStatistics.class, VmNetworkStatisticsDAO.class);
             put(network.class, NetworkDAO.class);
+            put(GlusterVolumeEntity.class, GlusterVolumeDAO.class);
         }
     };
 
@@ -730,6 +733,9 @@ public class DbFacade {
         return getDAO(QuotaDAO.class);
     }
 
+    public GlusterVolumeDAO getGlusterVolumeDAO() {
+        return getDAO(GlusterVolumeDAO.class);
+    }
 
     public void setOnStartConnectionTimeout(int onStartConnectionTimeout) {
         this.onStartConnectionTimeout = onStartConnectionTimeout;

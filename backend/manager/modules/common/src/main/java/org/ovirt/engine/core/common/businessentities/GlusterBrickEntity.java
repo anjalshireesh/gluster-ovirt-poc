@@ -21,6 +21,7 @@ package org.ovirt.engine.core.common.businessentities;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.ovirt.engine.core.common.utils.StringUtil;
+import org.ovirt.engine.core.compat.Guid;
 
 public class GlusterBrickEntity extends GlusterEntity {
     public enum BRICK_STATUS {
@@ -28,8 +29,9 @@ public class GlusterBrickEntity extends GlusterEntity {
         OFFLINE
     };
 
-    private String[] BRICK_STATUS_STR = { "Online", "Offline" };
+    private final String[] BRICK_STATUS_STR = { "Online", "Offline" };
 
+    private Guid serverId;
     private String serverName;
     // private String deviceName;
     private String brickDirectory;
@@ -125,7 +127,7 @@ public class GlusterBrickEntity extends GlusterEntity {
         }
 
         GlusterBrickEntity brick = (GlusterBrickEntity) obj;
-        if (getQualifiedName().equals(brick.getQualifiedName()) && getStatus() == brick.getStatus()) {
+        if (getServerId().equals(brick.getServerId()) && getStatus() == brick.getStatus()) {
             return true;
         }
 
@@ -142,5 +144,13 @@ public class GlusterBrickEntity extends GlusterEntity {
     @Override
     public Object getQueryableId() {
         return getId();
+    }
+
+    public Guid getServerId() {
+        return serverId;
+    }
+
+    public void setServerId(Guid serverId) {
+        this.serverId = serverId;
     }
 }

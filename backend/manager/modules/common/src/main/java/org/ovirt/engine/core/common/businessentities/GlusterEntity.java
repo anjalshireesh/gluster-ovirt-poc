@@ -21,9 +21,10 @@ package org.ovirt.engine.core.common.businessentities;
 import java.io.Serializable;
 
 import org.ovirt.engine.core.common.utils.StringUtil;
+import org.ovirt.engine.core.compat.Guid;
 
 public class GlusterEntity extends IVdcQueryable implements Filterable, Serializable {
-    private String id;
+    private Guid id;
     protected String name;
 
     public GlusterEntity() {
@@ -52,11 +53,11 @@ public class GlusterEntity extends IVdcQueryable implements Filterable, Serializ
         return name;
     }
 
-    public String getId() {
-        return id == null ? getName() : id;
+    public Guid getId() {
+        return id;
     }
 
-    public void setId(String id) {
+    public void setId(Guid id) {
         this.id = id;
     }
 }

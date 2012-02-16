@@ -6,6 +6,7 @@ import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.TRANSPORT_TYPE;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_STATUS;
 import org.ovirt.engine.core.vdsbroker.irsbroker.StatusReturnForXmlRpc;
+import org.ovirt.engine.core.compat.Guid;
 
 public final class GlusterVolumeListReturnForXmlRpc extends StatusReturnForXmlRpc {
     private static final String GLUSTER_VOLUMES = "volumes";
@@ -29,7 +30,7 @@ public final class GlusterVolumeListReturnForXmlRpc extends StatusReturnForXmlRp
 
     private GlusterVolumeEntity prepareVolumeEntity(Map<String, Object> volumeMap) {
         GlusterVolumeEntity volume = new GlusterVolumeEntity();
-        volume.setId(volumeMap.get("uuid").toString());
+        volume.setId(Guid.createGuidFromString(volumeMap.get("uuid").toString()));
         volume.setName(volumeMap.get("volumeName").toString());
         volume.setVolumeType(volumeMap.get("volumeType").toString());
 

@@ -14,6 +14,7 @@ import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.ACCESS_
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.TRANSPORT_TYPE;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_STATUS;
 import org.ovirt.engine.core.common.utils.StringUtil;
+import org.ovirt.engine.core.compat.Guid;
 
 public class GlusterVolumeMapper {
     private static final GlusterBrickMapper brickMapper = new GlusterBrickMapper();
@@ -21,7 +22,7 @@ public class GlusterVolumeMapper {
     @Mapping(from = GlusterVolume.class, to = GlusterVolumeEntity.class)
     public static GlusterVolumeEntity map(GlusterVolume fromVolume, GlusterVolumeEntity toVolume) {
         GlusterVolumeEntity volume = toVolume != null ? toVolume : new GlusterVolumeEntity();
-        volume.setId(fromVolume.getId());
+        volume.setId(Guid.createGuidFromString(fromVolume.getId()));
         volume.setName(fromVolume.getVolumeName());
         volume.setVolumeType(fromVolume.getVolumeType());
         volume.setOptions(fromVolume.getOptions());
@@ -63,7 +64,7 @@ public class GlusterVolumeMapper {
     @Mapping(from = GlusterVolumeEntity.class, to = GlusterVolume.class)
     public static GlusterVolume map(GlusterVolumeEntity fromVolume, GlusterVolume toVolume) {
         GlusterVolume volume = toVolume != null ? toVolume : new GlusterVolume();
-        volume.setId(fromVolume.getId());
+        volume.setId(fromVolume.getId().toString());
         volume.setVolumeName(fromVolume.getName());
         volume.setVolumeType(fromVolume.getVolumeType().toString());
         volume.setTransportType(fromVolume.getTransportType().toString());
@@ -83,7 +84,7 @@ public class GlusterVolumeMapper {
         volume.setReplicaCount(BigInteger.valueOf(fromVolume.getReplicaCount()));
         volume.setStripeCount(BigInteger.valueOf(fromVolume.getStripeCount()));
         volume.setCifsUsers(StringUtil.collectionToString(fromVolume.getCifsUsers(), ","));
-        volume.setOptions(StringUtil.collectionToString(fromVolume.getOptions().getOptions(), ","));
+        volume.setOptions(StringUtil.collectionToString(fromVolume.getOptions(), ","));
 
         volume.setStatus(fromVolume.getStatus().toString());
 

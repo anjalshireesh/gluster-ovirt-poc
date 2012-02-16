@@ -3,6 +3,8 @@
  */
 package org.ovirt.engine.api.restapi.resource;
 
+import javax.ws.rs.core.Response;
+
 import org.ovirt.engine.api.model.GlusterBrick;
 import org.ovirt.engine.api.model.GlusterBricks;
 import org.ovirt.engine.api.model.GlusterVolume;
@@ -32,5 +34,11 @@ implements GlusterVolumeBricksResource {
 
     public String getClusterId() {
         return clusterId;
+    }
+
+    @Override
+    protected Response performRemove(String id) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

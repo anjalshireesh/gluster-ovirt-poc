@@ -54,7 +54,7 @@ public class CreateGlusterVolumeVDSCommand extends GlusterBrokerCommand<CreateGl
             ProceedProxyReturnValue();
         }
 
-        for(GlusterVolumeOption option : volume.getOptions().getOptions()) {
+        for(GlusterVolumeOption option : volume.getOptions()) {
             status = getIrsProxy().glusterVolumeSet(volume.getName(), option.getKey(), option.getValue());
             ProceedProxyReturnValue();
         }
