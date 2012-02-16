@@ -8,6 +8,7 @@ import org.ovirt.engine.core.common.businessentities.GlusterDeviceEntity.DEVICE_
 import org.ovirt.engine.core.common.businessentities.GlusterDiskEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterPartitionEntity;
 import org.ovirt.engine.core.vdsbroker.irsbroker.StatusReturnForXmlRpc;
+import org.ovirt.engine.core.compat.Guid;
 
 public class GlusterDiskListReturnForXmlRpc extends StatusReturnForXmlRpc {
     private static final String GLUSTER_DISKS = "disks";
@@ -51,7 +52,7 @@ public class GlusterDiskListReturnForXmlRpc extends StatusReturnForXmlRpc {
     private void populateDevice(GlusterDeviceEntity device, Map<String, Object> deviceMap) {
         device.setFsType(deviceMap.get("fsType").toString());
         device.setFsVersion(deviceMap.get("fsVersion").toString());
-        device.setId(deviceMap.get("uuid").toString());
+        device.setId(Guid.createGuidFromString(deviceMap.get("uuid").toString()));
         device.setMountPoint(deviceMap.get("mountPoint").toString());
 
         String diskSize = deviceMap.get("size").toString().trim();

@@ -16,6 +16,8 @@ import org.ovirt.engine.core.common.businessentities.Disk;
 import org.ovirt.engine.core.common.businessentities.DiskImage;
 import org.ovirt.engine.core.common.businessentities.DiskImageDynamic;
 import org.ovirt.engine.core.common.businessentities.Snapshot;
+import org.ovirt.engine.core.common.businessentities.DiskImageTemplate;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.StorageDomainStatus;
 import org.ovirt.engine.core.common.businessentities.StorageDomainType;
 import org.ovirt.engine.core.common.businessentities.VdsDynamic;
@@ -92,6 +94,7 @@ import org.ovirt.engine.core.dao.VmPoolDAO;
 import org.ovirt.engine.core.dao.VmStaticDAO;
 import org.ovirt.engine.core.dao.VmStatisticsDAO;
 import org.ovirt.engine.core.dao.VmTemplateDAO;
+import org.ovirt.engine.core.dao.gluster.GlusterVolumeDAO;
 import org.ovirt.engine.core.utils.linq.LinqUtils;
 import org.ovirt.engine.core.utils.linq.Predicate;
 import org.ovirt.engine.core.utils.log.Log;
@@ -133,6 +136,7 @@ public class DbFacade {
             put(network.class, NetworkDAO.class);
             put(Snapshot.class, SnapshotDao.class);
             put(VmDevice.class, VmDeviceDAO.class);
+            put(GlusterVolumeEntity.class, GlusterVolumeDAO.class);
         }
     };
 
@@ -768,6 +772,10 @@ public class DbFacade {
      */
     public StepDao getStepDao() {
         return getDAO(StepDao.class);
+    }
+
+    public GlusterVolumeDAO getGlusterVolumeDAO() {
+        return getDAO(GlusterVolumeDAO.class);
     }
 
     public void setOnStartConnectionTimeout(int onStartConnectionTimeout) {

@@ -10,6 +10,9 @@ import org.ovirt.engine.core.common.glustercommands.CreateGlusterVolumeVDSParame
 import org.ovirt.engine.core.common.vdscommands.VDSCommandType;
 import org.ovirt.engine.core.common.vdscommands.VDSReturnValue;
 import org.ovirt.engine.core.dal.VdcBllMessages;
+import org.ovirt.engine.core.dal.dbbroker.DbFacade;
+import org.ovirt.engine.core.utils.transaction.TransactionMethod;
+import org.ovirt.engine.core.utils.transaction.TransactionSupport;
 
 /**
  *
@@ -36,15 +39,31 @@ public class CreateGlusterVolumeCommand extends GlusterCommandBase<CreateGluster
      */
     @Override
     protected void executeCommand() {
-        VDSReturnValue returnValue =
-                Backend
-                        .getInstance()
-                        .getResourceManager()
-                        .RunVdsCommand(
-                                VDSCommandType.CreateGlusterVolume,
-                                new CreateGlusterVolumeVDSParameters(getVdsGroup().getstorage_pool_id().getValue(),
-                                        getParameters().getVolume()));
-        setSucceeded(returnValue.getSucceeded());
+        TransactionSupport.executeInNewTransaction(new TransactionMethod<Void>() {
+            @Override
+            public Void runInTransaction() {
+                VDSReturnValue returnValue =
+                    Backend
+                            .getInstance()
+                            .getResourceManager()
+                            .RunVdsCommand(
+                                    VDSCommandType.CreateGlusterVolume,
+                                    new CreateGlusterVolumeVDSParameters(getVdsGroup().getstorage_pool_id().getValue(),
+                                            getParameters().getVolume()));
+
+                AddVolumeToDb();
+                //TODO: What is compensation all about? needs to be understood.
+                //getCompensationContext().stateChanged();
+
+                setSucceeded(returnValue.getSucceeded());
+                return null;
+            }
+
+            private void AddVolumeToDb() {
+                DbFacade.getInstance().getGlusterVolumeDAO().save(getParameters().getVolume());
+            }
+        });
+
     }
 
     @Override

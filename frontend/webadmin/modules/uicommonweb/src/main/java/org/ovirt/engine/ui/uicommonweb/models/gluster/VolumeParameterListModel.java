@@ -54,7 +54,7 @@ public class VolumeParameterListModel extends SearchableListModel {
         }
         super.OnEntityChanged();
         GlusterVolumeEntity glusterVolumeEntity = (GlusterVolumeEntity)getEntity();
-        setItems(glusterVolumeEntity.getOptions().getOptions());
+        setItems(glusterVolumeEntity.getOptions());
     }
 
     @Override
