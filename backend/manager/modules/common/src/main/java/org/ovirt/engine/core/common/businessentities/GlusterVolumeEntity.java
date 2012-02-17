@@ -73,9 +73,10 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     private static final String[] STATUS_STR = new String[] { "Online", "Offline" };
     private static final String[] ACCESS_PROTOCOL_STR = new String[] { "Gluster", "NFS", "CIFS" };
 
-    private VOLUME_TYPE volumeType;
-    private TRANSPORT_TYPE transportType;
-    private VOLUME_STATUS status;
+    private VOLUME_TYPE volumeType = VOLUME_TYPE.DISTRIBUTE;
+    private TRANSPORT_TYPE transportType = TRANSPORT_TYPE.ETHERNET;
+    private VOLUME_STATUS status = VOLUME_STATUS.OFFLINE;
+
     private int replicaCount;
     private int stripeCount;
     private final Map<String, GlusterVolumeOption> options = new LinkedHashMap<String, GlusterVolumeOption>();
@@ -218,7 +219,7 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     }
 
     public String getAccessControlList() {
-        return options.get(OPTION_AUTH_ALLOW).getValue();
+        return getOptionValue(OPTION_AUTH_ALLOW);
     }
 
     public void setAccessControlList(String accessControlList) {
@@ -226,7 +227,7 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     }
 
     public boolean isNfsEnabled() {
-        String nfsDisabled = options.get(OPTION_NFS_DISABLE).getValue();
+        String nfsDisabled = getOptionValue(OPTION_NFS_DISABLE);
         if (nfsDisabled == null || nfsDisabled.equalsIgnoreCase(GlusterConstants.OFF)) {
             return true;
         } else {

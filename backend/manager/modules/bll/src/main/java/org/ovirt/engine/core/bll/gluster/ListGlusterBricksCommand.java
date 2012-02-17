@@ -89,7 +89,10 @@ public class ListGlusterBricksCommand extends GlusterCommandBase<GlusterVolumePa
     }
 
     private void addBrickToList(List<GlusterBrickEntity> bricks, VDS host, GlusterDeviceEntity device) {
-        GlusterBrickEntity brick = new GlusterBrickEntity(host.gethost_name(), device.getMountPoint() + "/" + getParameters().getVolumeName());
+        GlusterBrickEntity brick =
+                new GlusterBrickEntity(host.getStaticData(), device.getMountPoint() + "/"
+                        + getParameters().getVolumeName());
+        brick.setId(host.getvds_id());
         bricks.add(brick);
     }
 

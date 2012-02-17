@@ -98,6 +98,20 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
         return volume;
     }
 
+    @Override
+    public GlusterVolumeEntity getByName(Guid clusterId, String volName) {
+        GlusterVolumeEntity volume = getCallsHandler().executeRead(
+                "GetGlusterVolumeByName", getVolumeFromResultSet(),
+                getCustomMapSqlParameterSource().addValue("cluster_id", clusterId).addValue("vol_name", volName));
+
+        if (volume != null) {
+            volume.setBricks(getBricksOfVolume(volume.getId()));
+            volume.setOptions(getOptionsOfVolume(volume.getId()));
+            volume.setAccessProtocols(new HashSet<GlusterVolumeEntity.ACCESS_PROTOCOL>(getAccessProtocolsOfVolume(volume.getId())));
+        }
+        return volume;
+    }
+
     private MapSqlParameterSource createVolumeIdParamSource(Guid id) {
         return getCustomMapSqlParameterSource().addValue("volume_id", id);
     }

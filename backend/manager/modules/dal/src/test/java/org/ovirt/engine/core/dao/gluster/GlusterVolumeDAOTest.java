@@ -16,15 +16,15 @@ import org.ovirt.engine.core.dao.BaseDAOTestCase;
 
 public class GlusterVolumeDAOTest extends BaseDAOTestCase {
     private GlusterVolumeDAO dao;
-    private final String DEFAULT_CLUSTER_ID = "99408929-82cf-4dc7-a532-9d998063fa95";
-    private final String HOST_ID = "afce7a39-8e8c-4819-ba9c-796d316592e6";
+    private static final Guid HOST_ID = new Guid("afce7a39-8e8c-4819-ba9c-796d316592e6");
+    private static final Guid CLUSTER_ID = new Guid("0e57070e-2469-4b38-84a2-f111aaabd49d");
     private VdsStatic host;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
         dao = dbFacade.getGlusterVolumeDAO();
-        host = dbFacade.getVdsStaticDAO().get(new Guid(HOST_ID));
+        host = dbFacade.getVdsStaticDAO().get(HOST_ID);
     }
 
     public GlusterVolumeDAOTest() throws Exception {
@@ -37,7 +37,7 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
 
         GlusterVolumeEntity volume = new GlusterVolumeEntity();
         volume.setName("testVol1");
-        volume.setClusterId(new Guid("0e57070e-2469-4b38-84a2-f111aaabd49d"));
+        volume.setClusterId(CLUSTER_ID);
         volume.setId(volumeId);
         volume.setVolumeType(VOLUME_TYPE.DISTRIBUTE);
         volume.setTransportType(TRANSPORT_TYPE.ETHERNET);
@@ -48,7 +48,7 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
         volume.setOption("auth.allow", "*");
         volume.setAccessProtocols("GLUSTER,NFS");
 
-        GlusterBrickEntity brick = new GlusterBrickEntity(host.gethost_name(), "/export/testVol1");
+        GlusterBrickEntity brick = new GlusterBrickEntity(host, "/export/testVol1");
         brick.setServerId(host.getId());
         brick.setStatus(BRICK_STATUS.ONLINE);
         volume.addBrick(brick);
@@ -58,9 +58,11 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
         GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
 
         assertNotNull(volumeEntity);
+        assertEquals(volumeEntity, volume);
 
-        // TODO: the whole objects must be compared, after we add logic to
-        // populate bricks, options, etc in the retrieved volume object
+        volumeEntity = dao.getByName(CLUSTER_ID, volume.getName());
+
+        assertNotNull(volumeEntity);
         assertEquals(volumeEntity, volume);
     }
 }

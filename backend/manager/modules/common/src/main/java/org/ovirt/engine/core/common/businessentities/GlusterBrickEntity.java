@@ -40,20 +40,20 @@ public class GlusterBrickEntity extends GlusterEntity {
     public GlusterBrickEntity() {
     }
 
-    private void initBrick(String serverName, String brickDirectory) {
+    private void initBrick(Guid serverId, String serverName, String brickDirectory) {
+        setServerId(serverId);
         setServerName(serverName);
         setBrickDirectory(brickDirectory);
         setStatus(BRICK_STATUS.ONLINE);
     }
 
-    public GlusterBrickEntity(String serverName, String brickDirectory) {
-        super();
-        initBrick(serverName, brickDirectory);
+    public GlusterBrickEntity(VdsStatic host, String brickDirectory) {
+        initBrick(host.getId(), host.gethost_name(), brickDirectory);
     }
 
     public GlusterBrickEntity(String qualifiedName) {
         String brickInfo[] = qualifiedName.split(":", -1);
-        initBrick(brickInfo[0], brickInfo[1]);
+        initBrick(null, brickInfo[0], brickInfo[1]);
     }
 
     @Override
