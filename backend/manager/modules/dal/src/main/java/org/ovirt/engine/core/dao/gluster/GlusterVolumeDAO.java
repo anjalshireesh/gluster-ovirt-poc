@@ -15,6 +15,8 @@ public interface GlusterVolumeDAO extends DAO {
 
     public GlusterVolumeEntity getById(Guid id);
 
+    public GlusterVolumeEntity getByName(Guid clusterId, String volName);
+
     public void remove(Guid id);
 
     public void update(GlusterVolumeEntity volume);

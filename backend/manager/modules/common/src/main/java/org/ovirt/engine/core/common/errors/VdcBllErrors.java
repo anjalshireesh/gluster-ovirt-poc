@@ -356,10 +356,13 @@ public enum VdcBllErrors {
     NO_PARAMETERS_FOR_TASK(5026),
     HOST_ALREADY_EXISTS(5027),
 
-    // Gluster errors
+    // Gluster errors from VDSM
     VOLUME_CREATION_FAILED(6000),
     GLUSTER_COMMAND_FAILED(6010),
     GLUSTER_VOLUME_DELETE_FAILED(6120),
+
+    // Gluster errors from engine
+    GLUSTER_BRICK_HOST_NOT_FOUND(7000),
 
     // error to indicate backend does not recognize the session
     SESSION_ERROR(9999), ;

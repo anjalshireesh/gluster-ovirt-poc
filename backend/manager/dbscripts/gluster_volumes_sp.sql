@@ -1,4 +1,4 @@
-Create or replace FUNCTION InsertGlusterVolume(v_id UUID, v_cluster_id UUID, v_vol_name VARCHAR(255), v_vol_type INTEGER, v_transport_type INTEGER, v_status INTEGER, v_replica_count INTEGER, v_stripe_count INTEGER, v_cifs_users VARCHAR(1024))
+Create or replace FUNCTION InsertGlusterVolume(v_id UUID, v_cluster_id UUID, v_vol_name VARCHAR(1000), v_vol_type INTEGER, v_transport_type INTEGER, v_status INTEGER, v_replica_count INTEGER, v_stripe_count INTEGER, v_cifs_users VARCHAR(1024))
 RETURNS VOID
    AS $procedure$
 BEGIN
@@ -8,7 +8,7 @@ END; $procedure$
 LANGUAGE plpgsql;
 
 
-Create or replace FUNCTION InsertGlusterVolumeBrick(v_volume_id UUID, v_host_id UUID, v_brick_dir VARCHAR(1024), v_status INTEGER)
+Create or replace FUNCTION InsertGlusterVolumeBrick(v_volume_id UUID, v_host_id UUID, v_brick_dir VARCHAR(4096), v_status INTEGER)
 RETURNS VOID
    AS $procedure$
 BEGIN
@@ -19,7 +19,7 @@ END; $procedure$
 LANGUAGE plpgsql;
 
 
-Create or replace FUNCTION InsertGlusterVolumeOption(v_volume_id UUID, v_option_key VARCHAR(255), v_option_val VARCHAR(255))
+Create or replace FUNCTION InsertGlusterVolumeOption(v_volume_id UUID, v_option_key VARCHAR(255), v_option_val VARCHAR(8192))
 RETURNS VOID
    AS $procedure$
 BEGIN
@@ -63,13 +63,13 @@ END; $procedure$
 LANGUAGE plpgsql;
 
 
-Create or replace FUNCTION GetGlusterVolumeByName(v_cluster_id UUID, v_volume_name VARCHAR(255))
+Create or replace FUNCTION GetGlusterVolumeByName(v_cluster_id UUID, v_vol_name VARCHAR(1000))
 RETURNS SETOF gluster_volumes
    AS $procedure$
 BEGIN
    RETURN QUERY SELECT *
    FROM gluster_volumes
-   WHERE cluster_id = v_cluster_id and volume_name = v_volume_name;
+   WHERE cluster_id = v_cluster_id and vol_name = v_vol_name;
 END; $procedure$
 LANGUAGE plpgsql;
 
@@ -117,7 +117,7 @@ END; $procedure$
 LANGUAGE plpgsql;
 
 
-Create or replace FUNCTION DeleteGlusterVolumeBrick(v_volume_id UUID, v_host_id UUID, v_brick_dir VARCHAR(1024))
+Create or replace FUNCTION DeleteGlusterVolumeBrick(v_volume_id UUID, v_host_id UUID, v_brick_dir VARCHAR(4096))
 RETURNS VOID
    AS $procedure$
 BEGIN
@@ -151,7 +151,7 @@ END; $procedure$
 LANGUAGE plpgsql;
 
 
-Create or replace FUNCTION UpdateGlusterVolume(v_id UUID, v_cluster_id UUID, v_vol_name VARCHAR(255), v_vol_type INTEGER, v_transport_type INTEGER, v_status INTEGER, v_replica_count INTEGER, v_stripe_count INTEGER, v_cifs_users VARCHAR(1024))
+Create or replace FUNCTION UpdateGlusterVolume(v_id UUID, v_cluster_id UUID, v_vol_name VARCHAR(1000), v_vol_type INTEGER, v_transport_type INTEGER, v_status INTEGER, v_replica_count INTEGER, v_stripe_count INTEGER, v_cifs_users VARCHAR(1024))
 RETURNS VOID
    AS $procedure$
 BEGIN
@@ -170,7 +170,7 @@ END; $procedure$
 LANGUAGE plpgsql;
 
 
-Create or replace FUNCTION UpdateGlusterVolumeOption(v_volume_id UUID, v_option_key VARCHAR(255), v_option_val VARCHAR(255))
+Create or replace FUNCTION UpdateGlusterVolumeOption(v_volume_id UUID, v_option_key VARCHAR(255), v_option_val VARCHAR(8192))
 RETURNS VOID
    AS $procedure$
 BEGIN
