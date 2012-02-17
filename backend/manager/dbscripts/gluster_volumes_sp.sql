@@ -19,7 +19,7 @@ END; $procedure$
 LANGUAGE plpgsql;
 
 
-Create or replace FUNCTION InsertGlusterVolumeOption(v_volume_id UUID, v_option_key VARCHAR(255), v_option_val VARCHAR(8192))
+Create or replace FUNCTION InsertGlusterVolumeOption(v_volume_id UUID, v_option_key VARCHAR(8192), v_option_val VARCHAR(8192))
 RETURNS VOID
    AS $procedure$
 BEGIN
@@ -129,7 +129,7 @@ END; $procedure$
 LANGUAGE plpgsql;
 
 
-Create or replace FUNCTION DeleteGlusterVolumeOption(v_volume_id UUID, v_option_key VARCHAR(255))
+Create or replace FUNCTION DeleteGlusterVolumeOption(v_volume_id UUID, v_option_key VARCHAR(8192))
 RETURNS VOID
    AS $procedure$
 BEGIN
@@ -170,7 +170,7 @@ END; $procedure$
 LANGUAGE plpgsql;
 
 
-Create or replace FUNCTION UpdateGlusterVolumeOption(v_volume_id UUID, v_option_key VARCHAR(255), v_option_val VARCHAR(8192))
+Create or replace FUNCTION UpdateGlusterVolumeOption(v_volume_id UUID, v_option_key VARCHAR(8192), v_option_val VARCHAR(8192))
 RETURNS VOID
    AS $procedure$
 BEGIN

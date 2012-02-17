@@ -51,7 +51,7 @@ if (not exists (select 1 from INFORMATION_SCHEMA.TABLES where table_name='gluste
     CREATE TABLE gluster_volume_options
     (
 		volume_id UUID NOT NULL references gluster_volumes(id) on delete cascade,
-		option_key VARCHAR(255) NOT NULL,
+		option_key VARCHAR(8192) NOT NULL,
 		option_val VARCHAR(8192) NOT NULL,
         CONSTRAINT pk_gluster_volume_options PRIMARY KEY(volume_id, option_key)
     ) WITH OIDS;
