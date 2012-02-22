@@ -13,11 +13,14 @@ import org.ovirt.engine.api.model.GlusterBricks;
 import org.ovirt.engine.api.model.GlusterVolume;
 import org.ovirt.engine.api.model.GlusterVolumes;
 import org.ovirt.engine.api.model.VM;
+import org.ovirt.engine.api.model.VolumeOption;
 import org.ovirt.engine.api.resource.GlusterVolumeBricksResource;
 import org.ovirt.engine.api.resource.GlusterVolumeResource;
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeBricksParameters;
+import org.ovirt.engine.core.common.glusteractions.GlusterVolumeOptionParameters;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeParameters;
 import org.ovirt.engine.core.compat.Guid;
 
@@ -124,6 +127,18 @@ GlusterVolumeResource {
             return performAction(VdcActionType.RemoveBricksFromGlusterVolume,
                     new GlusterVolumeBricksParameters(Guid.createGuidFromString(getClusterId()), get()
                             .getVolumeName(), mapCollection(action.getGlusterBricks())));
+        } catch (Exception e) {
+            return handleError(e, false);
+        }
+    }
+
+    @Override
+    public Response setVolumeOption(Action action) {
+        try {
+            return performAction(VdcActionType.GlusterVolumeOption,
+                    new GlusterVolumeOptionParameters(Guid.createGuidFromString(getClusterId()),
+                            get().getVolumeName(),
+                            getMapper(VolumeOption.class, GlusterVolumeOption.class).map(action.getVolumeOption(), null)));
         } catch (Exception e) {
             return handleError(e, false);
         }
