@@ -134,14 +134,10 @@ GlusterVolumeResource {
 
     @Override
     public Response setVolumeOption(Action action) {
-        try {
-            return performAction(VdcActionType.GlusterVolumeOption,
+        return performAction(VdcActionType.SetGlusterVolumeOption,
                     new GlusterVolumeOptionParameters(Guid.createGuidFromString(getClusterId()),
                             get().getVolumeName(),
                             getMapper(VolumeOption.class, GlusterVolumeOption.class).map(action.getVolumeOption(), null)));
-        } catch (Exception e) {
-            return handleError(e, false);
-        }
     }
 
     protected List<GlusterBrickEntity> mapCollection(GlusterBricks brickList) {
