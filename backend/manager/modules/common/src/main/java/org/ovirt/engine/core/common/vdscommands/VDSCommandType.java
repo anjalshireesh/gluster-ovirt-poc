@@ -134,7 +134,8 @@ public enum VDSCommandType {
     ListGlusterVolumes("org.ovirt.engine.core.vdsbroker.glusterbroker"),
     ListGlusterHostDisks("org.ovirt.engine.core.vdsbroker.glusterbroker"),
     RemoveBricksFromGlusterVolume("org.ovirt.engine.core.vdsbroker.glusterbroker"),
-    AddGlusterHost("org.ovirt.engine.core.vdsbroker.glusterbroker");
+    AddGlusterHost("org.ovirt.engine.core.vdsbroker.glusterbroker"),
+    SetGlusterVolumeOption("org.ovirt.engine.core.vdsbroker.glusterbroker");
 
     String packageName;
 
