@@ -21,6 +21,9 @@ public class SearchObjectAutoCompleter extends SearchObjectsBaseAutoCompleter {
         mVerbs.put(SearchObjects.VDC_STORAGE_POOL_OBJ_NAME, SearchObjects.VDC_STORAGE_POOL_OBJ_NAME);
         mVerbs.put(SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME);
 
+        mVerbs.put(SearchObjects.GLUSTER_VOLUMES_OBJ_NAME, SearchObjects.GLUSTER_VOLUMES_OBJ_NAME);
+
+
         buildCompletions();
         mVerbs.put(SearchObjects.VM_OBJ_NAME, SearchObjects.VM_OBJ_NAME);
         if (isDesktopsAllowed) {
@@ -82,28 +85,13 @@ public class SearchObjectAutoCompleter extends SearchObjectsBaseAutoCompleter {
                 new String[] { "id", "storage_id" });
 
         // vds - audit
-        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VDS_OBJ_NAME, SearchObjects.AUDIT_OBJ_NAME),
-                new String[] { "vds_id", "vds_id" });
-        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VDS_OBJ_NAME, SearchObjects.AUDIT_OBJ_NAME),
-                new String[] { "vds_id", "vds_id" });
+        addJoin(SearchObjects.VDS_OBJ_NAME, "vds_id", SearchObjects.AUDIT_OBJ_NAME, "vds_id");
 
         // users - audit
-        mJoinDictionary.put(StringFormat.format("%1$s.%2$s",
-                SearchObjects.VDC_USER_OBJ_NAME,
-                SearchObjects.AUDIT_OBJ_NAME),
-                new String[] { "user_id", "user_id" });
-        mJoinDictionary.put(StringFormat.format("%2$s.%1$s",
-                SearchObjects.VDC_USER_OBJ_NAME,
-                SearchObjects.AUDIT_OBJ_NAME),
-                new String[] { "user_id", "user_id" });
+        addJoin(SearchObjects.VDC_USER_OBJ_NAME, "user_id", SearchObjects.AUDIT_OBJ_NAME, "user_id");
 
         // Datacenter(Storage_pool) - Cluster(vds group)
-        mJoinDictionary
-                .put(StringFormat.format("%1$s.%2$s", SearchObjects.VDC_STORAGE_POOL_OBJ_NAME,
-                        SearchObjects.VDC_CLUSTER_OBJ_NAME), new String[] { "id", "storage_pool_id" });
-        mJoinDictionary
-                .put(StringFormat.format("%2$s.%1$s", SearchObjects.VDC_STORAGE_POOL_OBJ_NAME,
-                        SearchObjects.VDC_CLUSTER_OBJ_NAME), new String[] { "storage_pool_id", "id" });
+        addJoin(SearchObjects.VDC_STORAGE_POOL_OBJ_NAME, "id", SearchObjects.VDC_CLUSTER_OBJ_NAME, "storage_pool_id");
 
         // Datacenter(Storage_pool) - Storage Domain
         mJoinDictionary
@@ -114,11 +102,15 @@ public class SearchObjectAutoCompleter extends SearchObjectsBaseAutoCompleter {
                         SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME), new String[] { "storage_pool_id", "id" });
 
         // audit - cluster
-        mJoinDictionary.put(StringFormat.format("%1$s.%2$s", SearchObjects.VDC_CLUSTER_OBJ_NAME, SearchObjects.AUDIT_OBJ_NAME),
-                new String[] { "vds_group_id", "vds_group_id" });
-        mJoinDictionary.put(StringFormat.format("%2$s.%1$s", SearchObjects.VDC_CLUSTER_OBJ_NAME, SearchObjects.AUDIT_OBJ_NAME),
-                new String[] { "vds_group_id", "vds_group_id" });
+        addJoin(SearchObjects.VDC_CLUSTER_OBJ_NAME, "vds_group_id", SearchObjects.AUDIT_OBJ_NAME, "vds_group_id");
 
+        // Cluster - Volume
+        addJoin(SearchObjects.GLUSTER_VOLUMES_OBJ_NAME, "cluster_id", SearchObjects.VDC_CLUSTER_OBJ_NAME, "vds_group_id");
+    }
+
+    private void addJoin(String firstObj, String firstColumnName, String secondObj, String secondColumnName) {
+        mJoinDictionary.put(firstObj + "." + secondObj, new String[] {firstColumnName, secondColumnName});
+        mJoinDictionary.put(secondObj + "." + firstObj, new String[] {secondColumnName, firstColumnName});
     }
 
     public IAutoCompleter getCrossRefAutoCompleter(String obj) {
@@ -165,10 +157,11 @@ public class SearchObjectAutoCompleter extends SearchObjectsBaseAutoCompleter {
             // SearchObjects.VDC_POOL_OBJ_NAME:
             // no need for empty case before default: case
             // SearchObjects.VDC_POOL_PLU_OBJ_NAME:
+        } else if (StringHelper.EqOp(obj, SearchObjects.GLUSTER_VOLUMES_OBJ_NAME)) {
+            return new GlusterVolumeCrossRefAutoCompleter();
         } else {
             return null;
         }
-
     }
 
     public boolean isCrossReferece(String text, String obj) {
@@ -231,7 +224,9 @@ public class SearchObjectAutoCompleter extends SearchObjectsBaseAutoCompleter {
         }
         else if (StringHelper.EqOp(obj, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME)) {
             retval = new StorageDomainFieldAutoCompleter();
-
+        }
+        else if (StringHelper.EqOp(obj, SearchObjects.GLUSTER_VOLUMES_OBJ_NAME)) {
+            retval = new GlusterVolumeConditionFieldAutoCompleter();
         } else {
         }
         return retval;
@@ -275,7 +270,8 @@ public class SearchObjectAutoCompleter extends SearchObjectsBaseAutoCompleter {
         else if (StringHelper.EqOp(obj, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME)) {
             retval = "storage_domains_without_storage_pools";
 
-        } else {
+        }
+        else {
             retval = getRelatedTableName(obj);
         }
         return retval;
@@ -323,7 +319,9 @@ public class SearchObjectAutoCompleter extends SearchObjectsBaseAutoCompleter {
         }
         else if (StringHelper.EqOp(obj, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME)) {
             retval = "storage_domains_with_hosts_view";
-
+        }
+        else if (StringHelper.EqOp(obj, SearchObjects.GLUSTER_VOLUMES_OBJ_NAME)) {
+            retval = "gluster_volumes";
         } else {
         }
         return retval;
@@ -369,7 +367,11 @@ public class SearchObjectAutoCompleter extends SearchObjectsBaseAutoCompleter {
         else if (StringHelper.EqOp(obj, SearchObjects.VDC_STORAGE_DOMAIN_OBJ_NAME)) {
             retval = "id";
 
-        } else {
+        }
+        else if (StringHelper.EqOp(obj, SearchObjects.GLUSTER_VOLUMES_OBJ_NAME)) {
+            retval = "id";
+        }
+        else {
         }
         return retval;
     }
@@ -440,6 +442,9 @@ public class SearchObjectAutoCompleter extends SearchObjectsBaseAutoCompleter {
         else if (StringHelper.EqOp(obj, SearchObjects.VDC_CLUSTER_OBJ_NAME)
                 || StringHelper.EqOp(obj, SearchObjects.VDC_CLUSTER_PLU_OBJ_NAME)) {
             retval = "name ASC ";
+        }
+        else if (StringHelper.EqOp(obj, SearchObjects.GLUSTER_VOLUMES_OBJ_NAME)) {
+            retval = "vol_name ASC ";
         } else {
         }
         return retval;

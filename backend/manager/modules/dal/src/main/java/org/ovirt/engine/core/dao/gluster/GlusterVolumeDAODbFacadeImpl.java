@@ -7,8 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
-import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity.BRICK_STATUS;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.ACCESS_PROTOCOL;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.TRANSPORT_TYPE;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_STATUS;
@@ -19,6 +19,7 @@ import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.dao.BaseDAODbFacade;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
 public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
         GlusterVolumeDAO {
@@ -236,4 +237,8 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
 
     }
 
+    @Override
+    public List<GlusterVolumeEntity> getAllWithQuery(String query) {
+        return new SimpleJdbcTemplate(jdbcTemplate).query(query, getVolumeFromResultSet());
+    }
 }

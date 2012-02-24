@@ -14,6 +14,7 @@ import org.ovirt.engine.core.common.businessentities.AdUser;
 import org.ovirt.engine.core.common.businessentities.AuditLog;
 import org.ovirt.engine.core.common.businessentities.DbUser;
 import org.ovirt.engine.core.common.businessentities.DiskImage;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.IVdcQueryable;
 import org.ovirt.engine.core.common.businessentities.Quota;
 import org.ovirt.engine.core.common.businessentities.VDS;
@@ -117,6 +118,10 @@ public class SearchQuery<P extends SearchParameters> extends QueriesCommandBase<
         }
         case DiskImage: {
             returnValue = searchDiskImage();
+            break;
+        }
+        case GlusterVolume: {
+            returnValue = searchGlusterVolumes();
             break;
         }
         default: {
@@ -249,6 +254,17 @@ public class SearchQuery<P extends SearchParameters> extends QueriesCommandBase<
 
     private List<DiskImage> searchDiskImage() {
         return genericSearch(DbFacade.getInstance().getDiskImageDAO(), true, null);
+    }
+
+    protected List<GlusterVolumeEntity> searchGlusterVolumes() {
+        List<GlusterVolumeEntity> returnValue = null;
+        QueryData2 data = InitQueryData(true);
+        if (data == null) {
+            returnValue = new ArrayList<GlusterVolumeEntity>();
+        } else {
+            returnValue = DbFacade.getInstance().getGlusterVolumeDAO().getAllWithQuery(data.getQuery());
+        }
+        return returnValue;
     }
 
     private QueryData2 InitQueryData(boolean useCache) {

@@ -1,5 +1,7 @@
 package org.ovirt.engine.core.dao.gluster;
 
+import java.util.List;
+
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
@@ -28,4 +30,7 @@ public interface GlusterVolumeDAO extends DAO {
     public void removeBrickFromVolume(Guid volumeId, GlusterBrickEntity brick);
 
     public void setVolumeOption(Guid volumeId, GlusterVolumeOption option);
+
+    public List<GlusterVolumeEntity> getAllWithQuery(String query);
+
 }

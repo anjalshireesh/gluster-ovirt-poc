@@ -522,7 +522,7 @@ public class CommonModel extends ListModel
 
         storageList.setIsAvailable(model.getType() == SystemTreeItemType.DataCenter || model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Host || model.getType() == SystemTreeItemType.Storages || model.getType() == SystemTreeItemType.Storage || model.getType() == SystemTreeItemType.System);
 
-        volumeListModel.setIsAvailable(model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Volumes ? true : false);
+        volumeListModel.setIsAvailable(model.getType() == SystemTreeItemType.Cluster || model.getType() == SystemTreeItemType.Volumes || model.getType() == SystemTreeItemType.System);
 
 
         boolean isDataStorage = false;
@@ -572,6 +572,9 @@ public class CommonModel extends ListModel
                 break;
             case VMs:
                 setSelectedItem(vmList);
+                break;
+            case Volumes:
+                setSelectedItem(volumeListModel);
                 break;
             default:
                 //webadmin: redirect to default tab in case no tab is selected.
@@ -662,7 +665,8 @@ public class CommonModel extends ListModel
             AsyncQuery _asyncQuery = new AsyncQuery();
             _asyncQuery.setHandleFailure(true);
             _asyncQuery.setModel(this);
-            _asyncQuery.asyncCallback = new INewAsyncCallback() { public void OnSuccess(Object model, Object ReturnValue)
+            _asyncQuery.asyncCallback = new INewAsyncCallback() { @Override
+            public void OnSuccess(Object model, Object ReturnValue)
                 {
                     CommonModel commonModel = (CommonModel)model;
                     commonModel.setLoggedInUser(null);
@@ -1105,6 +1109,14 @@ public class CommonModel extends ListModel
                         }
                     }
                     break;
+                case Volumes:
+                {
+                    if (volumeListModel.IsSearchStringMatch(source))
+                    {
+                        // When user selects the "Volumes" node in system tree, the search filter will be set to "Volumes: cluster = <parent cluster>"
+                        prefix.argvalue = StringFormat.format("Volumes: cluster = %1$s", model.getParent().getTitle());
+                    }
+                }
             }
 
             prefix.argvalue = prefix.argvalue + " ";

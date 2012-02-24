@@ -3,7 +3,6 @@ package org.ovirt.engine.ui.uicommonweb.models.gluster;
 import java.util.ArrayList;
 
 import org.ovirt.engine.core.common.action.VdcActionType;
-import org.ovirt.engine.core.common.action.VdsGroupParametersBase;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_TYPE;
@@ -11,6 +10,9 @@ import org.ovirt.engine.core.common.businessentities.VDSGroup;
 import org.ovirt.engine.core.common.businessentities.storage_pool;
 import org.ovirt.engine.core.common.glusteractions.CreateGlusterVolumeParameters;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeParameters;
+import org.ovirt.engine.core.common.interfaces.SearchType;
+import org.ovirt.engine.core.common.queries.SearchParameters;
+import org.ovirt.engine.core.common.queries.VdcQueryType;
 import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.compat.ObservableCollection;
 import org.ovirt.engine.core.compat.PropertyChangedEventArgs;
@@ -98,6 +100,8 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
         setTitle("Volumes");
 
         setDefaultSearchString("Volumes:");
+        setSearchString(getDefaultSearchString());
+
         setCreateVolumeCommand(new UICommand("Create Volume", this));
         setRemoveVolumeCommand(new UICommand("Remove", this));
         setStartCommand(new UICommand("Start", this));
@@ -132,7 +136,8 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
         volumeModel.setAddBricksCommand(getAddBricksCommand());
         AsyncQuery _asyncQuery = new AsyncQuery();
         _asyncQuery.setModel(this);
-        _asyncQuery.asyncCallback = new INewAsyncCallback() { public void OnSuccess(Object model, Object result)
+        _asyncQuery.asyncCallback = new INewAsyncCallback() { @Override
+        public void OnSuccess(Object model, Object result)
             {
                 VolumeListModel volumeListModel = (VolumeListModel)model;
                 VolumeModel innerVolumeModel = (VolumeModel)volumeListModel.getWindow();
@@ -196,31 +201,49 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
     public static Guid clusterId;
 
     @Override
-    protected void SyncSearch() {
-        super.SyncSearch();
-        if(getSystemTreeSelectedItem() != null && (getSystemTreeSelectedItem().getType().equals(SystemTreeItemType.Cluster) || getSystemTreeSelectedItem().getType().equals(SystemTreeItemType.Volumes))) {
-            final VDSGroup cluster = (VDSGroup)getSystemTreeSelectedItem().getEntity();
-            clusterId = cluster.getID();
-            Frontend.RunAction(VdcActionType.ListGlusterVolumes, new VdsGroupParametersBase(cluster.getID()), new IFrontendActionAsyncCallback() {
+    public boolean IsSearchStringMatch(String searchString)
+    {
+        return searchString.trim().toLowerCase().startsWith("volume");
+    }
 
-                @Override
-                public void Executed(FrontendActionAsyncResult result) {
-                    if(result.getReturnValue().getActionReturnValue() != null) {
-                        ArrayList<GlusterVolumeEntity> volumes =  new ArrayList<GlusterVolumeEntity>();
-                        for (GlusterVolumeEntity iterable_element : (java.util.ArrayList<GlusterVolumeEntity>)result.getReturnValue().getActionReturnValue()) {
-                            volumes.add(iterable_element);
-                        }
-                        setItems(volumes);
-                    } else {
-                        setItems(new ArrayList<GlusterVolumeEntity>());
-                    }
-                }
-            });
+    @Override
+    protected void SyncSearch() {
+//        super.SyncSearch();
+//        if(getSystemTreeSelectedItem() != null && (getSystemTreeSelectedItem().getType().equals(SystemTreeItemType.Cluster) || getSystemTreeSelectedItem().getType().equals(SystemTreeItemType.Volumes))) {
+//            final VDSGroup cluster = (VDSGroup)getSystemTreeSelectedItem().getEntity();
+//            clusterId = cluster.getID();
+//            Frontend.RunAction(VdcActionType.ListGlusterVolumes, new VdsGroupParametersBase(cluster.getID()), new IFrontendActionAsyncCallback() {
+//
+//                @Override
+//                public void Executed(FrontendActionAsyncResult result) {
+//                    if(result.getReturnValue().getActionReturnValue() != null) {
+//                        ArrayList<GlusterVolumeEntity> volumes =  new ArrayList<GlusterVolumeEntity>();
+//                        for (GlusterVolumeEntity iterable_element : (java.util.ArrayList<GlusterVolumeEntity>)result.getReturnValue().getActionReturnValue()) {
+//                            volumes.add(iterable_element);
+//                        }
+//                        setItems(volumes);
+//                    } else {
+//                        setItems(new ArrayList<GlusterVolumeEntity>());
+//                    }
+//                }
+//            });
+//        }
+//        else {
+//            setItems(new ArrayList<GlusterVolumeEntity>());
+//        }
+//        setIsQueryFirstTime(false);
+
+        if (getSystemTreeSelectedItem() != null
+                && (getSystemTreeSelectedItem().getType().equals(SystemTreeItemType.Cluster) || getSystemTreeSelectedItem().getType()
+                        .equals(SystemTreeItemType.Volumes))) {
+            final VDSGroup cluster = (VDSGroup) getSystemTreeSelectedItem().getEntity();
+            clusterId = cluster.getID(); // this is used by the "add bricks" screen while fetching brick list
         }
-        else {
-            setItems(new ArrayList<GlusterVolumeEntity>());
-        }
-        setIsQueryFirstTime(false);
+
+        SearchParameters tempVar = new SearchParameters(getSearchString(), SearchType.GlusterVolume);
+        tempVar.setMaxCount(getSearchPageSize());
+        tempVar.setRefresh(getIsQueryFirstTime());
+        super.SyncSearch(VdcQueryType.Search, tempVar);
     }
 
     @Override
@@ -266,6 +289,9 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
     }
 
     private void onAddBrick() {
+        final VDSGroup cluster = (VDSGroup)getSystemTreeSelectedItem().getEntity();
+        clusterId = cluster.getID(); // this is used by the "add bricks" screen while fetching brick list
+
         AddBrickModel model = (AddBrickModel)getWindow2();
         if(model == null){
             CancelWindow2();
@@ -287,6 +313,7 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
         CancelWindow2();
     }
     private void addBricks() {
+
 //        if(getSelectedItem() == null) {
 //            return;
 //        }
@@ -374,10 +401,12 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
         return "VolumeListModel";
     }
     private SystemTreeItemModel systemTreeSelectedItem;
+    @Override
     public SystemTreeItemModel getSystemTreeSelectedItem()
     {
         return systemTreeSelectedItem;
     }
+    @Override
     public void setSystemTreeSelectedItem(SystemTreeItemModel value)
     {
         if (systemTreeSelectedItem != value)
