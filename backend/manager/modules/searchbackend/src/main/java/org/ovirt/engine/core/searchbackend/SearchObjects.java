@@ -24,6 +24,10 @@ public final class SearchObjects {
     public static final String VDC_CLUSTER_PLU_OBJ_NAME = "CLUSTERS";
     public static final String VDC_STORAGE_POOL_OBJ_NAME = "DATACENTER";
     public static final String VDC_STORAGE_DOMAIN_OBJ_NAME = "STORAGE";
+
+    // Gluster objects
+    public static final String GLUSTER_VOLUMES_OBJ_NAME = "VOLUMES";
+
     //special searches
     private static final String ALERT = "EVENTS: severity=alert";
     private static final String ERROR = "Events: severity=error";
@@ -56,6 +60,8 @@ public final class SearchObjects {
         SAFE_SEARCH_EXPR.add(HOST_BY_CPU.toLowerCase());
         SAFE_SEARCH_EXPR.add(DATACENTER_BY_NAME.toLowerCase());
         SAFE_SEARCH_EXPR.add(VM_BY_STATUS.toLowerCase());
+
+        SAFE_SEARCH_EXPR.add(GLUSTER_VOLUMES_OBJ_NAME.toLowerCase() + SEPERATOR);
     }
 
     /**

@@ -13,6 +13,7 @@ import org.ovirt.engine.core.bll.adbroker.LdapSearchByQueryParameters;
 import org.ovirt.engine.core.common.businessentities.AdUser;
 import org.ovirt.engine.core.common.businessentities.AuditLog;
 import org.ovirt.engine.core.common.businessentities.DbUser;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.IVdcQueryable;
 import org.ovirt.engine.core.common.businessentities.VDS;
 import org.ovirt.engine.core.common.businessentities.VDSGroup;
@@ -121,6 +122,10 @@ public class SearchQuery<P extends SearchParameters> extends QueriesCommandBase<
         }
         case StorageDomain: {
             returnValue = searchStorageDomain();
+            break;
+        }
+        case GlusterVolume: {
+            returnValue = searchGlusterVolumes();
             break;
         }
         default: {
@@ -282,6 +287,17 @@ public class SearchQuery<P extends SearchParameters> extends QueriesCommandBase<
             returnValue = new ArrayList<storage_domains>();
         } else {
             returnValue = DbFacade.getInstance().getStorageDomainDAO().getAllWithQuery(data.getQuery());
+        }
+        return returnValue;
+    }
+
+    protected List<GlusterVolumeEntity> searchGlusterVolumes() {
+        List<GlusterVolumeEntity> returnValue = null;
+        QueryData2 data = InitQueryData(true);
+        if (data == null) {
+            returnValue = new ArrayList<GlusterVolumeEntity>();
+        } else {
+            returnValue = DbFacade.getInstance().getGlusterVolumeDAO().getAllWithQuery(data.getQuery());
         }
         return returnValue;
     }

@@ -382,6 +382,8 @@
     	<include name="core/searchbackend/DateUtils.java" />
 		<include name="core/searchbackend/SqlInjectionChecker.java" />
 		<include name="core/searchbackend/PostgresSqlInjectionChecker.java" />
+		<include name="core/searchbackend/GlusterVolumeConditionFieldAutoCompleter.java" />
+		<include name="core/searchbackend/GlusterVolumeCrossRefAutoCompleter.java" />
 	</source>
 
 	<super-source path="ui/uioverrides" />
