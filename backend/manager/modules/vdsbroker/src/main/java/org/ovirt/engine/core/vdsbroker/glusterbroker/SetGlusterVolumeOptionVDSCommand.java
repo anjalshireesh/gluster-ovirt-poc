@@ -4,20 +4,21 @@
 package org.ovirt.engine.core.vdsbroker.glusterbroker;
 
 import org.ovirt.engine.core.common.glustercommands.GlusterVolumeOptionVDSParameters;
+import org.ovirt.engine.core.vdsbroker.vdsbroker.VdsBrokerCommand;
 
 /**
  *
  */
-public class SetGlusterVolumeOptionVDSCommand extends GlusterBrokerCommand<GlusterVolumeOptionVDSParameters> {
+public class SetGlusterVolumeOptionVDSCommand<P extends GlusterVolumeOptionVDSParameters> extends VdsBrokerCommand<P> {
 
-    public SetGlusterVolumeOptionVDSCommand(GlusterVolumeOptionVDSParameters parameters) {
+    public SetGlusterVolumeOptionVDSCommand(P parameters) {
         super(parameters);
     }
 
     @Override
-    protected void ExecuteIrsBrokerCommand() {
+    protected void ExecuteVdsBrokerCommand() {
         status =
-                getIrsProxy().glusterVolumeSet(getParameters().getVolumeName(),
+                getBroker().glusterVolumeSet(getParameters().getVolumeName(),
                         getParameters().getVolumeOption().getKey(),
                         getParameters().getVolumeOption().getValue());
         ProceedProxyReturnValue();

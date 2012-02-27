@@ -1,16 +1,8 @@
 package org.ovirt.engine.core.vdsbroker.glusterbroker;
 
-<<<<<<< HEAD
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.glustercommands.GlusterVolumeBricksVDSParameters;
 
-=======
-import java.util.List;
-
-import org.ovirt.engine.core.common.glustercommands.GlusterVolumeBricksVDSParameters;
-import org.ovirt.engine.core.common.utils.GlusterCoreUtil;
-
->>>>>>> New VDS Remove Brick Command
 public class AddBricksToGlusterVolumeVDSCommand extends GlusterBrokerCommand<GlusterVolumeBricksVDSParameters> {
     public AddBricksToGlusterVolumeVDSCommand(GlusterVolumeBricksVDSParameters parameters) {
         super(parameters);

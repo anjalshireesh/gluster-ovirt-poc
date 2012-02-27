@@ -3,6 +3,7 @@ package org.ovirt.engine.core.dao;
 import java.util.List;
 
 import org.ovirt.engine.core.common.businessentities.VDS;
+import org.ovirt.engine.core.common.businessentities.VDSStatus;
 import org.ovirt.engine.core.common.businessentities.VDSType;
 import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.compat.NGuid;
@@ -120,4 +121,12 @@ public interface VdsDAO extends DAO, SearchDAO<VDS>, AutoRecoverDAO<VDS> {
      */
     List<VDS> getListForSpmSelection(Guid storagePoolId);
 
+    /**
+     * Retrieves all VDS instances in the given Storage Pool, that are in status "UP"
+     * Here not considering the VDS Spm priority
+     * @param storagePoolID
+     * @param status
+     * @return list of VDS instances
+     */
+    List<VDS> getAllForVdsGroupWithStatus(Guid storagePoolID, VDSStatus status);
 }

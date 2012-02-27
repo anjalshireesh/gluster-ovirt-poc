@@ -17,7 +17,7 @@ public class StopGlusterVolumeCommand extends GlusterCommandBase<GlusterVolumePa
 
     @Override
     protected boolean canDoAction() {
-        addCanDoActionMessage(VdcBllMessages.VAR__ACTION__START);
+        addCanDoActionMessage(VdcBllMessages.VAR__ACTION__STOP);
         addCanDoActionMessage(VdcBllMessages.VAR__TYPE__GLUSTER_VOLUME);
         return super.canDoAction();
     }
@@ -30,7 +30,7 @@ public class StopGlusterVolumeCommand extends GlusterCommandBase<GlusterVolumePa
                         .getResourceManager()
                         .RunVdsCommand(
                                 VDSCommandType.StopGlusterVolume,
-                                new GlusterVolumeVDSParameters(getVdsGroup().getstorage_pool_id().getValue(),
+                                new GlusterVolumeVDSParameters(getOnlineHost().getvds_id(),
                                         getParameters().getVolumeName()));
         setSucceeded(returnValue.getSucceeded());
     }

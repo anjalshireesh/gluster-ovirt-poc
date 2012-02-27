@@ -1,31 +1,22 @@
 package org.ovirt.engine.core.vdsbroker.glusterbroker;
 
-<<<<<<< HEAD
-import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
-import org.ovirt.engine.core.common.glustercommands.GlusterVolumeBricksVDSParameters;
-=======
 import java.util.List;
 
 import org.ovirt.engine.core.common.glustercommands.GlusterVolumeBricksVDSParameters;
 import org.ovirt.engine.core.common.utils.GlusterCoreUtil;
->>>>>>> New VDS Remove Brick Command
+import org.ovirt.engine.core.vdsbroker.vdsbroker.VdsBrokerCommand;
 
-public class RemoveBricksFromGlusterVolumeVDSCommand extends GlusterBrokerCommand<GlusterVolumeBricksVDSParameters> {
+public class RemoveBricksFromGlusterVolumeVDSCommand<P extends GlusterVolumeBricksVDSParameters> extends VdsBrokerCommand<P> {
 
-    public RemoveBricksFromGlusterVolumeVDSCommand(GlusterVolumeBricksVDSParameters parameters) {
+    public RemoveBricksFromGlusterVolumeVDSCommand(P parameters) {
         super(parameters);
     }
 
     @Override
-    protected void ExecuteIrsBrokerCommand() {
-        String[] brickList = new String[getParameters().getBricks().size()];
+    protected void ExecuteVdsBrokerCommand() {
+        List<String> bricks = GlusterCoreUtil.getQualifiedBrickList(getParameters().getBricks());
 
-        int i=0;
-        for (GlusterBrickEntity brick : getParameters().getBricks()) {
-            brickList[i++] = brick.getQualifiedName();
-        }
-
-        status = getIrsProxy().glusterVolumeRemoveBrick(getParameters().getVolumeName(), brickList);
+        status = getBroker().glusterVolumeRemoveBrick(getParameters().getVolumeName(), bricks.toArray(new String[0]));
 
         // IMPORTANT! This handles errors if any
         ProceedProxyReturnValue();

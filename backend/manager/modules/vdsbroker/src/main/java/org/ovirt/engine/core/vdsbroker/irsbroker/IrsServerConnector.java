@@ -105,23 +105,4 @@ public interface IrsServerConnector {
 
     public Map<String, Object> getVmsList(String storagePoolId, String storageDomainId);
 
-    public Map<String, Object> glusterVolumeCreate(Map<String, Object> volumeData);
-    public Map<String, Object> glusterVolumeStart(String volumeName);
-    public Map<String, Object> glusterVolumeStop(String volumeName);
-    public Map<String, Object> glusterVolumesList();
-    public Map<String, Object> glusterVolumeDelete(String volumeName);
-    public Map<String, Object> glusterVolumeAddBrick(String volumeName, String[] bricks);
-    public Map<String, Object> glusterVolumeRebalanceStart(String volumeName, String mode);
-    public Map<String, Object> glusterVolumeRebalanceStop(String volumeName);
-    public Map<String, Object> glusterVolumeRebalanceStatus(String volumeName);
-    public Map<String, Object> glusterVolumeSet(String volumeName, String key, String value);
-    public Map<String, Object> glusterHostAdd(String hostName);
-    public Map<String, Object> glusterVolumeRemoveBrick(String volumeName, String[] bricks);
-
-    public Map<String, Object> glusterVolumeReplaceBrickStart(String volumeName, String sourceBrick, String targetBrick);
-    public Map<String, Object> glusterVolumeReplaceBrickAbort(String volumeName, String sourceBrick, String targetBrick);
-    public Map<String, Object> glusterVolumeReplaceBrickStatus(String volumeName, String sourceBrick, String targetBrick);
-    public Map<String, Object> glusterVolumeReplaceBrickPause(String volumeName, String sourceBrick, String targetBrick);
-    public Map<String, Object> glusterVolumeReplaceBrickCommit(String volumeName, String sourceBrick, String targetBrick);
-
 }

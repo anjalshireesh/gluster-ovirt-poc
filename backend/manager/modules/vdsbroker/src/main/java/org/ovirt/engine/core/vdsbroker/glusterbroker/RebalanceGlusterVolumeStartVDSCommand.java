@@ -8,9 +8,9 @@ public class RebalanceGlusterVolumeStartVDSCommand extends GlusterBrokerCommand<
     }
 
     @Override
-    protected void ExecuteIrsBrokerCommand() {
+    protected void ExecuteVdsBrokerCommand() {
         // TODO: The rebalance mode to be received from client and passed
-        status = getIrsProxy().glusterVolumeRebalanceStart(getParameters().getVolumeName(), "migrate-data");
+        status = getBroker().glusterVolumeRebalanceStart(getParameters().getVolumeName(), "migrate-data");
 
         // IMPORTANT! This handles errors if any
         ProceedProxyReturnValue();
