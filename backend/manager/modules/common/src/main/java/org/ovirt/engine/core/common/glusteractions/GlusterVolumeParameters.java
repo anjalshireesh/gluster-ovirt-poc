@@ -1,8 +1,9 @@
 package org.ovirt.engine.core.common.glusteractions;
 
+import org.ovirt.engine.core.common.action.VdsGroupParametersBase;
 import org.ovirt.engine.core.compat.Guid;
 
-public class GlusterVolumeParameters extends GlusterParametersBase {
+public class GlusterVolumeParameters extends VdsGroupParametersBase {
     private String volumeName;
 
     public GlusterVolumeParameters(Guid vdsGroupId, String volumeName) {

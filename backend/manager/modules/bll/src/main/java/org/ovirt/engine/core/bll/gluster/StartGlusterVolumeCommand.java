@@ -30,7 +30,7 @@ public class StartGlusterVolumeCommand extends GlusterCommandBase<GlusterVolumeP
                         .getResourceManager()
                         .RunVdsCommand(
                                 VDSCommandType.StartGlusterVolume,
-                                new GlusterVolumeVDSParameters(getVdsGroup().getstorage_pool_id().getValue(),
+                                new GlusterVolumeVDSParameters(getOnlineHost().getvds_id(),
                                         getParameters().getVolumeName()));
         setSucceeded(returnValue.getSucceeded());
     }

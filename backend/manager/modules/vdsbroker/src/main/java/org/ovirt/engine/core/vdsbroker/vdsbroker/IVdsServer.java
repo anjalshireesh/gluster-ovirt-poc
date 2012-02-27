@@ -2,6 +2,7 @@ package org.ovirt.engine.core.vdsbroker.vdsbroker;
 
 import java.util.Map;
 
+import org.ovirt.engine.core.vdsbroker.glusterbroker.GlusterVolumeListReturnForXmlRpc;
 import org.ovirt.engine.core.vdsbroker.irsbroker.IsoListReturnForXmlRpc;
 import org.ovirt.engine.core.vdsbroker.irsbroker.OneUuidReturnForXmlRpc;
 import org.ovirt.engine.core.vdsbroker.xmlrpc.XmlRpcStruct;
@@ -175,4 +176,22 @@ public interface IVdsServer {
     StatusOnlyReturnForXmlRpc revertTask(String taskUUID);
 
     GlusterDiskListReturnForXmlRpc glusterDisksList();
+
+    OneUuidReturnForXmlRpc glusterVolumeCreate(Map<String, Object> volumeData);
+    StatusOnlyReturnForXmlRpc glusterVolumeStart(String volumeName);
+    StatusOnlyReturnForXmlRpc glusterVolumeStop(String volumeName);
+    GlusterVolumeListReturnForXmlRpc glusterVolumesList();
+    StatusOnlyReturnForXmlRpc glusterVolumeDelete(String volumeName);
+    StatusOnlyReturnForXmlRpc glusterVolumeAddBrick(String volumeName, String[] brickList);
+    StatusOnlyReturnForXmlRpc glusterVolumeRemoveBrick(String volumeName, String[] brickList);
+    StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStart(String volumeName, String mode);
+    StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStop(String volumeName);
+    StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStatus(String volumeName);
+    StatusOnlyReturnForXmlRpc glusterVolumeSet(String volumeName, String key, String value);
+    StatusOnlyReturnForXmlRpc glusterHostAdd(String hostName);
+    StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickStart(String volumeName, String sourceBrick, String targetBrick);
+    StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickAbort(String volumeName, String sourceBrick, String targetBrick);
+    StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickStatus(String volumeName, String sourceBrick, String targetBrick);
+    StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickPause(String volumeName, String sourceBrick, String targetBrick);
+    StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickCommit(String volumeName, String sourceBrick, String targetBrick);
 }

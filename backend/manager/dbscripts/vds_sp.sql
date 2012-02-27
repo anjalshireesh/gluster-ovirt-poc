@@ -555,6 +555,19 @@ END; $procedure$
   LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION GetUpVds(v_storage_pool_id UUID, v_status integer) RETURNS SETOF vds
+AS $procedure$
+
+BEGIN
+BEGIN
+      RETURN QUERY SELECT vds.*
+      FROM vds
+      WHERE (status = v_status) AND (storage_pool_id = v_storage_pool_id);
+   END;
+   RETURN;
+END; $procedure$
+  LANGUAGE plpgsql;
+
 
 Create or replace FUNCTION GetAllFromVds() RETURNS SETOF vds
    AS $procedure$

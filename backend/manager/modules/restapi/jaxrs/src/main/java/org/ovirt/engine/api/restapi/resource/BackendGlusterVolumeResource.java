@@ -13,6 +13,7 @@ import org.ovirt.engine.api.model.GlusterBricks;
 import org.ovirt.engine.api.model.GlusterVolume;
 import org.ovirt.engine.api.model.GlusterVolumes;
 import org.ovirt.engine.api.model.VM;
+import org.ovirt.engine.api.model.VolumeOption;
 import org.ovirt.engine.api.resource.GlusterVolumeBricksResource;
 import org.ovirt.engine.api.resource.GlusterVolumeResource;
 import org.ovirt.engine.core.common.action.VdcActionType;

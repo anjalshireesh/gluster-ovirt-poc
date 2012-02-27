@@ -4,18 +4,19 @@ import java.util.List;
 
 import org.ovirt.engine.core.common.glustercommands.GlusterVolumeBricksVDSParameters;
 import org.ovirt.engine.core.common.utils.GlusterCoreUtil;
+import org.ovirt.engine.core.vdsbroker.vdsbroker.VdsBrokerCommand;
 
-public class RemoveBricksFromGlusterVolumeVDSCommand extends GlusterBrokerCommand<GlusterVolumeBricksVDSParameters> {
+public class RemoveBricksFromGlusterVolumeVDSCommand<P extends GlusterVolumeBricksVDSParameters> extends VdsBrokerCommand<P> {
 
-    public RemoveBricksFromGlusterVolumeVDSCommand(GlusterVolumeBricksVDSParameters parameters) {
+    public RemoveBricksFromGlusterVolumeVDSCommand(P parameters) {
         super(parameters);
     }
 
     @Override
-    protected void ExecuteIrsBrokerCommand() {
+    protected void ExecuteVdsBrokerCommand() {
         List<String> bricks = GlusterCoreUtil.getQualifiedBrickList(getParameters().getBricks());
 
-        status = getIrsProxy().glusterVolumeRemoveBrick(getParameters().getVolumeName(), bricks.toArray(new String[0]));
+        status = getBroker().glusterVolumeRemoveBrick(getParameters().getVolumeName(), bricks.toArray(new String[0]));
 
         // IMPORTANT! This handles errors if any
         ProceedProxyReturnValue();
