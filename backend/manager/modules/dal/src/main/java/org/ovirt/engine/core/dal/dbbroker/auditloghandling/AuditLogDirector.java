@@ -764,13 +764,13 @@ public final class AuditLogDirector {
                 String token = matcher.group();
                 token = token.substring(2); // remove leading ${
                 token = token.substring(0, token.length() - 1); // remove
-                                                                // trailing }
+                // trailing }
 
                 String value = map.get(token.toLowerCase()); // get value from
-                                                             // value map
+                // value map
                 if (value == null || value.isEmpty())
                     value = token; // replace value with token if value not
-                                   // defined
+                // defined
                 matcher.appendReplacement(buffer, Matcher.quoteReplacement(value)); // put the value into
                                                                                     // message
             }
