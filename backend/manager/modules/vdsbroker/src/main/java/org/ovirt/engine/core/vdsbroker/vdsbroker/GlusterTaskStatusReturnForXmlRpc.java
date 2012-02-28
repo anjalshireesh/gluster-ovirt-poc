@@ -7,14 +7,11 @@ import org.ovirt.engine.core.utils.ObjectDescriptor;
 import org.ovirt.engine.core.vdsbroker.irsbroker.StatusReturnForXmlRpc;
 
 public final class GlusterTaskStatusReturnForXmlRpc extends StatusReturnForXmlRpc {
-    private static final String GLUSTER_TASK = "task";
+    //private static final String GLUSTER_TASK = "task";
     private static final String TASK_STATE = "rebalance"; //"task_state";
     private static final String TASK_MESSAGE = "message";
 
     private GlusterTaskStatusEntity glusterTaskStatusEntity;
-    private String task;
-    private String taskState;
-    private String taskMessage;
 
     @Override
     public String toString() {
@@ -23,16 +20,9 @@ public final class GlusterTaskStatusReturnForXmlRpc extends StatusReturnForXmlRp
 
     public GlusterTaskStatusReturnForXmlRpc(Map<String, Object> innerMap) {
         super(innerMap);
-        task = (String) innerMap.get(GLUSTER_TASK);
-        taskState = (String) innerMap.get(TASK_STATE);
-        taskMessage = (String) innerMap.get(TASK_MESSAGE);
-        setGlusterTaskStatusEntity();
-    }
-
-    public void setGlusterTaskStatusEntity() {
         glusterTaskStatusEntity = new GlusterTaskStatusEntity();
-        glusterTaskStatusEntity.setTaskState(taskState);
-        glusterTaskStatusEntity.setTaskMessage(taskMessage);
+        glusterTaskStatusEntity.setTaskState((String) innerMap.get(TASK_STATE));
+        glusterTaskStatusEntity.setTaskMessage((String) innerMap.get(TASK_MESSAGE));
     }
 
     public GlusterTaskStatusEntity getGlusterTaskStatusEntity() {
