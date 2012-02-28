@@ -184,9 +184,9 @@ public interface IVdsServer {
     StatusOnlyReturnForXmlRpc glusterVolumeDelete(String volumeName);
     StatusOnlyReturnForXmlRpc glusterVolumeAddBrick(String volumeName, String[] brickList);
     StatusOnlyReturnForXmlRpc glusterVolumeRemoveBrick(String volumeName, String[] brickList);
-    StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStart(String volumeName, String mode);
+    StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStart(String volumeName, String mode, String force);
     StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStop(String volumeName);
-    StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStatus(String volumeName);
+    GlusterTaskStatusReturnForXmlRpc glusterVolumeRebalanceStatus(String volumeName);
     StatusOnlyReturnForXmlRpc glusterVolumeSet(String volumeName, String key, String value);
     StatusOnlyReturnForXmlRpc glusterHostAdd(String hostName);
     StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickStart(String volumeName, String sourceBrick, String targetBrick);

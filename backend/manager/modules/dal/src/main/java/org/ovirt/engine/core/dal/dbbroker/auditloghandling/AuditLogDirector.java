@@ -79,6 +79,10 @@ public final class AuditLogDirector {
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_REBALANCE_START_FAILED, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_REBALANCE_STOP, AuditLogSeverity.NORMAL);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_REBALANCE_STOP_FAILED, AuditLogSeverity.ERROR);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REBALANCE_STATUS, AuditLogSeverity.NORMAL);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REBALANCE_STATUS_FAILED, AuditLogSeverity.ERROR);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_DELETE, AuditLogSeverity.NORMAL);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_DELETE_FAILED, AuditLogSeverity.ERROR);
     }
 
     private static void initDefaultSeverities() {

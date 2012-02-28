@@ -12,11 +12,13 @@ import org.ovirt.engine.api.model.GlusterBrick;
 import org.ovirt.engine.api.model.GlusterBricks;
 import org.ovirt.engine.api.model.GlusterVolume;
 import org.ovirt.engine.api.model.GlusterVolumes;
+import org.ovirt.engine.api.model.Status;
 import org.ovirt.engine.api.model.VolumeOption;
 import org.ovirt.engine.api.resource.GlusterVolumeBricksResource;
 import org.ovirt.engine.api.resource.GlusterVolumeResource;
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
+import org.ovirt.engine.core.common.businessentities.GlusterTaskStatusEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
 import org.ovirt.engine.core.common.constants.GlusterConstants.GLUSTER_TASK_OPERATION;
@@ -24,6 +26,7 @@ import org.ovirt.engine.core.common.glusteractions.GlusterVolumeBricksParameters
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeOptionParameters;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeParameters;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeReplaceBrickParameters;
+import org.ovirt.engine.core.common.glusteractions.RebalanceGlusterVolumeParameters;
 import org.ovirt.engine.core.compat.Guid;
 
 public class BackendGlusterVolumeResource extends AbstractBackendActionableResource<GlusterVolume, GlusterVolumeEntity> implements
@@ -67,15 +70,39 @@ public class BackendGlusterVolumeResource extends AbstractBackendActionableResou
     }
 
     @Override
-    public Response rebalanceStart(Action action) {
-        return performAction(VdcActionType.RebalanceGlusterVolumeStart,
-                new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), get().getVolumeName()));
+    public Response rebalance(Action action) {
+        GLUSTER_TASK_OPERATION operation = GLUSTER_TASK_OPERATION.valueOf(action.getOperation().toUpperCase());
+        String rebalanceOption = (action.getRebalanceOption() != null ) ? action.getRebalanceOption() : "";
+        boolean isForce = (action.isForce() != null) ? action.isForce() : false;
+        GlusterTaskStatusEntity glusterTaskStatus;
+        Status taskStatus;
+
+        switch (operation) {
+        case START:
+        case STOP:
+            taskStatus = performAction(VdcActionType.RebalanceGlusterVolume,
+                    new RebalanceGlusterVolumeParameters(Guid.createGuidFromString(getClusterId()),
+                            get().getVolumeName(),
+                            operation,
+                            rebalanceOption,
+                            isForce), Status.class);
+        case STATUS:
+        default:
+            glusterTaskStatus = performAction(VdcActionType.RebalanceGlusterVolume,
+                    new RebalanceGlusterVolumeParameters(Guid.createGuidFromString(getClusterId()),
+                            get().getVolumeName(),
+                            operation), GlusterTaskStatusEntity.class);
+            taskStatus = mapCollection(glusterTaskStatus);
+        }
+        return Response.ok(taskStatus).build();
+
     }
 
-    @Override
-    public Response rebalanceStop(Action action) {
-        return performAction(VdcActionType.RebalanceGlusterVolumeStop,
-                new GlusterVolumeParameters(Guid.createGuidFromString(getClusterId()), get().getVolumeName()));
+    private Status mapCollection(GlusterTaskStatusEntity glusterTaskStatusEntity) {
+        Status status = new Status();
+        status.setState(glusterTaskStatusEntity.getTaskState());
+        status.setDetail(glusterTaskStatusEntity.getTaskMessage());
+        return status;
     }
 
     @Override
