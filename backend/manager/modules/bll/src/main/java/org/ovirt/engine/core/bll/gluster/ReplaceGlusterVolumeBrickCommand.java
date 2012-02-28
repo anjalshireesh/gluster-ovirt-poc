@@ -2,7 +2,7 @@ package org.ovirt.engine.core.bll.gluster;
 
 import org.ovirt.engine.core.bll.Backend;
 import org.ovirt.engine.core.common.AuditLogType;
-import org.ovirt.engine.core.common.constants.GlusterConstants.GLUSTER_TASK_OPERATION;
+import org.ovirt.engine.core.common.businessentities.GlusterTaskOperation;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeReplaceBrickParameters;
 import org.ovirt.engine.core.common.glustercommands.ReplaceGlusterVolumeBrickVDSParameters;
 import org.ovirt.engine.core.common.vdscommands.VDSCommandType;
@@ -39,7 +39,7 @@ public class ReplaceGlusterVolumeBrickCommand extends GlusterCommandBase<Gluster
 
     @Override
     public AuditLogType getAuditLogTypeValue() {
-        GLUSTER_TASK_OPERATION operation = getParameters().getOperation();
+        GlusterTaskOperation operation = getParameters().getOperation();
         if (getSucceeded()) {
             return getSuccessAuditLogType(operation);
         } else {
@@ -47,7 +47,7 @@ public class ReplaceGlusterVolumeBrickCommand extends GlusterCommandBase<Gluster
         }
     }
 
-    private AuditLogType getSuccessAuditLogType(GLUSTER_TASK_OPERATION operation) {
+    private AuditLogType getSuccessAuditLogType(GlusterTaskOperation operation) {
         AuditLogType returnAuditLogType = null;
         switch (operation) {
         case START:
@@ -66,7 +66,7 @@ public class ReplaceGlusterVolumeBrickCommand extends GlusterCommandBase<Gluster
         return returnAuditLogType;
     }
 
-    private AuditLogType getFailureAuditLogType(GLUSTER_TASK_OPERATION operation) {
+    private AuditLogType getFailureAuditLogType(GlusterTaskOperation operation) {
         AuditLogType returnAuditLogType = null;
         switch (operation) {
         case START:

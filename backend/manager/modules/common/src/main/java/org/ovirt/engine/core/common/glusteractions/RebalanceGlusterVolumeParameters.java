@@ -1,39 +1,38 @@
 package org.ovirt.engine.core.common.glusteractions;
 
-import org.ovirt.engine.core.common.constants.GlusterConstants.GLUSTER_TASK_OPERATION;
+import org.ovirt.engine.core.common.businessentities.GlusterTaskOperation;
 import org.ovirt.engine.core.compat.Guid;
 
 public class RebalanceGlusterVolumeParameters extends GlusterVolumeParameters {
-
-    private GLUSTER_TASK_OPERATION operation;
-    private String rebalanceOption;
+    private GlusterTaskOperation operation;
+    private Boolean fixLayoutOnly;
     private Boolean force;
 
-    public RebalanceGlusterVolumeParameters(Guid clusterId, String volumeName, GLUSTER_TASK_OPERATION operation, String rebalanceOption, Boolean force) {
+    public RebalanceGlusterVolumeParameters(Guid clusterId, String volumeName, GlusterTaskOperation operation, Boolean fixLayoutOnly, Boolean force) {
         super(clusterId, volumeName);
         setOperation(operation);
-        setRebalanceOption(rebalanceOption);
+        setFixLayoutOnly(fixLayoutOnly);
         setForce(force);
     }
 
-    public RebalanceGlusterVolumeParameters(Guid clusterId, String volumeName, GLUSTER_TASK_OPERATION operation) {
+    public RebalanceGlusterVolumeParameters(Guid clusterId, String volumeName, GlusterTaskOperation operation) {
         super(clusterId, volumeName);
         setOperation(operation);
-        setRebalanceOption("");
+        setFixLayoutOnly(false);
         setForce(false);
     }
 
-    public void setOperation(GLUSTER_TASK_OPERATION operation) {
+    public void setOperation(GlusterTaskOperation operation) {
         this.operation = operation;
     }
-    public GLUSTER_TASK_OPERATION getOperation() {
+    public GlusterTaskOperation getOperation() {
         return operation;
     }
-    public void setRebalanceOption(String rebalanceOption) {
-        this.rebalanceOption = rebalanceOption;
+    public void setFixLayoutOnly(Boolean fixLayoutOnly) {
+        this.fixLayoutOnly = fixLayoutOnly;
     }
-    public String getRebalanceOption() {
-        return rebalanceOption;
+    public Boolean isFixLayoutOnly() {
+        return fixLayoutOnly;
     }
     public void setForce(Boolean force) {
         this.force = force;

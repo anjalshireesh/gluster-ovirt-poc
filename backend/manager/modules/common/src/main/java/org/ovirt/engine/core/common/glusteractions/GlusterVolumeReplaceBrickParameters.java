@@ -1,20 +1,20 @@
 package org.ovirt.engine.core.common.glusteractions;
 
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
-import org.ovirt.engine.core.common.constants.GlusterConstants.GLUSTER_TASK_OPERATION;
+import org.ovirt.engine.core.common.businessentities.GlusterTaskOperation;
 import org.ovirt.engine.core.compat.Guid;
 
 public class GlusterVolumeReplaceBrickParameters extends GlusterVolumeParameters {
 
     private GlusterBrickEntity sourceBrick;
     private GlusterBrickEntity targetBrick;
-    private GLUSTER_TASK_OPERATION operation;
+    private GlusterTaskOperation operation;
 
     public GlusterVolumeReplaceBrickParameters(Guid vdsGroupId,
             String volumeName,
             GlusterBrickEntity sourceBrick,
             GlusterBrickEntity targetBrick,
-            GLUSTER_TASK_OPERATION operation) {
+            GlusterTaskOperation operation) {
         super(vdsGroupId, volumeName);
         setSourceBrick(sourceBrick);
         setTargetBrick(targetBrick);
@@ -37,11 +37,11 @@ public class GlusterVolumeReplaceBrickParameters extends GlusterVolumeParameters
         return targetBrick;
     }
 
-    public void setOperation(GLUSTER_TASK_OPERATION operation) {
+    public void setOperation(GlusterTaskOperation operation) {
         this.operation = operation;
     }
 
-    public GLUSTER_TASK_OPERATION getOperation() {
+    public GlusterTaskOperation getOperation() {
         return operation;
     }
 }

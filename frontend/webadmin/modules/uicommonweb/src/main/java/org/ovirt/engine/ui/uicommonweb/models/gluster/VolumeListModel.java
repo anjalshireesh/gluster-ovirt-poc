@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
+import org.ovirt.engine.core.common.businessentities.GlusterTaskOperation;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_TYPE;
 import org.ovirt.engine.core.common.businessentities.VDSGroup;
 import org.ovirt.engine.core.common.businessentities.storage_pool;
-import org.ovirt.engine.core.common.constants.GlusterConstants.GLUSTER_TASK_OPERATION;
 import org.ovirt.engine.core.common.glusteractions.CreateGlusterVolumeParameters;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeParameters;
 import org.ovirt.engine.core.common.glusteractions.RebalanceGlusterVolumeParameters;
@@ -351,7 +351,7 @@ public class VolumeListModel extends ListWithDetailsModel implements ISupportSys
             return;
         }
         GlusterVolumeEntity volume = (GlusterVolumeEntity)getSelectedItem();
-        Frontend.RunAction(VdcActionType.RebalanceGlusterVolume, new RebalanceGlusterVolumeParameters(clusterId, volume.getName(), GLUSTER_TASK_OPERATION.START));
+        Frontend.RunAction(VdcActionType.RebalanceGlusterVolume, new RebalanceGlusterVolumeParameters(clusterId, volume.getName(), GlusterTaskOperation.START));
     }
 
     private void stop() {

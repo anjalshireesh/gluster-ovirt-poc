@@ -3,7 +3,6 @@ package org.ovirt.engine.core.vdsbroker.vdsbroker;
 import java.util.Map;
 
 import org.ovirt.engine.core.common.businessentities.GlusterTaskStatusEntity;
-import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.utils.ObjectDescriptor;
 import org.ovirt.engine.core.vdsbroker.irsbroker.StatusReturnForXmlRpc;
 
@@ -32,10 +31,6 @@ public final class GlusterTaskStatusReturnForXmlRpc extends StatusReturnForXmlRp
 
     public void setGlusterTaskStatusEntity() {
         glusterTaskStatusEntity = new GlusterTaskStatusEntity();
-        glusterTaskStatusEntity.setId(Guid.NewGuid());
-        glusterTaskStatusEntity.setCode(mStatus.mCode);
-        glusterTaskStatusEntity.setMessage(mStatus.mMessage);
-        glusterTaskStatusEntity.setName(task);
         glusterTaskStatusEntity.setTaskState(taskState);
         glusterTaskStatusEntity.setTaskMessage(taskMessage);
     }

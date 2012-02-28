@@ -1,38 +1,43 @@
 package org.ovirt.engine.core.common.glustercommands;
 
-import org.ovirt.engine.core.common.constants.GlusterConstants.GLUSTER_TASK_OPERATION;
+import org.ovirt.engine.core.common.businessentities.GlusterTaskOperation;
 import org.ovirt.engine.core.compat.Guid;
 
 public class RebalanceGlusterVolumeVDSParameters extends GlusterVolumeVDSParameters {
-    private GLUSTER_TASK_OPERATION operation;
-    private String reblanceOption;
+    private GlusterTaskOperation operation;
+    private Boolean fixLayoutOnly;
     private Boolean force;
+    private String FIX_LAYOUT = "fix-layout";
 
     public RebalanceGlusterVolumeVDSParameters(Guid storagePoolId,
             String volumeName,
-            GLUSTER_TASK_OPERATION operation,
-            String rebalanceOption,
+            GlusterTaskOperation operation,
+            Boolean fixLayoutOnly,
             Boolean force) {
         super(storagePoolId, volumeName);
         setOperation(operation);
-        setReblanceOption(rebalanceOption);
+        setFixLayoutOnly(fixLayoutOnly);
         setForce(force);
     }
 
-    public void setOperation(GLUSTER_TASK_OPERATION operation) {
+    public void setOperation(GlusterTaskOperation operation) {
         this.operation = operation;
     }
 
-    public GLUSTER_TASK_OPERATION getOperation() {
+    public GlusterTaskOperation getOperation() {
         return operation;
     }
 
-    public void setReblanceOption(String reblanceOption) {
-        this.reblanceOption = reblanceOption;
+    public void setFixLayoutOnly(Boolean fixLayoutOnly) {
+        this.fixLayoutOnly = fixLayoutOnly;
     }
 
-    public String getReblanceOption() {
-        return reblanceOption;
+    public Boolean isFixLayoutOnly() {
+        return fixLayoutOnly;
+    }
+
+    public String getRebalanceMode() {
+        return (fixLayoutOnly) ? FIX_LAYOUT : "";
     }
 
     public void setForce(Boolean force) {

@@ -18,10 +18,10 @@ import org.ovirt.engine.api.resource.GlusterVolumeBricksResource;
 import org.ovirt.engine.api.resource.GlusterVolumeResource;
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
+import org.ovirt.engine.core.common.businessentities.GlusterTaskOperation;
 import org.ovirt.engine.core.common.businessentities.GlusterTaskStatusEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
-import org.ovirt.engine.core.common.constants.GlusterConstants.GLUSTER_TASK_OPERATION;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeBricksParameters;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeOptionParameters;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeParameters;
@@ -71,34 +71,30 @@ public class BackendGlusterVolumeResource extends AbstractBackendActionableResou
 
     @Override
     public Response rebalance(Action action) {
-        GLUSTER_TASK_OPERATION operation = GLUSTER_TASK_OPERATION.valueOf(action.getOperation().toUpperCase());
-        String rebalanceOption = (action.getRebalanceOption() != null ) ? action.getRebalanceOption() : "";
-        boolean isForce = (action.isForce() != null) ? action.isForce() : false;
-        GlusterTaskStatusEntity glusterTaskStatus;
-        Status taskStatus;
-
+        GlusterTaskOperation operation = GlusterTaskOperation.valueOf(action.getOperation().toUpperCase());
+        Boolean fixLayoutOnly = (action.isFixLayoutOnly() != null) ? action.isFixLayoutOnly() : false;
+        Boolean isForce = (action.isForce() != null) ? action.isForce() : false;
         switch (operation) {
         case START:
         case STOP:
-            taskStatus = performAction(VdcActionType.RebalanceGlusterVolume,
+            return doAction(VdcActionType.RebalanceGlusterVolume,
                     new RebalanceGlusterVolumeParameters(Guid.createGuidFromString(getClusterId()),
                             get().getVolumeName(),
                             operation,
-                            rebalanceOption,
-                            isForce), Status.class);
+                            fixLayoutOnly,
+                            isForce), action);
         case STATUS:
         default:
-            glusterTaskStatus = performAction(VdcActionType.RebalanceGlusterVolume,
+            GlusterTaskStatusEntity glusterTaskStatus = performAction(VdcActionType.RebalanceGlusterVolume,
                     new RebalanceGlusterVolumeParameters(Guid.createGuidFromString(getClusterId()),
                             get().getVolumeName(),
                             operation), GlusterTaskStatusEntity.class);
-            taskStatus = mapCollection(glusterTaskStatus);
+            action.setStatus(mapStatus(glusterTaskStatus));
+            return Response.ok(action).build();
         }
-        return Response.ok(taskStatus).build();
-
     }
 
-    private Status mapCollection(GlusterTaskStatusEntity glusterTaskStatusEntity) {
+    private Status mapStatus(GlusterTaskStatusEntity glusterTaskStatusEntity) {
         Status status = new Status();
         status.setState(glusterTaskStatusEntity.getTaskState());
         status.setDetail(glusterTaskStatusEntity.getTaskMessage());
@@ -158,7 +154,7 @@ public class BackendGlusterVolumeResource extends AbstractBackendActionableResou
                             .getVolumeName(),
                             mapCollection(action.getSourceBrick()),
                             mapCollection(action.getTargetBrick()),
-                            GLUSTER_TASK_OPERATION.valueOf(action.getOperation().toUpperCase())));
+                            GlusterTaskOperation.valueOf(action.getOperation().toUpperCase())));
         } catch (Exception e) {
             return handleError(e, false);
         }
