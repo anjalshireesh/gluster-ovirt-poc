@@ -1,7 +1,11 @@
 package org.ovirt.engine.core.common.glusteractions;
 
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
+<<<<<<< HEAD
 import org.ovirt.engine.core.common.constants.GlusterConstants.GLUSTER_TASK_OPERATION;
+=======
+import org.ovirt.engine.core.common.constants.GlusterConstants.VOLUME_OPERATION;
+>>>>>>> a502934177dd603f83b8e3e1c41b8e91e3968a98
 import org.ovirt.engine.core.compat.Guid;
 
 public class GlusterVolumeReplaceBrickParameters extends GlusterVolumeParameters {
