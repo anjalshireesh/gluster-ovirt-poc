@@ -239,6 +239,14 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
 
     @Override
     public List<GlusterVolumeEntity> getAllWithQuery(String query) {
-        return new SimpleJdbcTemplate(jdbcTemplate).query(query, getVolumeFromResultSet());
+        List<GlusterVolumeEntity> volumes = new SimpleJdbcTemplate(jdbcTemplate).query(query, getVolumeFromResultSet());
+
+        // Update all fetched volumes with their elements like bricks, options and access protocols
+        for(GlusterVolumeEntity volume : volumes) {
+            volume.setBricks(getBricksOfVolume(volume.getId()));
+            volume.setOptions(getOptionsOfVolume(volume.getId()));
+            volume.setAccessProtocols(new HashSet<GlusterVolumeEntity.ACCESS_PROTOCOL>(getAccessProtocolsOfVolume(volume.getId())));
+        }
+        return volumes;
     }
 }
