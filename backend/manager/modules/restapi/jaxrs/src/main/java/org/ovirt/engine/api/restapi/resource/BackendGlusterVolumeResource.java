@@ -12,11 +12,12 @@ import org.ovirt.engine.api.model.GlusterBrick;
 import org.ovirt.engine.api.model.GlusterBricks;
 import org.ovirt.engine.api.model.GlusterVolume;
 import org.ovirt.engine.api.model.GlusterVolumes;
-import org.ovirt.engine.api.model.VM;
+import org.ovirt.engine.api.model.VolumeOption;
 import org.ovirt.engine.api.resource.GlusterVolumeBricksResource;
 import org.ovirt.engine.api.resource.GlusterVolumeResource;
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
 import org.ovirt.engine.core.common.constants.GlusterConstants.GLUSTER_TASK_OPERATION;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeBricksParameters;
@@ -25,14 +26,14 @@ import org.ovirt.engine.core.common.glusteractions.GlusterVolumeParameters;
 import org.ovirt.engine.core.common.glusteractions.GlusterVolumeReplaceBrickParameters;
 import org.ovirt.engine.core.compat.Guid;
 
-public class BackendGlusterVolumeResource extends AbstractBackendActionableResource<VM, org.ovirt.engine.core.common.businessentities.VM> implements
-GlusterVolumeResource {
+public class BackendGlusterVolumeResource extends AbstractBackendActionableResource<GlusterVolume, GlusterVolumeEntity> implements
+        GlusterVolumeResource {
 
     private final BackendGlusterVolumesResource parent;
     private final String clusterId;
 
     public BackendGlusterVolumeResource(String clusterId, String id, BackendGlusterVolumesResource parent) {
-        super(id, VM.class, org.ovirt.engine.core.common.businessentities.VM.class, SUB_COLLECTIONS);
+        super(id, GlusterVolume.class, GlusterVolumeEntity.class, SUB_COLLECTIONS);
         this.parent = parent;
         this.clusterId = clusterId;
     }
