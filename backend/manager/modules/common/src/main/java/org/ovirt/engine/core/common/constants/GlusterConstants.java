@@ -18,6 +18,7 @@
  *******************************************************************************/
 package org.ovirt.engine.core.common.constants;
 
+
 /**
  *
  */
@@ -48,4 +49,18 @@ public class GlusterConstants {
     public static final String STATS_PERIOD_1WEEK = "1w";
     public static final String STATS_PERIOD_1MONTH = "1m";
     public static final String STATS_PERIOD_1YEAR = "1y";
+
+    public enum GLUSTER_TASK_OPERATION {
+        START,
+        ABORT,
+        PAUSE,
+        STATUS,
+        COMMIT
+    }
+
+    public static final String START = "start";
+    public static final String ABORT = "abort";
+    public static final String PAUSE = "pause";
+    public static final String STATUS = "status";
+    public static final String COMMIT = "commit";
 }

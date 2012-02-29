@@ -404,4 +404,54 @@ public class IrsServerWrapper implements IIrsServer {
         StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
         return wrapper;
     }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickStart(String volumeName,
+            String sourceBrick,
+            String targetBrick) {
+        Map<String, Object> xmlRpcReturnValue =
+            irsServer.glusterVolumeReplaceBrickStart(volumeName, sourceBrick, targetBrick);
+        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+        return wrapper;
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickAbort(String volumeName,
+            String sourceBrick,
+            String targetBrick) {
+        Map<String, Object> xmlRpcReturnValue =
+            irsServer.glusterVolumeReplaceBrickAbort(volumeName, sourceBrick, targetBrick);
+        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+        return wrapper;
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickStatus(String volumeName,
+            String sourceBrick,
+            String targetBrick) {
+        Map<String, Object> xmlRpcReturnValue =
+            irsServer.glusterVolumeReplaceBrickStatus(volumeName, sourceBrick, targetBrick);
+        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+        return wrapper;
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickPause(String volumeName,
+            String sourceBrick,
+            String targetBrick) {
+        Map<String, Object> xmlRpcReturnValue =
+            irsServer.glusterVolumeReplaceBrickPause(volumeName, sourceBrick, targetBrick);
+        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+        return wrapper;
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickCommit(String volumeName,
+            String sourceBrick,
+            String targetBrick) {
+        Map<String, Object> xmlRpcReturnValue =
+            irsServer.glusterVolumeReplaceBrickCommit(volumeName, sourceBrick, targetBrick);
+        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+        return wrapper;
+    }
 }

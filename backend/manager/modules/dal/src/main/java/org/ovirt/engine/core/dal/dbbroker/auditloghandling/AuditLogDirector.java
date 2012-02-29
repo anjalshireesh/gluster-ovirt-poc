@@ -61,6 +61,18 @@ public final class AuditLogDirector {
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_STOP_FAILED, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_OPTION_SET, AuditLogSeverity.NORMAL);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_OPTION_SET_FAILED, AuditLogSeverity.ERROR);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_ADD_BRICK, AuditLogSeverity.NORMAL);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_ADD_BRICK_FAILED, AuditLogSeverity.ERROR);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REMOVE_BRICK, AuditLogSeverity.NORMAL);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REMOVE_BRICK_FAILED, AuditLogSeverity.ERROR);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REPLACE_BRICK_START, AuditLogSeverity.NORMAL);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REPLACE_BRICK_START_FAILED, AuditLogSeverity.ERROR);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REPLACE_BRICK_ABORT, AuditLogSeverity.NORMAL);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REPLACE_BRICK_ABORT_FAILED, AuditLogSeverity.ERROR);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REPLACE_BRICK_PAUSE, AuditLogSeverity.NORMAL);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REPLACE_BRICK_PAUSE_FAILED, AuditLogSeverity.ERROR);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REPLACE_BRICK_COMMIT, AuditLogSeverity.NORMAL);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REPLACE_BRICK_COMMIT_FAILED, AuditLogSeverity.ERROR);
     }
 
     private static void initDefaultSeverities() {
@@ -123,7 +135,7 @@ public final class AuditLogDirector {
         mSeverities.put(AuditLogType.USER_DETACH_USER_FROM_TIME_LEASED_POOL_FAILED_INTERNAL, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.USER_DETACH_AD_GROUP_FROM_TIME_LEASED_POOL_INTERNAL, AuditLogSeverity.NORMAL);
         mSeverities
-                .put(AuditLogType.USER_DETACH_AD_GROUP_FROM_TIME_LEASED_POOL_FAILED_INTERNAL, AuditLogSeverity.ERROR);
+        .put(AuditLogType.USER_DETACH_AD_GROUP_FROM_TIME_LEASED_POOL_FAILED_INTERNAL, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.USER_UPDATE_USER_TO_TIME_LEASED_POOL, AuditLogSeverity.NORMAL);
         mSeverities.put(AuditLogType.USER_UPDATE_USER_TO_TIME_LEASED_POOL_FAILED, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.USER_UPDATE_VM_POOL_WITH_VMS_FAILED, AuditLogSeverity.ERROR);
@@ -156,7 +168,7 @@ public final class AuditLogDirector {
                 AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.USER_ADD_ROLE_WITH_ACTION_GROUP, AuditLogSeverity.NORMAL);
         mSeverities
-                .put(AuditLogType.USER_ADD_ROLE_WITH_ACTION_GROUP_FAILED, AuditLogSeverity.ERROR);
+        .put(AuditLogType.USER_ADD_ROLE_WITH_ACTION_GROUP_FAILED, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.USER_REMOVE_ADUSER, AuditLogSeverity.NORMAL);
         mSeverities.put(AuditLogType.USER_FAILED_REMOVE_ADUSER, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.USER_ADD, AuditLogSeverity.NORMAL);
@@ -280,7 +292,7 @@ public final class AuditLogDirector {
         mSeverities.put(AuditLogType.SYSTEM_CHANGE_STORAGE_POOL_STATUS_PROBLEMATIC_SEARCHING_NEW_SPM,
                 AuditLogSeverity.WARNING);
         mSeverities
-                .put(AuditLogType.SYSTEM_CHANGE_STORAGE_POOL_STATUS_PROBLEMATIC_WITH_ERROR, AuditLogSeverity.WARNING);
+        .put(AuditLogType.SYSTEM_CHANGE_STORAGE_POOL_STATUS_PROBLEMATIC_WITH_ERROR, AuditLogSeverity.WARNING);
         mSeverities.put(AuditLogType.USER_FORCE_REMOVE_STORAGE_DOMAIN, AuditLogSeverity.NORMAL);
         mSeverities.put(AuditLogType.USER_FORCE_REMOVE_STORAGE_DOMAIN_FAILED, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.RECONSTRUCT_MASTER_DONE, AuditLogSeverity.NORMAL);
@@ -752,15 +764,15 @@ public final class AuditLogDirector {
                 String token = matcher.group();
                 token = token.substring(2); // remove leading ${
                 token = token.substring(0, token.length() - 1); // remove
-                                                                // trailing }
+                // trailing }
 
                 String value = map.get(token.toLowerCase()); // get value from
-                                                             // value map
+                // value map
                 if (value == null || value.isEmpty())
                     value = token; // replace value with token if value not
-                                   // defined
+                // defined
                 matcher.appendReplacement(buffer, Matcher.quoteReplacement(value)); // put the value into
-                // message
+                                                                                    // message
             }
 
             matcher.appendTail(buffer); // append the rest of the message
@@ -771,7 +783,7 @@ public final class AuditLogDirector {
 
     static Map<String, String> getAvalableValues(AuditLogableBase logable) {
         Map<String, String> returnValue =
-                new HashMap<String, String>(logable.getCustomValues());
+            new HashMap<String, String>(logable.getCustomValues());
         Class<?> type = AuditLogableBase.class;
         for (PropertyInfo propertyInfo : TypeCompat.GetProperties(type)) {
             Object value = propertyInfo.GetValue(logable, null);
