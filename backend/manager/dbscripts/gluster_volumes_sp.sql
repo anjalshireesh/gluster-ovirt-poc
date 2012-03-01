@@ -170,6 +170,20 @@ END; $procedure$
 LANGUAGE plpgsql;
 
 
+Create or replace FUNCTION UpdateGlusterVolumeStatus(v_cluster_id UUID, v_vol_name VARCHAR(1000), v_status INTEGER)
+RETURNS VOID
+   AS $procedure$
+BEGIN
+UPDATE gluster_volumes
+   SET 
+   status = v_status,
+   _update_date = LOCALTIMESTAMP
+   WHERE cluster_id = v_cluster_id 
+   AND   vol_name = v_vol_name;
+END; $procedure$
+LANGUAGE plpgsql;
+
+
 Create or replace FUNCTION UpdateGlusterVolumeOption(v_volume_id UUID, v_option_key VARCHAR(8192), v_option_val VARCHAR(8192))
 RETURNS VOID
    AS $procedure$

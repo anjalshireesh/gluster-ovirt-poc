@@ -82,6 +82,14 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
         }
     }
 
+    private void updateGlusterVolumeStatus(Guid vdsGroupId, String volumeName, VOLUME_STATUS status) {
+        getCallsHandler().executeModification("UpdateGlusterVolumeStatus",
+                getCustomMapSqlParameterSource()
+                        .addValue("cluster_id", vdsGroupId)
+                        .addValue("vol_name", volumeName)
+                        .addValue("status", status.getValue()));
+    }
+
     @Override
     public void save(GlusterVolumeEntity volume) {
         insertVolumeEntity(volume);
@@ -257,5 +265,10 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
             volume.setAccessProtocols(new HashSet<GlusterVolumeEntity.ACCESS_PROTOCOL>(getAccessProtocolsOfVolume(volume.getId())));
         }
         return volumes;
+    }
+
+    @Override
+    public void updateVolumeStatus(Guid vdsGroupId, String volumeName, VOLUME_STATUS status) {
+        updateGlusterVolumeStatus(vdsGroupId, volumeName, status);
     }
 }
