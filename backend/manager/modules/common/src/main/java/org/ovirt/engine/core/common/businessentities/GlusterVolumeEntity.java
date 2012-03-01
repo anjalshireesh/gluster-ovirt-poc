@@ -38,7 +38,15 @@ import org.ovirt.engine.core.compat.Guid;
 public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity<Guid> {
     public enum VOLUME_STATUS {
         ONLINE,
-        OFFLINE
+        OFFLINE;
+
+        public int getValue() {
+            return ordinal();
+        }
+
+        public static VOLUME_STATUS forValue(int ordinal) {
+            return values()[ordinal];
+        }
     };
 
     public enum VOLUME_TYPE {
@@ -46,12 +54,28 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
         REPLICATE,
         DISTRIBUTED_REPLICATE,
         STRIPE,
-        DISTRIBUTED_STRIPE
+        DISTRIBUTED_STRIPE;
+
+        public int getValue() {
+            return ordinal();
+        }
+
+        public static VOLUME_TYPE forValue(int ordinal) {
+            return values()[ordinal];
+        }
     };
 
     public enum TRANSPORT_TYPE {
         ETHERNET,
-        INFINIBAND
+        INFINIBAND;
+
+        public int getValue() {
+            return ordinal();
+        }
+
+        public static TRANSPORT_TYPE forValue(int ordinal) {
+            return values()[ordinal];
+        }
     };
 
     public enum ACCESS_PROTOCOL {
