@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_STATUS;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
 import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.dao.DAO;
@@ -22,6 +23,8 @@ public interface GlusterVolumeDAO extends DAO {
     public void remove(Guid id);
 
     public void update(GlusterVolumeEntity volume);
+
+    public void updateVolumeStatus(Guid vdsGroupId, String volumeName, VOLUME_STATUS status);
 
     public void getVolumesByClusterGuid(Guid clusterId);
 

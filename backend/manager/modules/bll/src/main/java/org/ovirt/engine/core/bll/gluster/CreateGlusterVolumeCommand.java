@@ -9,6 +9,7 @@ import org.ovirt.engine.core.bll.Backend;
 import org.ovirt.engine.core.common.AuditLogType;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.ACCESS_PROTOCOL;
 import org.ovirt.engine.core.common.businessentities.VDS;
 import org.ovirt.engine.core.common.errors.VdcBLLException;
 import org.ovirt.engine.core.common.errors.VdcBllErrors;
@@ -52,14 +53,18 @@ public class CreateGlusterVolumeCommand extends GlusterCommandBase<CreateGluster
                 .executeInNewTransaction(new TransactionMethod<Void>() {
                     @Override
                     public Void runInTransaction() {
+                        GlusterVolumeEntity volume = getParameters().getVolume();
+                        if(volume.getAccessProtocols() == null) {
+                            volume.setAccessProtocol(ACCESS_PROTOCOL.GLUSTER);
+                        }
+
                         VDSBrokerFrontend vdsBroker = Backend.getInstance()
                                 .getResourceManager();
 
                         VDSReturnValue returnValue = vdsBroker.RunVdsCommand(
                                 VDSCommandType.CreateGlusterVolume,
                                 new CreateGlusterVolumeVDSParameters(
-                                        getOnlineHost().getvds_id(), getParameters()
-                                                .getVolume()));
+                                        getOnlineHost().getvds_id(), volume));
 
                         setSucceeded(returnValue.getSucceeded());
                         if (!getSucceeded()) {
