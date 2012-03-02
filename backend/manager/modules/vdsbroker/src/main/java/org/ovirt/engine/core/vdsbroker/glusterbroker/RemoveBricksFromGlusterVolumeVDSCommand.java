@@ -4,11 +4,10 @@ import java.util.List;
 
 import org.ovirt.engine.core.common.glustercommands.GlusterVolumeBricksVDSParameters;
 import org.ovirt.engine.core.common.utils.GlusterCoreUtil;
-import org.ovirt.engine.core.vdsbroker.vdsbroker.VdsBrokerCommand;
 
-public class RemoveBricksFromGlusterVolumeVDSCommand<P extends GlusterVolumeBricksVDSParameters> extends VdsBrokerCommand<P> {
+public class RemoveBricksFromGlusterVolumeVDSCommand extends GlusterBrokerCommand<GlusterVolumeBricksVDSParameters> {
 
-    public RemoveBricksFromGlusterVolumeVDSCommand(P parameters) {
+    public RemoveBricksFromGlusterVolumeVDSCommand(GlusterVolumeBricksVDSParameters parameters) {
         super(parameters);
     }
 

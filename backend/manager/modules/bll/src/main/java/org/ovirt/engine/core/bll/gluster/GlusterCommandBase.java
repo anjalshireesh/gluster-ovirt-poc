@@ -47,7 +47,7 @@ public abstract class GlusterCommandBase<T extends VdsGroupParametersBase> exten
         List<VDS> hosts =
                 DbFacade.getInstance()
                         .getVdsDAO()
-                        .getAllForVdsGroupWithStatus(getVdsGroup().getstorage_pool_id().getValue(), VDSStatus.Up);
+                        .getAllForVdsGroupWithStatus(getVdsGroup().getID().getValue(), VDSStatus.Up);
         return hosts.get(0);
     }
 }

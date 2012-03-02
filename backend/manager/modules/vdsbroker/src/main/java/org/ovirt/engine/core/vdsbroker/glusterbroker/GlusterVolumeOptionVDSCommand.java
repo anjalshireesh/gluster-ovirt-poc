@@ -4,14 +4,13 @@
 package org.ovirt.engine.core.vdsbroker.glusterbroker;
 
 import org.ovirt.engine.core.common.glustercommands.GlusterVolumeOptionVDSParameters;
-import org.ovirt.engine.core.vdsbroker.vdsbroker.VdsBrokerCommand;
 
 /**
  *
  */
-public class GlusterVolumeOptionVDSCommand<P extends GlusterVolumeOptionVDSParameters> extends VdsBrokerCommand<P> {
+public class GlusterVolumeOptionVDSCommand extends GlusterBrokerCommand<GlusterVolumeOptionVDSParameters> {
 
-    public GlusterVolumeOptionVDSCommand(P parameters) {
+    public GlusterVolumeOptionVDSCommand(GlusterVolumeOptionVDSParameters parameters) {
         super(parameters);
     }
 

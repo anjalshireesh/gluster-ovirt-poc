@@ -4,10 +4,9 @@ import java.util.List;
 
 import org.ovirt.engine.core.common.glustercommands.GlusterVolumeBricksVDSParameters;
 import org.ovirt.engine.core.common.utils.GlusterCoreUtil;
-import org.ovirt.engine.core.vdsbroker.vdsbroker.VdsBrokerCommand;
 
-public class AddBricksToGlusterVolumeVDSCommand<P extends GlusterVolumeBricksVDSParameters> extends VdsBrokerCommand<P> {
-    public AddBricksToGlusterVolumeVDSCommand(P parameters) {
+public class AddBricksToGlusterVolumeVDSCommand extends GlusterBrokerCommand<GlusterVolumeBricksVDSParameters> {
+    public AddBricksToGlusterVolumeVDSCommand(GlusterVolumeBricksVDSParameters parameters) {
         super(parameters);
     }
 
