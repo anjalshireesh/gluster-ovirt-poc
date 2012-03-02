@@ -24,6 +24,11 @@ import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
         GlusterVolumeDAO {
 
+    private static final ParameterizedRowMapper<GlusterVolumeEntity> volumeRowMapper = createVolumeRowMapper();
+    private static final ParameterizedRowMapper<GlusterBrickEntity> brickRowMapper = createBrickRowMapper();
+    private static final ParameterizedRowMapper<GlusterVolumeOption> optionRowMapper = createOptionRowMapper();
+    private static final ParameterizedRowMapper<ACCESS_PROTOCOL> accessProtocolRowMapper = createAccessProtocolRowMapper();
+
     private void insertVolumeEntity(GlusterVolumeEntity volume) {
         getCallsHandler().executeModification(
                 "InsertGlusterVolume",
@@ -88,7 +93,7 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
     @Override
     public GlusterVolumeEntity getById(Guid id) {
         GlusterVolumeEntity volume = getCallsHandler().executeRead(
-                "GetGlusterVolumeById", getVolumeFromResultSet(),
+                "GetGlusterVolumeById", volumeRowMapper,
                 createVolumeIdParamSource(id));
 
         if (volume != null) {
@@ -102,7 +107,7 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
     @Override
     public GlusterVolumeEntity getByName(Guid clusterId, String volName) {
         GlusterVolumeEntity volume = getCallsHandler().executeRead(
-                "GetGlusterVolumeByName", getVolumeFromResultSet(),
+                "GetGlusterVolumeByName", volumeRowMapper,
                 getCustomMapSqlParameterSource().addValue("cluster_id", clusterId).addValue("vol_name", volName));
 
         if (volume != null) {
@@ -118,33 +123,37 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
     }
 
     private List<GlusterBrickEntity> getBricksOfVolume(Guid volumeId) {
-        return getCallsHandler().executeReadList(
-                "GetBricksByGlusterVolumeGuid", getBricksFromResultSet(),
+        List<GlusterBrickEntity> bricks = getCallsHandler().executeReadList(
+                "GetBricksByGlusterVolumeGuid", brickRowMapper,
                 createVolumeIdParamSource(volumeId));
+
+        for(GlusterBrickEntity brick : bricks) {
+            brick.setServerName(dbFacade.getVdsStaticDAO().get(brick.getServerId()).gethost_name());
+        }
+
+        return bricks;
     }
 
     private List<GlusterVolumeOption> getOptionsOfVolume(Guid volumeId) {
         return getCallsHandler().executeReadList(
-                "GetOptionsByGlusterVolumeGuid", getOptionsFromResultSet(),
+                "GetOptionsByGlusterVolumeGuid", optionRowMapper,
                 createVolumeIdParamSource(volumeId));
     }
 
     private List<ACCESS_PROTOCOL> getAccessProtocolsOfVolume(Guid volumeId) {
         return getCallsHandler().executeReadList(
                 "GetAccessProtocolsByGlusterVolumeGuid",
-                getAccessProtocolsFromResultSet(),
+                accessProtocolRowMapper,
                 createVolumeIdParamSource(volumeId));
     }
 
-    private ParameterizedRowMapper<GlusterBrickEntity> getBricksFromResultSet() {
+    private static ParameterizedRowMapper<GlusterBrickEntity> createBrickRowMapper() {
         ParameterizedRowMapper<GlusterBrickEntity> mapper = new ParameterizedRowMapper<GlusterBrickEntity>() {
             @Override
             public GlusterBrickEntity mapRow(ResultSet rs, int rowNum)
                     throws SQLException {
                 GlusterBrickEntity entity = new GlusterBrickEntity();
-                Guid hostId = Guid.createGuidFromString(rs.getString("host_id"));
-                entity.setServerId(hostId);
-                entity.setServerName(dbFacade.getVdsStaticDAO().get(hostId).gethost_name());
+                entity.setServerId(Guid.createGuidFromString(rs.getString("host_id")));
                 entity.setBrickDirectory(rs.getString("brick_dir"));
                 entity.setStatus(BRICK_STATUS.values()[rs.getInt("status")]);
                 return entity;
@@ -153,7 +162,7 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
         return mapper;
     }
 
-    private ParameterizedRowMapper<GlusterVolumeOption> getOptionsFromResultSet() {
+    private static ParameterizedRowMapper<GlusterVolumeOption> createOptionRowMapper() {
         ParameterizedRowMapper<GlusterVolumeOption> mapper = new ParameterizedRowMapper<GlusterVolumeOption>() {
             @Override
             public GlusterVolumeOption mapRow(ResultSet rs, int rowNum)
@@ -167,7 +176,7 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
         return mapper;
     }
 
-    private ParameterizedRowMapper<ACCESS_PROTOCOL> getAccessProtocolsFromResultSet() {
+    private static ParameterizedRowMapper<ACCESS_PROTOCOL> createAccessProtocolRowMapper() {
         ParameterizedRowMapper<ACCESS_PROTOCOL> mapper = new ParameterizedRowMapper<ACCESS_PROTOCOL>() {
             @Override
             public ACCESS_PROTOCOL mapRow(ResultSet rs, int rowNum)
@@ -178,7 +187,7 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
         return mapper;
     }
 
-    private ParameterizedRowMapper<GlusterVolumeEntity> getVolumeFromResultSet() {
+    private static ParameterizedRowMapper<GlusterVolumeEntity> createVolumeRowMapper() {
         ParameterizedRowMapper<GlusterVolumeEntity> mapper = new ParameterizedRowMapper<GlusterVolumeEntity>() {
             @Override
             public GlusterVolumeEntity mapRow(ResultSet rs, int rowNum)
@@ -239,7 +248,7 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
 
     @Override
     public List<GlusterVolumeEntity> getAllWithQuery(String query) {
-        List<GlusterVolumeEntity> volumes = new SimpleJdbcTemplate(jdbcTemplate).query(query, getVolumeFromResultSet());
+        List<GlusterVolumeEntity> volumes = new SimpleJdbcTemplate(jdbcTemplate).query(query, volumeRowMapper);
 
         // Update all fetched volumes with their elements like bricks, options and access protocols
         for(GlusterVolumeEntity volume : volumes) {
