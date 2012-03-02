@@ -2,11 +2,10 @@ package org.ovirt.engine.core.vdsbroker.glusterbroker;
 
 import org.ovirt.engine.core.common.constants.GlusterConstants.GLUSTER_TASK_OPERATION;
 import org.ovirt.engine.core.common.glustercommands.ReplaceGlusterVolumeBrickVDSParameters;
-import org.ovirt.engine.core.vdsbroker.vdsbroker.VdsBrokerCommand;
 
-public class ReplaceGlusterVolumeBrickVDSCommand<P extends ReplaceGlusterVolumeBrickVDSParameters> extends VdsBrokerCommand<P> {
+public class ReplaceGlusterVolumeBrickVDSCommand extends GlusterBrokerCommand<ReplaceGlusterVolumeBrickVDSParameters> {
 
-    public ReplaceGlusterVolumeBrickVDSCommand(P parameters) {
+    public ReplaceGlusterVolumeBrickVDSCommand(ReplaceGlusterVolumeBrickVDSParameters parameters) {
         super(parameters);
     }
 

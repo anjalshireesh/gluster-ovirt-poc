@@ -5,15 +5,14 @@ package org.ovirt.engine.core.vdsbroker.glusterbroker;
 
 import org.ovirt.engine.core.common.vdscommands.VdsIdVDSCommandParametersBase;
 import org.ovirt.engine.core.vdsbroker.vdsbroker.StatusForXmlRpc;
-import org.ovirt.engine.core.vdsbroker.vdsbroker.VdsBrokerCommand;
 
 /**
  *
  */
-public class ListGlusterVolumesVDSCommand<P extends VdsIdVDSCommandParametersBase> extends VdsBrokerCommand<P> {
+public class ListGlusterVolumesVDSCommand extends GlusterBrokerCommand<VdsIdVDSCommandParametersBase> {
     private StatusForXmlRpc status;
 
-    public ListGlusterVolumesVDSCommand(P parameters) {
+    public ListGlusterVolumesVDSCommand(VdsIdVDSCommandParametersBase parameters) {
         super(parameters);
     }
 

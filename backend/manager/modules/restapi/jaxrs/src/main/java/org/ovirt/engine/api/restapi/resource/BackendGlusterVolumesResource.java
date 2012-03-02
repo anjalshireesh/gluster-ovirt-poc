@@ -37,7 +37,6 @@ public class BackendGlusterVolumesResource extends AbstractBackendCollectionReso
         VdcReturnValueBase result =
                 backend.RunAction(VdcActionType.ListGlusterVolumes,
                         new VdsGroupParametersBase(Guid.createGuidFromString(getClusterId())));
-
         List<GlusterVolumeEntity> volumes = (List<GlusterVolumeEntity>)result.getActionReturnValue();
         return mapCollection(volumes);
     }

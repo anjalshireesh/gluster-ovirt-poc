@@ -138,10 +138,10 @@ public class VdsDAODbFacadeImpl extends BaseDAODbFacade implements VdsDAO {
     }
 
     @Override
-    public List<VDS> getAllForVdsGroupWithStatus(Guid storagePoolID, VDSStatus status) {
-        return getCallsHandler().executeReadList("GetUpVds",
+    public List<VDS> getAllForVdsGroupWithStatus(Guid vdsGroupID, VDSStatus status) {
+        return getCallsHandler().executeReadList("GetVdsByStatus",
                 new VdsRowMapper(),
-                getCustomMapSqlParameterSource().addValue("storage_pool_id", storagePoolID).addValue("status",
+                getCustomMapSqlParameterSource().addValue("vds_group_id", vdsGroupID).addValue("status",
                         status.ordinal()));
     }
 

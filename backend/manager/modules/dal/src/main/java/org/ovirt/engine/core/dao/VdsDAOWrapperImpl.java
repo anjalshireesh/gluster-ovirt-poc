@@ -161,7 +161,7 @@ public class VdsDAOWrapperImpl extends BaseDAOWrapperImpl implements VdsDAO {
     }
 
     @Override
-    public List<VDS> getAllForVdsGroupWithStatus(Guid storagePoolID, VDSStatus status) {
+    public List<VDS> getAllForVdsGroupWithStatus(Guid vdsGroupId, VDSStatus status) {
         // TODO Auto-generated method stub
         return null;
     }

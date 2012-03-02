@@ -122,11 +122,11 @@ public interface VdsDAO extends DAO, SearchDAO<VDS>, AutoRecoverDAO<VDS> {
     List<VDS> getListForSpmSelection(Guid storagePoolId);
 
     /**
-     * Retrieves all VDS instances in the given Storage Pool, that are in status "UP"
+     * Retrieves all VDS instances in the given Vds group, that are in status "UP"
      * Here not considering the VDS Spm priority
-     * @param storagePoolID
+     * @param vdsGroupId
      * @param status
      * @return list of VDS instances
      */
-    List<VDS> getAllForVdsGroupWithStatus(Guid storagePoolID, VDSStatus status);
+    List<VDS> getAllForVdsGroupWithStatus(Guid vdsGroupId, VDSStatus status);
 }
