@@ -19,12 +19,15 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
     private static final Guid HOST_ID = new Guid("afce7a39-8e8c-4819-ba9c-796d316592e6");
     private static final Guid CLUSTER_ID = new Guid("0e57070e-2469-4b38-84a2-f111aaabd49d");
     private VdsStatic host;
+    private GlusterVolumeEntity volume;
+
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
         dao = dbFacade.getGlusterVolumeDAO();
         host = dbFacade.getVdsStaticDAO().get(HOST_ID);
+        volume = insertTestVolume();
     }
 
     public GlusterVolumeDAOTest() throws Exception {
@@ -33,6 +36,21 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
 
     @Test
     public void testGlusterVolumeInsert() throws Exception {
+        GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
+        assertNotNull(volumeEntity);
+        assertEquals(volumeEntity, volume);
+    }
+
+    @Test
+    public void testGlusterVolumeStatusChange() throws Exception {
+        volume.setStatus(VOLUME_STATUS.OFFLINE);
+        dao.updateVolumeStatus(CLUSTER_ID, "testVol1", VOLUME_STATUS.OFFLINE);
+        GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
+        assertNotNull(volumeEntity);
+        assertEquals(volumeEntity, volume);
+    }
+
+    private GlusterVolumeEntity insertTestVolume() {
         Guid volumeId = Guid.NewGuid();
 
         GlusterVolumeEntity volume = new GlusterVolumeEntity();
@@ -54,15 +72,6 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
         volume.addBrick(brick);
 
         dao.save(volume);
-
-        GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
-
-        assertNotNull(volumeEntity);
-        assertEquals(volumeEntity, volume);
-
-        volumeEntity = dao.getByName(CLUSTER_ID, volume.getName());
-
-        assertNotNull(volumeEntity);
-        assertEquals(volumeEntity, volume);
+        return volume;
     }
 }

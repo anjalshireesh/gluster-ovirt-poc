@@ -34,6 +34,7 @@ import org.ovirt.engine.core.common.constants.GlusterConstants;
 import org.ovirt.engine.core.common.utils.GlusterCoreUtil;
 import org.ovirt.engine.core.common.utils.StringUtil;
 import org.ovirt.engine.core.compat.Guid;
+import org.ovirt.engine.core.compat.StringHelper;
 
 public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity<Guid> {
     public enum VOLUME_STATUS {
@@ -228,6 +229,19 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
         return protocolsStr;
     }
 
+    /**
+     * Sets a single access protocol, removing other if set already
+     * @param protocol
+     */
+    public void setAccessProtocol(ACCESS_PROTOCOL protocol) {
+        accessProtocols = new HashSet<GlusterVolumeEntity.ACCESS_PROTOCOL>();
+        addAccessProtocol(protocol);
+    }
+
+    private void addAccessProtocol(ACCESS_PROTOCOL protocol) {
+        this.accessProtocols.add(protocol);
+    }
+
     public void setAccessProtocols(String accessProtocols) {
         if(accessProtocols == null || accessProtocols.trim().isEmpty()) {
             this.accessProtocols = null;
@@ -247,7 +261,9 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     }
 
     public void setAccessControlList(String accessControlList) {
-        setOption(OPTION_AUTH_ALLOW, accessControlList);
+        if (!StringHelper.isNullOrEmpty(accessControlList)) {
+            setOption(OPTION_AUTH_ALLOW, accessControlList);
+        }
     }
 
     public boolean isNfsEnabled() {
