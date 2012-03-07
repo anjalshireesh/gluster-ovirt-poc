@@ -32,7 +32,6 @@ import java.util.Set;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity.BRICK_STATUS;
 import org.ovirt.engine.core.common.constants.GlusterConstants;
 import org.ovirt.engine.core.common.utils.GlusterCoreUtil;
-import org.ovirt.engine.core.common.utils.StringUtil;
 import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.compat.StringHelper;
 
@@ -91,13 +90,6 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     public static final String OPTION_AUTH_ALLOW = "auth.allow";
     public static final String OPTION_NFS_DISABLE = "nfs.disable";
 
-    private static final String[] VOLUME_TYPE_STR = new String[] { "Distribute", "Replicate", "Distributed Replicate",
-            "Stripe", "Distributed Stripe" };
-
-    private static final String[] TRANSPORT_TYPE_STR = new String[] { "Ethernet", "Infiniband" };
-    private static final String[] STATUS_STR = new String[] { "Online", "Offline" };
-    private static final String[] ACCESS_PROTOCOL_STR = new String[] { "Gluster", "NFS", "CIFS" };
-
     private VOLUME_TYPE volumeType = VOLUME_TYPE.DISTRIBUTE;
     private TRANSPORT_TYPE transportType = TRANSPORT_TYPE.ETHERNET;
     private VOLUME_STATUS status = VOLUME_STATUS.OFFLINE;
@@ -116,28 +108,12 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     private Set<ACCESS_PROTOCOL> accessProtocols = new LinkedHashSet<ACCESS_PROTOCOL>(Arrays.asList(new ACCESS_PROTOCOL[] {
             ACCESS_PROTOCOL.GLUSTER }));
 
-    public String getVolumeTypeStr() {
-        return getVolumeTypeStr(getVolumeType());
-    }
-
-    public static String getVolumeTypeStr(VOLUME_TYPE volumeType) {
-        return VOLUME_TYPE_STR[volumeType.ordinal()];
-    }
-
     public static VOLUME_TYPE getVolumeTypeByStr(String volumeTypeStr) {
         return VOLUME_TYPE.valueOf(volumeTypeStr);
     }
 
     public static TRANSPORT_TYPE getTransportTypeByStr(String transportTypeStr) {
         return TRANSPORT_TYPE.valueOf(transportTypeStr);
-    }
-
-    public String getTransportTypeStr() {
-        return TRANSPORT_TYPE_STR[getTransportType().ordinal()];
-    }
-
-    public String getStatusStr() {
-        return STATUS_STR[getStatus().ordinal()];
     }
 
     public int getNumOfBricks() {
@@ -218,15 +194,6 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
 
     public void setAccessProtocols(Set<ACCESS_PROTOCOL> accessProtocols) {
         this.accessProtocols = accessProtocols;
-    }
-
-    public String getAccessProtocolsStr() {
-        String protocolsStr = "";
-        for (ACCESS_PROTOCOL protocol : accessProtocols) {
-            String protocolStr = ACCESS_PROTOCOL_STR[protocol.ordinal()];
-            protocolsStr += (protocolsStr.isEmpty() ? protocolStr : ", " + protocolStr);
-        }
-        return protocolsStr;
     }
 
     /**
@@ -423,16 +390,6 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
         setVolumeType(volumeType);
         setTransportType(transportType);
         setStatus(status);
-    }
-
-    /**
-     * Filter matches if any of the properties name, GlusterVolume type, transport type, status and number of disks
-     * contains the filter string
-     */
-    @Override
-    public boolean filter(String filterString, boolean caseSensitive) {
-        return StringUtil.filterString(getName() + getVolumeTypeStr() + getTransportTypeStr() + getStatusStr()
-                + getNumOfBricks(), filterString, caseSensitive);
     }
 
     public List<String> getBrickDirectories() {
