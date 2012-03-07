@@ -43,7 +43,8 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
 
     @Test
     public void testGlusterVolumeStatusChange() throws Exception {
-        dao.updateVolumeStatus(HOST_ID, "testVol1", VOLUME_STATUS.OFFLINE);
+        volume.setStatus(VOLUME_STATUS.OFFLINE);
+        dao.updateVolumeStatus(CLUSTER_ID, "testVol1", VOLUME_STATUS.OFFLINE);
         GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
         assertNotNull(volumeEntity);
         assertEquals(volumeEntity, volume);
