@@ -58,8 +58,7 @@ public class CreateGlusterVolumeCommand extends GlusterCommandBase<CreateGluster
                         VDSReturnValue returnValue = vdsBroker.RunVdsCommand(
                                 VDSCommandType.CreateGlusterVolume,
                                 new CreateGlusterVolumeVDSParameters(
-                                        getVdsGroup().getstorage_pool_id()
-                                                .getValue(), getParameters()
+                                        getOnlineHost().getvds_id(), getParameters()
                                                 .getVolume()));
 
                         setSucceeded(returnValue.getSucceeded());

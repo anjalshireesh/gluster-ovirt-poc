@@ -555,6 +555,19 @@ END; $procedure$
   LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION getVdsForVdsGroupWithStatus(v_vds_group_id UUID, v_status integer) RETURNS SETOF vds
+AS $procedure$
+
+BEGIN
+BEGIN
+      RETURN QUERY SELECT vds.*
+      FROM vds
+      WHERE (status = v_status) AND (vds_group_id = v_vds_group_id);
+   END;
+   RETURN;
+END; $procedure$
+  LANGUAGE plpgsql;
+
 
 Create or replace FUNCTION GetAllFromVds() RETURNS SETOF vds
    AS $procedure$

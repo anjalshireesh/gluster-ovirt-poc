@@ -4,6 +4,7 @@ import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.ovirt.engine.core.vdsbroker.glusterbroker.GlusterVolumeListReturnForXmlRpc;
 import org.ovirt.engine.core.vdsbroker.irsbroker.IsoListReturnForXmlRpc;
 import org.ovirt.engine.core.vdsbroker.irsbroker.OneUuidReturnForXmlRpc;
 import org.ovirt.engine.core.vdsbroker.xmlrpc.XmlRpcRunTimeException;
@@ -909,6 +910,208 @@ public class VdsServerWrapper implements IVdsServer {
         try {
             Map<String, Object> xmlRpcReturnValue = vdsServer.glusterDisksList();
             GlusterDiskListReturnForXmlRpc wrapper = new GlusterDiskListReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public OneUuidReturnForXmlRpc glusterVolumeCreate(Map<String, Object> volumeData) {
+        try {
+            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterVolumeCreate(volumeData);
+            OneUuidReturnForXmlRpc wrapper = new OneUuidReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeStart(String volumeName) {
+        try {
+            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterVolumeStart(volumeName);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeStop(String volumeName) {
+        try {
+            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterVolumeStop(volumeName);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public GlusterVolumeListReturnForXmlRpc glusterVolumesList() {
+        try {
+            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterVolumesList();
+            GlusterVolumeListReturnForXmlRpc wrapper = new GlusterVolumeListReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeDelete(String volumeName) {
+        try {
+            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterVolumeDelete(volumeName);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeAddBrick(String volumeName, String[] brickList) {
+        try {
+            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterVolumeAddBrick(volumeName, brickList);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeRemoveBrick(String volumeName, String[] brickList) {
+        try {
+            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterVolumeRemoveBrick(volumeName, brickList);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStart(String volumeName, String mode) {
+        try {
+            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterVolumeRebalanceStart(volumeName, mode);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStop(String volumeName) {
+        try {
+            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterVolumeRebalanceStop(volumeName);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStatus(String volumeName) {
+        try {
+            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterVolumeRebalanceStatus(volumeName);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeSet(String volumeName, String key, String value) {
+        try {
+            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterVolumeSet(volumeName, key, value);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterHostAdd(String hostName) {
+        try {
+            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterHostAdd(hostName);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickStart(String volumeName,
+            String sourceBrick,
+            String targetBrick) {
+        try {
+            Map<String, Object> xmlRpcReturnValue =
+                    vdsServer.glusterVolumeReplaceBrickStart(volumeName, sourceBrick, targetBrick);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickAbort(String volumeName,
+            String sourceBrick,
+            String targetBrick) {
+        try {
+            Map<String, Object> xmlRpcReturnValue =
+                    vdsServer.glusterVolumeReplaceBrickAbort(volumeName, sourceBrick, targetBrick);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickStatus(String volumeName,
+            String sourceBrick,
+            String targetBrick) {
+        try {
+            Map<String, Object> xmlRpcReturnValue =
+                    vdsServer.glusterVolumeReplaceBrickStatus(volumeName, sourceBrick, targetBrick);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickPause(String volumeName,
+            String sourceBrick,
+            String targetBrick) {
+        try {
+            Map<String, Object> xmlRpcReturnValue =
+                    vdsServer.glusterVolumeReplaceBrickPause(volumeName, sourceBrick, targetBrick);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            return wrapper;
+        } catch (UndeclaredThrowableException ute) {
+            throw new XmlRpcRunTimeException(ute);
+        }
+    }
+
+    @Override
+    public StatusOnlyReturnForXmlRpc glusterVolumeReplaceBrickCommit(String volumeName,
+            String sourceBrick,
+            String targetBrick) {
+        try {
+            Map<String, Object> xmlRpcReturnValue =
+                    vdsServer.glusterVolumeReplaceBrickCommit(volumeName, sourceBrick, targetBrick);
+            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
             return wrapper;
         } catch (UndeclaredThrowableException ute) {
             throw new XmlRpcRunTimeException(ute);

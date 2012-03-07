@@ -3,16 +3,16 @@
  */
 package org.ovirt.engine.core.vdsbroker.glusterbroker;
 
-import org.ovirt.engine.core.common.glustercommands.GlusterBaseVDSCommandParameters;
+import org.ovirt.engine.core.common.vdscommands.VdsIdVDSCommandParametersBase;
 import org.ovirt.engine.core.vdsbroker.vdsbroker.StatusForXmlRpc;
 
 /**
  *
  */
-public class ListGlusterVolumesVDSCommand extends GlusterBrokerCommand<GlusterBaseVDSCommandParameters> {
+public class ListGlusterVolumesVDSCommand extends GlusterBrokerCommand<VdsIdVDSCommandParametersBase> {
     private StatusForXmlRpc status;
 
-    public ListGlusterVolumesVDSCommand(GlusterBaseVDSCommandParameters parameters) {
+    public ListGlusterVolumesVDSCommand(VdsIdVDSCommandParametersBase parameters) {
         super(parameters);
     }
 
@@ -22,12 +22,13 @@ public class ListGlusterVolumesVDSCommand extends GlusterBrokerCommand<GlusterBa
     }
 
     @Override
-    protected void ExecuteIrsBrokerCommand() {
-        GlusterVolumeListReturnForXmlRpc returnValue = getIrsProxy().glusterVolumesList();
+    protected void ExecuteVdsBrokerCommand() {
+        GlusterVolumeListReturnForXmlRpc returnValue = getBroker().glusterVolumesList();
         status = returnValue.mStatus;
         setReturnValue(returnValue.volumes);
 
         // IMPORTANT! This handles errors if any
         ProceedProxyReturnValue();
     }
+
 }

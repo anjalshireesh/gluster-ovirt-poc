@@ -9,13 +9,8 @@ public class DeleteGlusterVolumeVDSCommand extends GlusterBrokerCommand<GlusterV
     }
 
     @Override
-    protected void ExecuteIrsBrokerCommand() {
-
-        status = getIrsProxy().glusterVolumeDelete(getParameters().getVolumeName());
-
-        // IMPORTANT! This handles errors if any
+    protected void ExecuteVdsBrokerCommand() {
+        status = getBroker().glusterVolumeDelete(getParameters().getVolumeName());
         ProceedProxyReturnValue();
-
-        // TODO: handle CIFS related options after delete gluster volume
     }
 }

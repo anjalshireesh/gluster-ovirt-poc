@@ -12,10 +12,10 @@ public class RemoveBricksFromGlusterVolumeVDSCommand extends GlusterBrokerComman
     }
 
     @Override
-    protected void ExecuteIrsBrokerCommand() {
+    protected void ExecuteVdsBrokerCommand() {
         List<String> bricks = GlusterCoreUtil.getQualifiedBrickList(getParameters().getBricks());
 
-        status = getIrsProxy().glusterVolumeRemoveBrick(getParameters().getVolumeName(), bricks.toArray(new String[0]));
+        status = getBroker().glusterVolumeRemoveBrick(getParameters().getVolumeName(), bricks.toArray(new String[0]));
 
         // IMPORTANT! This handles errors if any
         ProceedProxyReturnValue();

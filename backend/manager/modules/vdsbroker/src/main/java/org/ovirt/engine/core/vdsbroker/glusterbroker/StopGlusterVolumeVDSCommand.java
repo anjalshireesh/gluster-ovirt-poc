@@ -8,8 +8,8 @@ public class StopGlusterVolumeVDSCommand extends GlusterBrokerCommand<GlusterVol
     }
 
     @Override
-    protected void ExecuteIrsBrokerCommand() {
-        status = getIrsProxy().glusterVolumeStop(getParameters().getVolumeName());
+    protected void ExecuteVdsBrokerCommand() {
+        status = getBroker().glusterVolumeStop(getParameters().getVolumeName());
 
         // IMPORTANT! This handles errors if any
         ProceedProxyReturnValue();

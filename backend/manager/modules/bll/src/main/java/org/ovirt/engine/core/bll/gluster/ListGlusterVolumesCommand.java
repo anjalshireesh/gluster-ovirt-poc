@@ -11,9 +11,9 @@ import org.ovirt.engine.core.bll.Backend;
 import org.ovirt.engine.core.common.VdcObjectType;
 import org.ovirt.engine.core.common.action.VdsGroupParametersBase;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
-import org.ovirt.engine.core.common.glustercommands.GlusterBaseVDSCommandParameters;
 import org.ovirt.engine.core.common.vdscommands.VDSCommandType;
 import org.ovirt.engine.core.common.vdscommands.VDSReturnValue;
+import org.ovirt.engine.core.common.vdscommands.VdsIdVDSCommandParametersBase;
 import org.ovirt.engine.core.dal.VdcBllMessages;
 
 /**
@@ -43,11 +43,11 @@ public class ListGlusterVolumesCommand extends GlusterCommandBase<VdsGroupParame
                 .getResourceManager()
                 .RunVdsCommand(
                         VDSCommandType.ListGlusterVolumes,
-                        new GlusterBaseVDSCommandParameters(getVdsGroup().getstorage_pool_id().getValue()));
+                        new VdsIdVDSCommandParametersBase(getOnlineHost().getvds_id()));
 
         // Get the return value from VDS command and put it into the return value of the BLL command
         ArrayList<GlusterVolumeEntity> list = new ArrayList<GlusterVolumeEntity>();
-        for (GlusterVolumeEntity glusterVolumeEntity : (GlusterVolumeEntity[])returnValue.getReturnValue()) {
+        for (GlusterVolumeEntity glusterVolumeEntity : (GlusterVolumeEntity[]) returnValue.getReturnValue()) {
             list.add(glusterVolumeEntity);
         }
         getReturnValue().setActionReturnValue(list);
