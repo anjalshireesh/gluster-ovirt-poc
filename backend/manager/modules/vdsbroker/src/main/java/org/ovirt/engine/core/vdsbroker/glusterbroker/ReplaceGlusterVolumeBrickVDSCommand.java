@@ -10,7 +10,7 @@ public class ReplaceGlusterVolumeBrickVDSCommand extends GlusterBrokerCommand<Re
     }
 
     @Override
-    protected void ExecuteIrsBrokerCommand() {
+    protected void ExecuteVdsBrokerCommand() {
         String sourceBrick = getParameters().getSourceBrick().getQualifiedName();
         String targetBrick = getParameters().getTargetBrick().getQualifiedName();
         GLUSTER_TASK_OPERATION operation = getParameters().getOperation();
@@ -18,33 +18,33 @@ public class ReplaceGlusterVolumeBrickVDSCommand extends GlusterBrokerCommand<Re
         switch (operation) {
         case START:
             status =
-                getIrsProxy().glusterVolumeReplaceBrickStart(getParameters().getVolumeName(),
-                        sourceBrick,
-                        targetBrick);
+                    getBroker().glusterVolumeReplaceBrickStart(getParameters().getVolumeName(),
+                            sourceBrick,
+                            targetBrick);
             break;
         case ABORT:
             status =
-                getIrsProxy().glusterVolumeReplaceBrickAbort(getParameters().getVolumeName(),
-                        sourceBrick,
-                        targetBrick);
+                    getBroker().glusterVolumeReplaceBrickAbort(getParameters().getVolumeName(),
+                            sourceBrick,
+                            targetBrick);
             break;
         case STATUS:
             status =
-                getIrsProxy().glusterVolumeReplaceBrickStatus(getParameters().getVolumeName(),
-                        sourceBrick,
-                        targetBrick);
+                    getBroker().glusterVolumeReplaceBrickStatus(getParameters().getVolumeName(),
+                            sourceBrick,
+                            targetBrick);
             break;
         case PAUSE:
             status =
-                getIrsProxy().glusterVolumeReplaceBrickPause(getParameters().getVolumeName(),
-                        sourceBrick,
-                        targetBrick);
+                    getBroker().glusterVolumeReplaceBrickPause(getParameters().getVolumeName(),
+                            sourceBrick,
+                            targetBrick);
             break;
         case COMMIT:
             status =
-                getIrsProxy().glusterVolumeReplaceBrickCommit(getParameters().getVolumeName(),
-                        sourceBrick,
-                        targetBrick);
+                    getBroker().glusterVolumeReplaceBrickCommit(getParameters().getVolumeName(),
+                            sourceBrick,
+                            targetBrick);
             break;
 
         }

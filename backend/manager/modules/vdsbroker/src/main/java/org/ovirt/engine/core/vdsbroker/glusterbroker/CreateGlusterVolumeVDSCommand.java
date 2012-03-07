@@ -13,14 +13,15 @@ import org.ovirt.engine.core.common.glustercommands.CreateGlusterVolumeVDSParame
 import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.vdsbroker.irsbroker.OneUuidReturnForXmlRpc;
 import org.ovirt.engine.core.vdsbroker.vdsbroker.StatusForXmlRpc;
+import org.ovirt.engine.core.vdsbroker.vdsbroker.VdsBrokerCommand;
 
 /**
  *
  */
-public class CreateGlusterVolumeVDSCommand extends GlusterBrokerCommand<CreateGlusterVolumeVDSParameters> {
+public class CreateGlusterVolumeVDSCommand<P extends CreateGlusterVolumeVDSParameters> extends VdsBrokerCommand<P> {
     private StatusForXmlRpc status;
 
-    public CreateGlusterVolumeVDSCommand(CreateGlusterVolumeVDSParameters parameters) {
+    public CreateGlusterVolumeVDSCommand(P parameters) {
         super(parameters);
     }
 
@@ -30,7 +31,7 @@ public class CreateGlusterVolumeVDSCommand extends GlusterBrokerCommand<CreateGl
     }
 
     @Override
-    protected void ExecuteIrsBrokerCommand() {
+    protected void ExecuteVdsBrokerCommand() {
         GlusterVolumeEntity volume = getParameters().getVolume();
 
         Map<String, Object> parameters = new HashMap<String, Object>();
@@ -44,7 +45,7 @@ public class CreateGlusterVolumeVDSCommand extends GlusterBrokerCommand<CreateGl
         parameters.put("transportType", transportType.toString());
         parameters.put("bricks", volume.getBrickDirectories().toArray());
 
-        OneUuidReturnForXmlRpc uuidReturn = getIrsProxy().glusterVolumeCreate(parameters);
+        OneUuidReturnForXmlRpc uuidReturn = getBroker().glusterVolumeCreate(parameters);
         status = uuidReturn.mStatus;
         volume.setId(Guid.createGuidFromString(uuidReturn.mUuid));
 
@@ -55,17 +56,17 @@ public class CreateGlusterVolumeVDSCommand extends GlusterBrokerCommand<CreateGl
 
         String accessControlList = volume.getAccessControlList();
         if(accessControlList != null && !accessControlList.trim().isEmpty()) {
-            status = getIrsProxy().glusterVolumeSet(volume.getName(), GlusterVolumeEntity.OPTION_AUTH_ALLOW, accessControlList.trim()).mStatus;
+            status = getBroker().glusterVolumeSet(volume.getName(), GlusterVolumeEntity.OPTION_AUTH_ALLOW, accessControlList.trim()).mStatus;
             ProceedProxyReturnValue();
         }
 
         if(!volume.isNfsEnabled()) {
-            status = getIrsProxy().glusterVolumeSet(volume.getName(), GlusterVolumeEntity.OPTION_NFS_DISABLE, "on").mStatus;
+            status = getBroker().glusterVolumeSet(volume.getName(), GlusterVolumeEntity.OPTION_NFS_DISABLE, "on").mStatus;
             ProceedProxyReturnValue();
         }
 
         for(GlusterVolumeOption option : volume.getOptions()) {
-            status = getIrsProxy().glusterVolumeSet(volume.getName(), option.getKey(), option.getValue()).mStatus;
+            status = getBroker().glusterVolumeSet(volume.getName(), option.getKey(), option.getValue()).mStatus;
             ProceedProxyReturnValue();
         }
 

@@ -15,9 +15,9 @@ public class GlusterVolumeOptionVDSCommand extends GlusterBrokerCommand<GlusterV
     }
 
     @Override
-    protected void ExecuteIrsBrokerCommand() {
+    protected void ExecuteVdsBrokerCommand() {
         status =
-                getIrsProxy().glusterVolumeSet(getParameters().getVolumeName(),
+                getBroker().glusterVolumeSet(getParameters().getVolumeName(),
                         getParameters().getVolumeOption().getKey(),
                         getParameters().getVolumeOption().getValue());
         ProceedProxyReturnValue();

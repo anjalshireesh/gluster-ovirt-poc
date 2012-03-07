@@ -1,8 +1,9 @@
 package org.ovirt.engine.core.common.glustercommands;
 
+import org.ovirt.engine.core.common.vdscommands.VdsIdVDSCommandParametersBase;
 import org.ovirt.engine.core.compat.Guid;
 
-public class GlusterVolumeVDSParameters extends GlusterBaseVDSCommandParameters {
+public class GlusterVolumeVDSParameters extends VdsIdVDSCommandParametersBase {
     private final String volumeName;
 
     public GlusterVolumeVDSParameters(Guid storagePoolId, String volumeName) {

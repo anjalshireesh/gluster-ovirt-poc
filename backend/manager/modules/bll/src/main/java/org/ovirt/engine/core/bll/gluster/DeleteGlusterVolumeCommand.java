@@ -33,7 +33,7 @@ public class DeleteGlusterVolumeCommand extends GlusterCommandBase<GlusterVolume
                             .getResourceManager()
                             .RunVdsCommand(
                                     VDSCommandType.DeleteGlusterVolume,
-                                    new GlusterVolumeVDSParameters(getVdsGroup().getstorage_pool_id().getValue(),
+                                    new GlusterVolumeVDSParameters(getOnlineHost().getvds_id(),
                                             getParameters().getVolumeName()));
             setSucceeded(returnValue.getSucceeded());
         } catch (VdcBLLException e) {
