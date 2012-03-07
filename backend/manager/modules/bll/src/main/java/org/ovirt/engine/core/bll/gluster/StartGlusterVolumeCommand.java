@@ -34,6 +34,8 @@ public class StartGlusterVolumeCommand extends GlusterCommandBase<GlusterVolumeP
 
             @Override
             public Void runInTransaction() {
+                updateVolumeStatusInDb(getVdsGroupId(), getParameters().getVolumeName());
+
                 VDSReturnValue returnValue =
                         Backend
                                 .getInstance()
@@ -43,18 +45,12 @@ public class StartGlusterVolumeCommand extends GlusterCommandBase<GlusterVolumeP
                                         new GlusterVolumeVDSParameters(getOnlineHost().getvds_id(),
                                                 getParameters().getVolumeName()));
                 setSucceeded(returnValue.getSucceeded());
-
-                if (!getSucceeded()) {
-                    return null;
-                }
-                updateStartVolumeStatusToDb(getVdsGroupId(), getParameters().getVolumeName());
-
                 return null;
             }
         });
     }
 
-    private void updateStartVolumeStatusToDb(Guid vdsGroupId, String volumeName) {
+    private void updateVolumeStatusInDb(Guid vdsGroupId, String volumeName) {
         DbFacade.getInstance().getGlusterVolumeDAO().updateVolumeStatus(vdsGroupId, volumeName, VOLUME_STATUS.ONLINE);
     }
 

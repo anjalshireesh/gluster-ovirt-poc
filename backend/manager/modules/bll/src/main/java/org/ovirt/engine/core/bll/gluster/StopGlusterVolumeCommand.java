@@ -33,27 +33,24 @@ public class StopGlusterVolumeCommand extends GlusterCommandBase<GlusterVolumePa
 
             @Override
             public Void runInTransaction() {
-                VDSReturnValue returnValue =
-                    Backend
-                            .getInstance()
-                            .getResourceManager()
-                            .RunVdsCommand(
-                                    VDSCommandType.StopGlusterVolume,
-                                    new GlusterVolumeVDSParameters(getOnlineHost().getvds_id(),
-                                            getParameters().getVolumeName()));
-            setSucceeded(returnValue.getSucceeded());
+                updateVolumeStatusInDb(getVdsGroupId(), getParameters().getVolumeName());
 
-                if (!getSucceeded()) {
-                    return null;
-                }
-                updateStopVolumeStatusToDb(getVdsGroupId(), getParameters().getVolumeName());
+                VDSReturnValue returnValue =
+                        Backend
+                                .getInstance()
+                                .getResourceManager()
+                                .RunVdsCommand(
+                                        VDSCommandType.StopGlusterVolume,
+                                        new GlusterVolumeVDSParameters(getOnlineHost().getvds_id(),
+                                                getParameters().getVolumeName()));
+                setSucceeded(returnValue.getSucceeded());
 
                 return null;
             }
         });
     }
 
-    private void updateStopVolumeStatusToDb(Guid vdsGroupId, String volumeName) {
+    private void updateVolumeStatusInDb(Guid vdsGroupId, String volumeName) {
         DbFacade.getInstance().getGlusterVolumeDAO().updateVolumeStatus(vdsGroupId, volumeName, VOLUME_STATUS.OFFLINE);
     }
 
