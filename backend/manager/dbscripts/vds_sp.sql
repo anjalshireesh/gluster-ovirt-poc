@@ -555,7 +555,7 @@ END; $procedure$
   LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION GetVdsByStatus(v_vds_group_id UUID, v_status integer) RETURNS SETOF vds
+CREATE OR REPLACE FUNCTION getVdsForVdsGroupWithStatus(v_vds_group_id UUID, v_status integer) RETURNS SETOF vds
 AS $procedure$
 
 BEGIN
