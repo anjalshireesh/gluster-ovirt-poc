@@ -20,7 +20,6 @@ package org.ovirt.engine.core.common.businessentities;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.ovirt.engine.core.common.utils.StringUtil;
 import org.ovirt.engine.core.compat.Guid;
 
 public class GlusterBrickEntity extends GlusterEntity {
@@ -28,8 +27,6 @@ public class GlusterBrickEntity extends GlusterEntity {
         ONLINE,
         OFFLINE
     };
-
-    private final String[] BRICK_STATUS_STR = { "Online", "Offline" };
 
     private Guid serverId;
     private String serverName;
@@ -66,10 +63,6 @@ public class GlusterBrickEntity extends GlusterEntity {
         return status;
     }
 
-    public String getStatusStr() {
-        return BRICK_STATUS_STR[getStatus().ordinal()];
-    }
-
     public void setStatus(BRICK_STATUS status) {
         this.status = status;
     }
@@ -97,22 +90,8 @@ public class GlusterBrickEntity extends GlusterEntity {
         return brickDirectory;
     }
 
-    // public void setDeviceName(String deviceName) {
-    // this.deviceName = deviceName;
-    // }
-
-    // public String getDeviceName() {
-    // return deviceName;
-    // }
-
     public String getQualifiedName() {
         return serverName + ":" + brickDirectory;
-    }
-
-    @Override
-    public boolean filter(String filterString, boolean caseSensitive) {
-        return StringUtil.filterString(getServerName() + getBrickDirectory() + getStatusStr(), filterString,
-                caseSensitive);
     }
 
     @Override
@@ -137,7 +116,6 @@ public class GlusterBrickEntity extends GlusterEntity {
     public void copyFrom(GlusterBrickEntity newBrick) {
         setServerName(newBrick.getServerName());
         setBrickDirectory(newBrick.getBrickDirectory());
-        // setDeviceName(newBrick.getDeviceName());
         setStatus(newBrick.getStatus());
     }
 

@@ -20,10 +20,9 @@ package org.ovirt.engine.core.common.businessentities;
 
 import java.io.Serializable;
 
-import org.ovirt.engine.core.common.utils.StringUtil;
 import org.ovirt.engine.core.compat.Guid;
 
-public class GlusterEntity extends IVdcQueryable implements Filterable, Serializable {
+public class GlusterEntity extends IVdcQueryable implements Serializable {
     private Guid id;
     protected String name;
 
@@ -41,11 +40,6 @@ public class GlusterEntity extends IVdcQueryable implements Filterable, Serializ
 
     public GlusterEntity(String name) {
         this.name = name;
-    }
-
-    @Override
-    public boolean filter(String filterString, boolean caseSensitive) {
-        return StringUtil.filterString(getName(), filterString, caseSensitive);
     }
 
     @Override

@@ -12,7 +12,6 @@
 		<include name="core/common/businessentities/Filterable.java" />
 		<include name="core/common/businessentities/GlusterVolumeOptions.java" />
 		<include name="core/common/businessentities/GlusterBrickEntity.java" />
-		<include name="core/common/businessentities/GlusterBrick.java" />
 		<include name="core/common/constants/GlusterConstants.java" />
 		<include name="core/common/businessentities/GlusterVolumeOption.java" />
 		<include name="core/common/businessentities/GlusterVolumeEntity.java"/>

@@ -9,9 +9,16 @@ import org.ovirt.engine.ui.webadmin.section.main.view.AbstractSubTabTableView;
 import org.ovirt.engine.ui.webadmin.uicommon.model.SearchableDetailModelProvider;
 import org.ovirt.engine.ui.webadmin.widget.table.column.TextColumnWithTooltip;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.editor.client.Editor;
+import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.inject.Inject;
 
-public class SubTabVolumeBrickView extends AbstractSubTabTableView<GlusterVolumeEntity, GlusterBrickEntity, VolumeListModel, VolumeBrickListModel> implements SubTabVolumeBrickPresenter.ViewDef {
+public class SubTabVolumeBrickView extends AbstractSubTabTableView<GlusterVolumeEntity, GlusterBrickEntity, VolumeListModel, VolumeBrickListModel> implements SubTabVolumeBrickPresenter.ViewDef, Editor<VolumeBrickListModel> {
+
+    interface Driver extends SimpleBeanEditorDriver<VolumeBrickListModel, SubTabVolumeBrickView> {
+        Driver driver = GWT.create(Driver.class);
+    }
 
     @Inject
     public SubTabVolumeBrickView(SearchableDetailModelProvider<GlusterBrickEntity, VolumeListModel, VolumeBrickListModel> modelProvider) {
@@ -56,9 +63,14 @@ public class SubTabVolumeBrickView extends AbstractSubTabTableView<GlusterVolume
         TextColumnWithTooltip<GlusterBrickEntity> statusColumn = new TextColumnWithTooltip<GlusterBrickEntity>() {
             @Override
             public String getValue(GlusterBrickEntity brick) {
-                return brick.getStatusStr();
+                return brick.getStatus().toString();
             }
         };
         getTable().addColumn(statusColumn, "Status");
+    }
+
+    @Override
+    public void setMainTabSelectedItem(GlusterVolumeEntity selectedItem) {
+        Driver.driver.edit(getDetailModel());
     }
 }

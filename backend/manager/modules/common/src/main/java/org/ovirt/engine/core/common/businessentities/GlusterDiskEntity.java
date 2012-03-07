@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.ovirt.engine.core.common.utils.GlusterCoreUtil;
-import org.ovirt.engine.core.common.utils.StringUtil;
 
 public class GlusterDiskEntity extends GlusterDeviceEntity {
     private String description;
@@ -85,23 +84,6 @@ public class GlusterDiskEntity extends GlusterDeviceEntity {
             Double spaceInUse,
             DEVICE_STATUS status) {
         super(serverName, name, mountPoint, space, spaceInUse, status);
-    }
-
-    @Override
-    public boolean filter(String filterString, boolean caseSensitive) {
-        if (StringUtil.filterString(getServerName() + getName() + getStatusStr() + getSpace() + getFreeSpace()
-                + getType() + getDescription(), filterString, caseSensitive)) {
-            return true;
-        }
-
-        // disk doesn't match. check if any of the partitions of this disk match the filter
-        for (GlusterPartitionEntity partition : getPartitions()) {
-            if (partition.filter(filterString, caseSensitive)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     @Override

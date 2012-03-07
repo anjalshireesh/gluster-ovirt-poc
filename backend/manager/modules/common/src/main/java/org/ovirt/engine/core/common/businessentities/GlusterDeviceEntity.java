@@ -18,7 +18,6 @@
  *******************************************************************************/
 package org.ovirt.engine.core.common.businessentities;
 
-import org.ovirt.engine.core.common.utils.StringUtil;
 
 /**
  *
@@ -173,12 +172,6 @@ public class GlusterDeviceEntity extends GlusterEntity {
 
     public void setFsVersion(String fsVersion) {
         this.fsVersion = fsVersion;
-    }
-
-    @Override
-    public boolean filter(String filterString, boolean caseSensitive) {
-        return StringUtil.filterString(getServerName() + getName() + getStatusStr() + getSpace() + getFreeSpace()
-                + getType(), filterString, caseSensitive);
     }
 
     public String getQualifiedName() {

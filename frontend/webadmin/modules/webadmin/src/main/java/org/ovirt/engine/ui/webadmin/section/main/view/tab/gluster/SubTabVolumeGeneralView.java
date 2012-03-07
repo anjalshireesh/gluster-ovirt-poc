@@ -60,7 +60,6 @@ public class SubTabVolumeGeneralView extends AbstractSubTabFormView<GlusterVolum
         formBuilder.addFormItem(new FormItem("Num of Bricks", numOfBricks, 3, 0));
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void setMainTabSelectedItem(GlusterVolumeEntity selectedItem) {
         Driver.driver.edit(getDetailModel());

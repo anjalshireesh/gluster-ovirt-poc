@@ -42,7 +42,7 @@ public class MainTabVolumeView extends AbstractMainTabWithDetailsTableView<Glust
         TextColumnWithTooltip<GlusterVolumeEntity> volumeTypeColumn = new TextColumnWithTooltip<GlusterVolumeEntity>() {
             @Override
             public String getValue(GlusterVolumeEntity object) {
-                return object.getVolumeTypeStr();
+                return object.getVolumeType().toString();
             }
         };
         getTable().addColumn(volumeTypeColumn, "Volume Type");
@@ -58,7 +58,7 @@ public class MainTabVolumeView extends AbstractMainTabWithDetailsTableView<Glust
         TextColumnWithTooltip<GlusterVolumeEntity> transportColumn = new TextColumnWithTooltip<GlusterVolumeEntity>() {
             @Override
             public String getValue(GlusterVolumeEntity object) {
-                return object.getTransportTypeStr();
+                return object.getTransportType().toString();
             }
         };
         getTable().addColumn(transportColumn, "Transport Type");
@@ -66,7 +66,7 @@ public class MainTabVolumeView extends AbstractMainTabWithDetailsTableView<Glust
         TextColumnWithTooltip<GlusterVolumeEntity> statusColumn = new TextColumnWithTooltip<GlusterVolumeEntity>() {
             @Override
             public String getValue(GlusterVolumeEntity object) {
-                return object.getStatusStr();
+                return object.getStatus().toString();
             }
         };
         getTable().addColumn(statusColumn, "Status");
