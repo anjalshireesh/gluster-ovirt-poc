@@ -551,6 +551,33 @@ public interface Enums extends ConstantsWithLookup {
 
     String AuditLogType___VDC_STOP();
 
+    String AuditLogType___GLUSTER_VOLUME_CREATE();
+    String AuditLogType___GLUSTER_VOLUME_CREATE_FAILED();
+    String AuditLogType___GLUSTER_VOLUME_DELETE();
+    String AuditLogType___GLUSTER_VOLUME_DELETE_FAILED();
+    String AuditLogType___GLUSTER_VOLUME_START();
+    String AuditLogType___GLUSTER_VOLUME_START_FAILED();
+    String AuditLogType___GLUSTER_VOLUME_STOP();
+    String AuditLogType___GLUSTER_VOLUME_STOP_FAILED();
+    String AuditLogType___GLUSTER_VOLUME_ADD_BRICK();
+    String AuditLogType___GLUSTER_VOLUME_ADD_BRICK_FAILED();
+    String AuditLogType___GLUSTER_VOLUME_REMOVE_BRICK();
+    String AuditLogType___GLUSTER_VOLUME_REMOVE_BRICK_FAILED();
+    String AuditLogType___GLUSTER_VOLUME_OPTION_SET();
+    String AuditLogType___GLUSTER_VOLUME_OPTION_SET_FAILED();
+    String AuditLogType___GLUSTER_VOLUME_REPLACE_BRICK_START();
+    String AuditLogType___GLUSTER_VOLUME_REPLACE_BRICK_START_FAILED();
+    String AuditLogType___GLUSTER_VOLUME_REPLACE_BRICK_ABORT();
+    String AuditLogType___GLUSTER_VOLUME_REPLACE_BRICK_ABORT_FAILED();
+    String AuditLogType___GLUSTER_VOLUME_REPLACE_BRICK_PAUSE();
+    String AuditLogType___GLUSTER_VOLUME_REPLACE_BRICK_PAUSE_FAILED();
+    String AuditLogType___GLUSTER_VOLUME_REPLACE_BRICK_COMMIT();
+    String AuditLogType___GLUSTER_VOLUME_REPLACE_BRICK_COMMIT_FAILED();
+    String AuditLogType___GLUSTER_VOLUME_REBALANCE_START();
+    String AuditLogType___GLUSTER_VOLUME_REBALANCE_START_FAILED();
+    String AuditLogType___GLUSTER_VOLUME_REBALANCE_STOP();
+    String AuditLogType___GLUSTER_VOLUME_REBALANCE_STOP_FAILED();
+
     String VmTemplateStatus___OK();
 
     String VmTemplateStatus___Locked();

@@ -54,11 +54,30 @@ insert into event_map(event_up_name, event_down_name) values('VM_NOT_RESPONDING'
 
 insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_CREATE', 'UNASSIGNED');
 insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_CREATE_FAILED', 'UNASSIGNED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_DELETE', 'UNASSIGNED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_DELETE_FAILED', 'UNASSIGNED');
 insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_START', 'UNASSIGNED');
-insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_START_FAILED', 'VOLUME_STARTED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_START_FAILED', 'GLUSTER_VOLUME_START');
 insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_STOP', 'GLUSTER_VOLUME_START');
-insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_STOP_FAILED', 'UNASSIGNED');
-
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_STOP_FAILED', 'GLUSTER_VOLUME_STOP');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_ADD_BRICK', 'UNASSIGNED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_ADD_BRICK_FAILED', 'GLUSTER_VOLUME_ADD_BRICK');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_REMOVE_BRICK', 'UNASSIGNED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_REMOVE_BRICK_FAILED', 'GLUSTER_VOLUME_REMOVE_BRICK');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_OPTION_SET', 'UNASSIGNED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_OPTION_SET_FAILED', 'GLUSTER_VOLUME_OPTION_SET');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_REPLACE_BRICK_START', 'GLUSTER_VOLUME_REPLACE_BRICK_COMMIT');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_REPLACE_BRICK_START_FAILED', 'GLUSTER_VOLUME_REPLACE_BRICK_START');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_REPLACE_BRICK_ABORT', 'UNASSIGNED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_REPLACE_BRICK_ABORT_FAILED', 'GLUSTER_VOLUME_REPLACE_BRICK_ABORT');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_REPLACE_BRICK_PAUSE', 'GLUSTER_VOLUME_REPLACE_BRICK_START');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_REPLACE_BRICK_PAUSE_FAILED', 'GLUSTER_VOLUME_REPLACE_BRICK_PAUSE_FAILED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_REPLACE_BRICK_COMMIT', 'UNASSIGNED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_REPLACE_BRICK_COMMIT_FAILED', 'GLUSTER_VOLUME_REPLACE_BRICK_COMMIT');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_REBALANCE_START', 'UNASSIGNED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_REBALANCE_START_FAILED', 'GLUSTER_VOLUME_REBALANCE_START');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_REBALANCE_STOP', 'UNASSIGNED');
+insert into event_map(event_up_name, event_down_name) values('GLUSTER_VOLUME_REBALANCE_STOP_FAILED', 'GLUSTER_VOLUME_REBALANCE_STOP');
 
 -- Insert notification methods for notification service
 insert into event_notification_methods (method_id, method_type) values (0,'Email');
