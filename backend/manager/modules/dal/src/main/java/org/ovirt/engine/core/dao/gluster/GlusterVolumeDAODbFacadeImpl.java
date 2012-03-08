@@ -267,4 +267,12 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
                         .addValue("vol_name", volumeName)
                         .addValue("status", status.getValue()));
     }
+
+    @Override
+    public void deleteGlusterVolumeByName(Guid vdsGroupId, String volumeName) {
+        getCallsHandler().executeModification("DeleteGlusterVolumeByName",
+                getCustomMapSqlParameterSource()
+                        .addValue("cluster_id", vdsGroupId)
+                        .addValue("vol_name", volumeName));
+    }
 }
