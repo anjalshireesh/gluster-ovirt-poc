@@ -55,16 +55,18 @@ public final class AuditLogDirector {
     private static void initGlusterVolumeSeverities() {
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_CREATE, AuditLogSeverity.NORMAL);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_CREATE_FAILED, AuditLogSeverity.ERROR);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_DELETE, AuditLogSeverity.NORMAL);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_DELETE_FAILED, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_START, AuditLogSeverity.NORMAL);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_START_FAILED, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_STOP, AuditLogSeverity.NORMAL);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_STOP_FAILED, AuditLogSeverity.ERROR);
-        mSeverities.put(AuditLogType.GLUSTER_VOLUME_OPTION_SET, AuditLogSeverity.NORMAL);
-        mSeverities.put(AuditLogType.GLUSTER_VOLUME_OPTION_SET_FAILED, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_ADD_BRICK, AuditLogSeverity.NORMAL);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_ADD_BRICK_FAILED, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_REMOVE_BRICK, AuditLogSeverity.NORMAL);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_REMOVE_BRICK_FAILED, AuditLogSeverity.ERROR);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_OPTION_SET, AuditLogSeverity.NORMAL);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_OPTION_SET_FAILED, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_REPLACE_BRICK_START, AuditLogSeverity.NORMAL);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_REPLACE_BRICK_START_FAILED, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_REPLACE_BRICK_ABORT, AuditLogSeverity.NORMAL);
@@ -73,6 +75,10 @@ public final class AuditLogDirector {
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_REPLACE_BRICK_PAUSE_FAILED, AuditLogSeverity.ERROR);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_REPLACE_BRICK_COMMIT, AuditLogSeverity.NORMAL);
         mSeverities.put(AuditLogType.GLUSTER_VOLUME_REPLACE_BRICK_COMMIT_FAILED, AuditLogSeverity.ERROR);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REBALANCE_START, AuditLogSeverity.NORMAL);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REBALANCE_START_FAILED, AuditLogSeverity.ERROR);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REBALANCE_STOP, AuditLogSeverity.NORMAL);
+        mSeverities.put(AuditLogType.GLUSTER_VOLUME_REBALANCE_STOP_FAILED, AuditLogSeverity.ERROR);
     }
 
     private static void initDefaultSeverities() {
