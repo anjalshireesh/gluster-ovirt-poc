@@ -36,4 +36,6 @@ public interface GlusterVolumeDAO extends DAO {
 
     public List<GlusterVolumeEntity> getAllWithQuery(String query);
 
+    public void deleteGlusterVolumeByName(Guid vdsGroupId, String volumeName);
+
 }
