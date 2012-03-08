@@ -117,6 +117,16 @@ END; $procedure$
 LANGUAGE plpgsql;
 
 
+Create or replace FUNCTION DeleteGlusterVolumeByName(v_cluster_id UUID, v_vol_name VARCHAR(1000))
+RETURNS VOID
+   AS $procedure$
+BEGIN
+   DELETE FROM gluster_volumes
+   WHERE cluster_id = v_cluster_id 
+   AND   vol_name = v_vol_name;
+END; $procedure$
+LANGUAGE plpgsql;
+
 Create or replace FUNCTION DeleteGlusterVolumeBrick(v_volume_id UUID, v_host_id UUID, v_brick_dir VARCHAR(4096))
 RETURNS VOID
    AS $procedure$

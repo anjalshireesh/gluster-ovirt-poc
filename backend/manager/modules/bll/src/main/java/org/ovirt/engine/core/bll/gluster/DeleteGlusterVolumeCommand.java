@@ -7,7 +7,11 @@ import org.ovirt.engine.core.common.glusteractions.GlusterVolumeParameters;
 import org.ovirt.engine.core.common.glustercommands.GlusterVolumeVDSParameters;
 import org.ovirt.engine.core.common.vdscommands.VDSCommandType;
 import org.ovirt.engine.core.common.vdscommands.VDSReturnValue;
+import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.dal.VdcBllMessages;
+import org.ovirt.engine.core.dal.dbbroker.DbFacade;
+import org.ovirt.engine.core.utils.transaction.TransactionMethod;
+import org.ovirt.engine.core.utils.transaction.TransactionSupport;
 
 public class DeleteGlusterVolumeCommand extends GlusterCommandBase<GlusterVolumeParameters> {
 
@@ -27,18 +31,31 @@ public class DeleteGlusterVolumeCommand extends GlusterCommandBase<GlusterVolume
     @Override
     protected void executeCommand() {
         try {
-            VDSReturnValue returnValue =
-                    Backend
-                            .getInstance()
-                            .getResourceManager()
-                            .RunVdsCommand(
-                                    VDSCommandType.DeleteGlusterVolume,
-                                    new GlusterVolumeVDSParameters(getOnlineHost().getvds_id(),
-                                            getParameters().getVolumeName()));
-            setSucceeded(returnValue.getSucceeded());
+            TransactionSupport.executeInNewTransaction(new TransactionMethod<Void>() {
+
+                @Override
+                public Void runInTransaction() {
+                    deleteGlusterVolumeInDb(getVdsGroupId(), getParameters().getVolumeName());
+
+                    VDSReturnValue returnValue =
+                            Backend
+                                    .getInstance()
+                                    .getResourceManager()
+                                    .RunVdsCommand(
+                                            VDSCommandType.DeleteGlusterVolume,
+                                            new GlusterVolumeVDSParameters(getOnlineHost().getvds_id(),
+                                                    getParameters().getVolumeName()));
+                    setSucceeded(returnValue.getSucceeded());
+                    return null;
+                }
+            });
         } catch (VdcBLLException e) {
             getReturnValue().getExecuteFailedMessages().add(e.getErrorCode().toString());
         }
+    }
+
+    private void deleteGlusterVolumeInDb(Guid vdsGroupId, String volumeName) {
+        DbFacade.getInstance().getGlusterVolumeDAO().deleteGlusterVolumeByName(vdsGroupId, volumeName);
     }
 
     @Override
