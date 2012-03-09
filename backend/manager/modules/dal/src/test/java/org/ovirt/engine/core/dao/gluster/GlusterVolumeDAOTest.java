@@ -10,6 +10,7 @@ import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.TRANSPORT_TYPE;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_STATUS;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_TYPE;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
 import org.ovirt.engine.core.common.businessentities.VdsStatic;
 import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.dao.BaseDAOTestCase;
@@ -45,6 +46,15 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
     public void testGlusterVolumeStatusChange() throws Exception {
         volume.setStatus(VOLUME_STATUS.OFFLINE);
         dao.updateVolumeStatus(CLUSTER_ID, "testVol1", VOLUME_STATUS.OFFLINE);
+        GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
+        assertNotNull(volumeEntity);
+        assertEquals(volumeEntity, volume);
+    }
+
+    @Test
+    public void testGlusterVolumeOptions() throws Exception {
+        volume.setOption("nfs.disable", "on");
+        dao.setVolumeOption(volume.getId(), new GlusterVolumeOption("nfs.disable", "on"));
         GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
         assertNotNull(volumeEntity);
         assertEquals(volumeEntity, volume);
