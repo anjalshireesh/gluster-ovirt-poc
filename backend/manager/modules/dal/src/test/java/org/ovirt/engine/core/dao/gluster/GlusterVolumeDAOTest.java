@@ -28,7 +28,7 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
         super.setUp();
         dao = dbFacade.getGlusterVolumeDAO();
         host = dbFacade.getVdsStaticDAO().get(HOST_ID);
-        volume = insertTestVolume();
+        volume = insertTestVolume(true);
     }
 
     public GlusterVolumeDAOTest() throws Exception {
@@ -62,7 +62,7 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
 
     @Test
     public void testGlusterVolumeOption2() throws Exception {
-        GlusterVolumeEntity volumeEntity = insertTestVolumeWithoutOption();
+        GlusterVolumeEntity volumeEntity = insertTestVolume(false);
 
         dao.setVolumeOption(volumeEntity.getId(), new GlusterVolumeOption("auth.allow", "*"));
         dao.setVolumeOption(volumeEntity.getId(), new GlusterVolumeOption("nfs.disable", "on"));
@@ -74,29 +74,7 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
         assertEquals(newVolumeEntity, volumeEntity);
     }
 
-    private GlusterVolumeEntity insertTestVolumeWithoutOption() {
-        Guid volumeId = Guid.NewGuid();
-
-        GlusterVolumeEntity volume = new GlusterVolumeEntity();
-        volume.setName("testVol1");
-        volume.setClusterId(CLUSTER_ID);
-        volume.setId(volumeId);
-        volume.setVolumeType(VOLUME_TYPE.DISTRIBUTE);
-        volume.setTransportType(TRANSPORT_TYPE.ETHERNET);
-        volume.setReplicaCount(0);
-        volume.setStripeCount(0);
-        volume.setStatus(VOLUME_STATUS.ONLINE);
-
-        GlusterBrickEntity brick = new GlusterBrickEntity(host, "/export/testVol1");
-        brick.setServerId(host.getId());
-        brick.setStatus(BRICK_STATUS.ONLINE);
-        volume.addBrick(brick);
-
-        dao.save(volume);
-        return volume;
-    }
-
-    private GlusterVolumeEntity insertTestVolume() {
+    private GlusterVolumeEntity insertTestVolume(boolean setOption) {
         Guid volumeId = Guid.NewGuid();
 
         GlusterVolumeEntity volume = new GlusterVolumeEntity();
@@ -109,7 +87,9 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
         volume.setStripeCount(0);
         volume.setStatus(VOLUME_STATUS.ONLINE);
         volume.setCifsUsers("user1, user2");
-        volume.setOption("auth.allow", "*");
+        if (setOption) {
+            volume.setOption("auth.allow", "*");
+        }
         volume.setAccessProtocols("GLUSTER,NFS");
 
         GlusterBrickEntity brick = new GlusterBrickEntity(host, "/export/testVol1");
