@@ -10,6 +10,7 @@ import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.TRANSPORT_TYPE;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_STATUS;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_TYPE;
+import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
 import org.ovirt.engine.core.common.businessentities.VdsStatic;
 import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.dao.BaseDAOTestCase;
@@ -27,7 +28,7 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
         super.setUp();
         dao = dbFacade.getGlusterVolumeDAO();
         host = dbFacade.getVdsStaticDAO().get(HOST_ID);
-        volume = insertTestVolume();
+        volume = insertTestVolume(true);
     }
 
     public GlusterVolumeDAOTest() throws Exception {
@@ -50,7 +51,30 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
         assertEquals(volumeEntity, volume);
     }
 
-    private GlusterVolumeEntity insertTestVolume() {
+    @Test
+    public void testGlusterVolumeOptions() throws Exception {
+        volume.setOption("nfs.disable", "on");
+        dao.setVolumeOption(volume.getId(), new GlusterVolumeOption("nfs.disable", "on"));
+        GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
+        assertNotNull(volumeEntity);
+        assertEquals(volumeEntity, volume);
+    }
+
+    @Test
+    public void testGlusterVolumeOption2() throws Exception {
+        GlusterVolumeEntity volumeEntity = insertTestVolume(false);
+
+        dao.setVolumeOption(volumeEntity.getId(), new GlusterVolumeOption("auth.allow", "*"));
+        dao.setVolumeOption(volumeEntity.getId(), new GlusterVolumeOption("nfs.disable", "on"));
+        volumeEntity.setOption("auth.allow", "*");
+        volumeEntity.setOption("nfs.disable", "on");
+
+        GlusterVolumeEntity newVolumeEntity = dao.getById(volumeEntity.getId());
+        assertNotNull(newVolumeEntity);
+        assertEquals(newVolumeEntity, volumeEntity);
+    }
+
+    private GlusterVolumeEntity insertTestVolume(boolean setOption) {
         Guid volumeId = Guid.NewGuid();
 
         GlusterVolumeEntity volume = new GlusterVolumeEntity();
@@ -63,7 +87,9 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
         volume.setStripeCount(0);
         volume.setStatus(VOLUME_STATUS.ONLINE);
         volume.setCifsUsers("user1, user2");
-        volume.setOption("auth.allow", "*");
+        if (setOption) {
+            volume.setOption("auth.allow", "*");
+        }
         volume.setAccessProtocols("GLUSTER,NFS");
 
         GlusterBrickEntity brick = new GlusterBrickEntity(host, "/export/testVol1");

@@ -205,3 +205,14 @@ UPDATE gluster_volume_options
 END; $procedure$
 LANGUAGE plpgsql;
 
+Create or replace FUNCTION getGlusterVolumeOptionByKey(v_volume_id UUID, v_option_key VARCHAR(8192))
+RETURNS SETOF gluster_volume_options
+   AS $procedure$
+BEGIN
+   RETURN QUERY SELECT *
+   FROM  gluster_volume_options
+   WHERE volume_id = v_volume_id 
+   AND   option_key = v_option_key;
+END; $procedure$
+LANGUAGE plpgsql;
+
