@@ -507,6 +507,8 @@ public interface Enums extends ConstantsWithLookup {
 
     String EventNotificationEntity___VDC();
 
+    String EventNotificationEntity___GlusterVolume();
+
     String StorageDomainType___Master();
 
     String StorageDomainType___Data();
