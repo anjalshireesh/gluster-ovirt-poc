@@ -250,9 +250,7 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
     @Override
     public void setVolumeOption(Guid volumeId, GlusterVolumeOption option) {
         GlusterVolumeOption volumeOption = getVolumeOptionByKey(volumeId, option.getKey());
-        String spName =
-                (volumeOption != null && volumeOption.getKey().equals(option.getKey())) ? "UpdateGlusterVolumeOption"
-                        : "InsertGlusterVolumeOption";
+        String spName = (volumeOption != null) ? "UpdateGlusterVolumeOption" : "InsertGlusterVolumeOption";
         getCallsHandler().executeModification(spName,
                     getCustomMapSqlParameterSource()
                             .addValue("volume_id", volumeId)
