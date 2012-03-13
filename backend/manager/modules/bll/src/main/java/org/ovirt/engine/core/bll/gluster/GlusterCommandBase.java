@@ -1,10 +1,10 @@
 package org.ovirt.engine.core.bll.gluster;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.ovirt.engine.core.bll.VdsGroupCommandBase;
+import org.ovirt.engine.core.common.PermissionSubject;
 import org.ovirt.engine.core.common.VdcObjectType;
 import org.ovirt.engine.core.common.action.VdsGroupParametersBase;
 import org.ovirt.engine.core.common.businessentities.VDS;
@@ -39,15 +39,19 @@ public abstract class GlusterCommandBase<T extends VdsGroupParametersBase> exten
      * @see org.ovirt.engine.core.bll.CommandBase#getPermissionCheckSubjects()
      */
     @Override
-    public Map getPermissionCheckSubjects() {
-        return Collections.singletonMap(getVdsGroupId(), VdcObjectType.VdsGroups);
+    public List<PermissionSubject> getPermissionCheckSubjects() {
+        List<PermissionSubject> permissionList = new ArrayList<PermissionSubject>();
+        permissionList.add(new PermissionSubject(getVdsGroupId(),
+                VdcObjectType.VdsGroups,
+                getActionType().getActionGroup()));
+        return permissionList;
     }
 
     public VDS getOnlineHost() {
         List<VDS> hosts =
                 DbFacade.getInstance()
                         .getVdsDAO()
-                        .getAllForVdsGroupWithStatus(getVdsGroup().getID().getValue(), VDSStatus.Up);
+                        .getAllForVdsGroupWithStatus(getVdsGroup().getId(), VDSStatus.Up);
         return hosts.get(0);
     }
 }

@@ -32,31 +32,6 @@ implements GlusterVolumeBricksResource {
         return volume.getGlusterBricks();
     }
 
-    @Override
-    protected Response performRemove(String id) {
-        // TODO Invoke VDSM to remove the brick from the volume
-        return null;
-    }
-
-    @Override
-    public Response add(GlusterBricks glusterbricks) {
-        //validateParameters(glusterbricks, "glusterBricks.host", "glusterBricks.brickDirectory");
-
-        try {
-            String brickList = "";
-            for (GlusterBrick brick : glusterbricks.getGlusterBricks()) {
-                String brickQualifiedName = brick.getHost() + ":" + brick.getHost();
-                brickList += (brickList.isEmpty() ? "," : "") + brick.getHost() + ":" + brick.getBrickDirectory();
-            }
-            //            return performAction(VdcActionType.AddBricksToGlusterVolume,
-            //                    new GlusterVolumeBricksParameters(Guid.createGuidFromString(getClusterId()), parent.get()
-            //                            .getVolumeName(), brickList));
-            return null;
-        } catch (Exception e) {
-            return handleError(e, false);
-        }
-    }
-
     public String getClusterId() {
         return clusterId;
     }

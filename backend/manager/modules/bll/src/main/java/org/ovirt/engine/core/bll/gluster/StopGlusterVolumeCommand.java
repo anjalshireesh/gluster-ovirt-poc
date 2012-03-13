@@ -41,7 +41,7 @@ public class StopGlusterVolumeCommand extends GlusterCommandBase<GlusterVolumePa
                                 .getResourceManager()
                                 .RunVdsCommand(
                                         VDSCommandType.StopGlusterVolume,
-                                        new GlusterVolumeVDSParameters(getOnlineHost().getvds_id(),
+                                        new GlusterVolumeVDSParameters(getOnlineHost().getId(),
                                                 getParameters().getVolumeName()));
                 setSucceeded(returnValue.getSucceeded());
 

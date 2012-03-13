@@ -34,16 +34,10 @@ import org.ovirt.engine.core.common.errors.VdcBLLException;
 import org.ovirt.engine.core.common.errors.VdcBllErrors;
 import org.ovirt.engine.core.common.job.Step;
 import org.ovirt.engine.core.common.job.StepEnum;
-import org.ovirt.engine.core.common.glustercommands.GlusterHostVDSParameters;
 import org.ovirt.engine.core.common.utils.ValidationUtils;
 import org.ovirt.engine.core.common.validation.group.CreateEntity;
 import org.ovirt.engine.core.common.validation.group.PowerManagementCheck;
-import org.ovirt.engine.core.common.vdscommands.IrsBaseVDSCommandParameters;
-import org.ovirt.engine.core.common.vdscommands.VDSCommandType;
 import org.ovirt.engine.core.compat.Guid;
-import org.ovirt.engine.core.compat.LogCompat;
-import org.ovirt.engine.core.compat.LogFactoryCompat;
-import org.ovirt.engine.core.compat.NGuid;
 import org.ovirt.engine.core.compat.StringHelper;
 import org.ovirt.engine.core.dal.VdcBllMessages;
 import org.ovirt.engine.core.dal.dbbroker.DbFacade;
@@ -162,15 +156,6 @@ public class AddVdsCommand<T extends AddVdsActionParameters> extends VdsCommand<
                 }
             });
             ExecutionHandler.setAsyncJob(getExecutionContext(), true);
-        }
-
-        if (!isFirstHostInStoragePool()) {
-            setSucceeded(Backend.getInstance()
-                    .getResourceManager()
-                    .RunVdsCommand(VDSCommandType.AddGlusterHost,
-                            new GlusterHostVDSParameters(getStoragePoolId().getValue(),
-                                    getParameters().getVdsStaticData().gethost_name()))
-                    .getSucceeded());
         }
     }
 
@@ -312,35 +297,11 @@ public class AddVdsCommand<T extends AddVdsActionParameters> extends VdsCommand<
                 }
             }
         }
-
-        // if this is not the first host in the storage pool, check that there is spm
-        if (retrunValue && !isFirstHostInStoragePool()) {
-            // check if there is SPM
-            boolean isValid = (Boolean) Backend.getInstance()
-                    .getResourceManager()
-                    .RunVdsCommand(VDSCommandType.IsValid,
-                            new IrsBaseVDSCommandParameters(getVdsGroup().getstorage_pool_id().getValue()))
-                    .getReturnValue();
-            if (!isValid) {
-                retrunValue = false;
-                addCanDoActionMessage(VdcBllMessages.ACTION_TYPE_FAILED_NO_SPM);
-            }
-        }
         if (!retrunValue) {
             addCanDoActionMessage(VdcBllMessages.VAR__ACTION__ADD);
             addCanDoActionMessage(VdcBllMessages.VAR__TYPE__HOST);
         }
         return retrunValue;
-    }
-
-    private boolean isFirstHostInStoragePool() {
-        if (firstHostInStoragePool == null) {
-            NGuid storagePoolId = getVdsGroup().getstorage_pool_id();
-            firstHostInStoragePool = storagePoolId == null
-                    || getVdsDAO().getAllForStoragePool(storagePoolId.getValue()).isEmpty();
-            setStoragePoolId(storagePoolId);
-        }
-        return firstHostInStoragePool;
     }
 
     public VdsInstallHelper getVdsInstallHelper() {

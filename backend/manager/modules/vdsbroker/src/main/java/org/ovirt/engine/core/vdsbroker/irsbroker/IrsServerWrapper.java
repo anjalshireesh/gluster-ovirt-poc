@@ -50,14 +50,6 @@ public class IrsServerWrapper implements IIrsServer {
     }
 
     @Override
-    public StatusOnlyReturnForXmlRpc setVolumeLegality(String sdUUID, String spUUID, String imgGUID, String volUUID,
-            String legality) {
-        Map<String, Object> xmlRpcReturnValue = irsServer.setVolumeLegality(sdUUID, spUUID, imgGUID, volUUID, legality);
-        StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
-        return wrapper;
-    }
-
-    @Override
     public OneUuidReturnForXmlRpc mergeSnapshots(String sdUUID, String spUUID, String vmGUID, String imgGUID,
             String ancestorUUID, String successorUUID, String postZero) {
         Map<String, Object> xmlRpcReturnValue = irsServer.mergeSnapshots(sdUUID, spUUID, vmGUID, imgGUID, ancestorUUID,
@@ -72,13 +64,6 @@ public class IrsServerWrapper implements IIrsServer {
         Map<String, Object> xmlRpcReturnValue = irsServer.deleteVolume(sdUUID, spUUID, imgGUID, volUUID, postZero,
                 force);
         OneUuidReturnForXmlRpc wrapper = new OneUuidReturnForXmlRpc(xmlRpcReturnValue);
-        return wrapper;
-    }
-
-    @Override
-    public UuidListReturnForXmlRpc getVolumesList(String sdUUID, String spUUID, String imgGUID) {
-        Map<String, Object> xmlRpcReturnValue = irsServer.getVolumesList(sdUUID, spUUID, imgGUID);
-        UuidListReturnForXmlRpc wrapper = new UuidListReturnForXmlRpc(xmlRpcReturnValue);
         return wrapper;
     }
 

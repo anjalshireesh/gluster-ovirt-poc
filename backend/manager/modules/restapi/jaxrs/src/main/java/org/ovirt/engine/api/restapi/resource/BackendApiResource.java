@@ -45,7 +45,7 @@ import org.ovirt.engine.api.model.ObjectFactory;
 //import org.ovirt.engine.api.model.ParametersSet;
 import org.ovirt.engine.api.model.ProductInfo;
 import org.ovirt.engine.api.model.RSDL;
-//import org.ovirt.engine.api.model.SpecialObjects;
+import org.ovirt.engine.api.model.SpecialObjects;
 //import org.ovirt.engine.api.model.StorageDomains;
 import org.ovirt.engine.api.model.Users;
 //import org.ovirt.engine.api.model.VMs;

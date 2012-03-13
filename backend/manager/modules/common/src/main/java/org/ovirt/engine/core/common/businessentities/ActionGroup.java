@@ -65,12 +65,12 @@ public enum ActionGroup {
 
     // Quota
     CONFIGURE_QUOTA(900, RoleType.ADMIN, VdcObjectType.Quota),
-    CONSUME_QUOTA(901, RoleType.USER, VdcObjectType.Quota);
+    CONSUME_QUOTA(901, RoleType.USER, VdcObjectType.Quota),
 
     // Gluster Volume Action Group
     GLUSTER_CREATE_VOLUME(1000, RoleType.ADMIN, VdcObjectType.GlusterVolume),
-    GLUSTER_DELETE_VOLUME(1001, RoleType.ADMIN, VdcObjectType.GlusterVolume);
-    GLUSTER_VOLUME_OPERATIONS(1002, RoleType.ADMIN, VdcObjectType.GlusterVolume);
+    GLUSTER_DELETE_VOLUME(1001, RoleType.ADMIN, VdcObjectType.GlusterVolume),
+    GLUSTER_VOLUME_OPERATIONS(1002, RoleType.ADMIN, VdcObjectType.GlusterVolume),
     GLUSTER_VOLUME_OPTION(1003, RoleType.ADMIN, VdcObjectType.GlusterVolume);
 
     private int id;

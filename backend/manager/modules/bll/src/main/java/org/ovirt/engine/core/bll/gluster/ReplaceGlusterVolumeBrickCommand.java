@@ -28,7 +28,7 @@ public class ReplaceGlusterVolumeBrickCommand extends GlusterCommandBase<Gluster
             Backend.getInstance()
             .getResourceManager()
             .RunVdsCommand(VDSCommandType.ReplaceGlusterVolumeBrick,
-                    new ReplaceGlusterVolumeBrickVDSParameters(getOnlineHost().getvds_id(),
+                    new ReplaceGlusterVolumeBrickVDSParameters(getOnlineHost().getId(),
                             getParameters().getVolumeName(),
                             getParameters().getSourceBrick(),
                             getParameters().getTargetBrick(), getParameters().getOperation()));

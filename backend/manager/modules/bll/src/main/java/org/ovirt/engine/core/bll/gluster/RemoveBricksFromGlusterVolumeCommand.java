@@ -27,7 +27,7 @@ public class RemoveBricksFromGlusterVolumeCommand extends GlusterCommandBase<Glu
             Backend.getInstance()
             .getResourceManager()
             .RunVdsCommand(VDSCommandType.RemoveBricksFromGlusterVolume,
-                    new GlusterVolumeBricksVDSParameters(getOnlineHost().getvds_id(),
+                    new GlusterVolumeBricksVDSParameters(getOnlineHost().getId(),
                             getParameters().getVolumeName(),
                             getParameters().getBricks()));
         setSucceeded(returnValue.getSucceeded());

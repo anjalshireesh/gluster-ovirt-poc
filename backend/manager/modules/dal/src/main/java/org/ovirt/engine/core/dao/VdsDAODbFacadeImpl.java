@@ -119,14 +119,6 @@ public class VdsDAODbFacadeImpl extends BaseDAODbFacade implements VdsDAO {
     }
 
     @Override
-    public List<VDS> getAllForStoragePool(Guid storagePoolId) {
-        return getCallsHandler().executeReadList("GetVdsByStoragePoolId",
-                new VdsRowMapper(),
-                getCustomMapSqlParameterSource()
-                        .addValue("storage_pool_id", storagePoolId));
-    }
-
-    @Override
     public List<VDS> getListForSpmSelection(Guid storagePoolId) {
         return getCallsHandler().executeReadList("GetUpAndPrioritizedVds",
                 VdsRowMapper.instance,

@@ -27,9 +27,4 @@ public class JBossEmbeddedEJBUtilsStrategy extends EJBUtilsStrategy {
         return "";
     }
 
-    @Override
-    protected String getBeanSuffix(BeanType beanType, BeanProxyType proxyType) {
-        return "";
-    }
-
 }

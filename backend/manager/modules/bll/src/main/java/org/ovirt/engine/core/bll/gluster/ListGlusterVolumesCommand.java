@@ -4,11 +4,8 @@
 package org.ovirt.engine.core.bll.gluster;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
 
 import org.ovirt.engine.core.bll.Backend;
-import org.ovirt.engine.core.common.VdcObjectType;
 import org.ovirt.engine.core.common.action.VdsGroupParametersBase;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity;
 import org.ovirt.engine.core.common.vdscommands.VDSCommandType;
@@ -43,7 +40,7 @@ public class ListGlusterVolumesCommand extends GlusterCommandBase<VdsGroupParame
                 .getResourceManager()
                 .RunVdsCommand(
                         VDSCommandType.ListGlusterVolumes,
-                        new VdsIdVDSCommandParametersBase(getOnlineHost().getvds_id()));
+                        new VdsIdVDSCommandParametersBase(getOnlineHost().getId()));
 
         // Get the return value from VDS command and put it into the return value of the BLL command
         ArrayList<GlusterVolumeEntity> list = new ArrayList<GlusterVolumeEntity>();
@@ -53,14 +50,5 @@ public class ListGlusterVolumesCommand extends GlusterCommandBase<VdsGroupParame
         getReturnValue().setActionReturnValue(list);
 
         setSucceeded(returnValue.getSucceeded());
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.ovirt.engine.core.bll.CommandBase#getPermissionCheckSubjects()
-     */
-    @Override
-    public Map getPermissionCheckSubjects() {
-        return Collections.singletonMap(getVdsGroupId(), VdcObjectType.VdsGroups);
     }
 }

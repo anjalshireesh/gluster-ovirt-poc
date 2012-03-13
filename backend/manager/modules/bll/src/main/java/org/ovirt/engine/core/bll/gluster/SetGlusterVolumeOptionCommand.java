@@ -33,7 +33,7 @@ public class SetGlusterVolumeOptionCommand extends GlusterCommandBase<GlusterVol
                             .getResourceManager()
                             .RunVdsCommand(
                                     VDSCommandType.SetGlusterVolumeOption,
-                                    new GlusterVolumeOptionVDSParameters(getOnlineHost().getvds_id(),
+                                    new GlusterVolumeOptionVDSParameters(getOnlineHost().getId(),
                                             getParameters().getVolumeName(), getParameters().getVolumeOption()));
             setSucceeded(returnValue.getSucceeded());
         } catch (VdcBLLException e) {

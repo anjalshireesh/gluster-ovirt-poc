@@ -121,11 +121,9 @@ public class AuditLogDAODbFacadeImpl extends BaseDAODbFacade implements AuditLog
                 .addValue("correlation_id", event.getCorrelationId())
                 .addValue("job_id", event.getJobId())
                 .addValue("quota_id", event.getQuotaId())
-                .addValue("quota_name", event.getQuotaName());
+                .addValue("quota_name", event.getQuotaName())
                 .addValue("gluster_volume_id", event.getGlusterVolumeId())
                 .addValue("gluster_volume_name", event.getGlusterVolumeName());
-
-        getCallsHandler().executeModification("UpdateAuditLog", parameterSource);
     }
 
     @Override

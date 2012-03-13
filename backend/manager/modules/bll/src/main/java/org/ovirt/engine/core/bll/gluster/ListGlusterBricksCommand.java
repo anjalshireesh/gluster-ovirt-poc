@@ -4,12 +4,9 @@
 package org.ovirt.engine.core.bll.gluster;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.ovirt.engine.core.bll.Backend;
-import org.ovirt.engine.core.common.VdcObjectType;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterDeviceEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterDiskEntity;
@@ -66,7 +63,7 @@ public class ListGlusterBricksCommand extends GlusterCommandBase<GlusterVolumePa
                     .getResourceManager()
                     .RunVdsCommand(
                             VDSCommandType.ListGlusterHostDisks,
-                            new VdsIdVDSCommandParametersBase(host.getvds_id()));
+                            new VdsIdVDSCommandParametersBase(host.getId()));
             if(returnValue.getSucceeded()) {
                 GlusterDiskEntity[] disks = (GlusterDiskEntity[])returnValue.getReturnValue();
                 for(GlusterDiskEntity disk : disks) {
@@ -92,16 +89,7 @@ public class ListGlusterBricksCommand extends GlusterCommandBase<GlusterVolumePa
         GlusterBrickEntity brick =
                 new GlusterBrickEntity(host.getStaticData(), device.getMountPoint() + "/"
                         + getParameters().getVolumeName());
-        brick.setId(host.getvds_id());
+        brick.setId(host.getId());
         bricks.add(brick);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.ovirt.engine.core.bll.CommandBase#getPermissionCheckSubjects()
-     */
-    @Override
-    public Map getPermissionCheckSubjects() {
-        return Collections.singletonMap(getVdsGroupId(), VdcObjectType.VdsGroups);
     }
 }

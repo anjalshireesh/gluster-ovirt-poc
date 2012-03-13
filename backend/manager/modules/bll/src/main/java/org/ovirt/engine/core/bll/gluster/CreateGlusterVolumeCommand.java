@@ -64,7 +64,7 @@ public class CreateGlusterVolumeCommand extends GlusterCommandBase<CreateGluster
                         VDSReturnValue returnValue = vdsBroker.RunVdsCommand(
                                 VDSCommandType.CreateGlusterVolume,
                                 new CreateGlusterVolumeVDSParameters(
-                                        getOnlineHost().getvds_id(), volume));
+                                        getOnlineHost().getId(), volume));
 
                         setSucceeded(returnValue.getSucceeded());
                         if (!getSucceeded()) {
@@ -105,7 +105,7 @@ public class CreateGlusterVolumeCommand extends GlusterCommandBase<CreateGluster
                     throw new VdcBLLException(VdcBllErrors.GLUSTER_BRICK_HOST_NOT_FOUND);
                 }
             }
-            brick.setServerId(hosts.get(0).getvds_id());
+            brick.setServerId(hosts.get(0).getId());
         }
     }
 
