@@ -50,15 +50,20 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
     private void insertVolumeBricks(GlusterVolumeEntity volume) {
         List<GlusterBrickEntity> bricks = volume.getBricks();
         for (GlusterBrickEntity brick : bricks) {
-            getCallsHandler().executeModification(
-                    "InsertGlusterVolumeBrick",
-                    getCustomMapSqlParameterSource()
-                            .addValue("volume_id", volume.getId())
-                            .addValue("host_id", brick.getServerId())
-                            .addValue("brick_dir", brick.getBrickDirectory())
-                            .addValue("status", volume.getStatus()));
+            insertVolumeBricks(volume, brick);
         }
     }
+
+    private void insertVolumeBricks(GlusterVolumeEntity volume, GlusterBrickEntity brick) {
+        getCallsHandler().executeModification(
+                "InsertGlusterVolumeBrick",
+                getCustomMapSqlParameterSource()
+                        .addValue("volume_id", volume.getId())
+                        .addValue("host_id", brick.getServerId())
+                        .addValue("brick_dir", brick.getBrickDirectory())
+                        .addValue("status", volume.getStatus()));
+    }
+
 
     private void insertVolumeOptions(GlusterVolumeEntity volume) {
         Collection<GlusterVolumeOption> options = volume.getOptions();
@@ -229,14 +234,18 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
     }
 
     @Override
-    public void addBrickToVolume(Guid volumeId, GlusterBrickEntity brick) {
-        // TODO Auto-generated method stub
-
+    public void addBrickToVolume(GlusterVolumeEntity volume, GlusterBrickEntity brick) {
+        insertVolumeBricks(volume, brick);
     }
 
     @Override
     public void removeBrickFromVolume(Guid volumeId, GlusterBrickEntity brick) {
-        // TODO Auto-generated method stub
+        getCallsHandler().executeModification(
+                "RemoveGlusterVolumeBrick",
+                getCustomMapSqlParameterSource()
+                        .addValue("volume_id", volumeId)
+                        .addValue("host_id", brick.getServerId())
+                        .addValue("brick_dir", brick.getBrickDirectory()));
 
     }
 
