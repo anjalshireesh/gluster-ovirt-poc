@@ -37,7 +37,7 @@ public class RemoveBricksFromGlusterVolumeCommand extends GlusterCommandBase<Glu
 
                 @Override
                 public Void runInTransaction() {
-                    updateGlusterVolumeBricksInDb(getVdsGroupId(),
+                    deleteGlusterVolumeBricksInDb(getVdsGroupId(),
                             getParameters().getVolumeName(),
                             getParameters().getBricks());
                     VDSReturnValue returnValue =
@@ -57,12 +57,11 @@ public class RemoveBricksFromGlusterVolumeCommand extends GlusterCommandBase<Glu
         }
     }
 
-    private void updateGlusterVolumeBricksInDb(Guid vdsGroupId, String volumeName, List<GlusterBrickEntity> bricks) {
+    private void deleteGlusterVolumeBricksInDb(Guid vdsGroupId, String volumeName, List<GlusterBrickEntity> bricks) {
         GlusterVolumeEntity volume = DbFacade.getInstance().getGlusterVolumeDAO().getByName(vdsGroupId, volumeName);
-        updateHostIdsInBricks(bricks);
-        for (GlusterBrickEntity brick : bricks) {
-            DbFacade.getInstance().getGlusterVolumeDAO().removeBrickFromVolume(volume.getId(), brick);
-        }
+        DbFacade.getInstance()
+                .getGlusterVolumeDAO()
+                .removeBricksFromVolume(volume.getClusterId(), volume.getId(), bricks);
     }
 
     @Override

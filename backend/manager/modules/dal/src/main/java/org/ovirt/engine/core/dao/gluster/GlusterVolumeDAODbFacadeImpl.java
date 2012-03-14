@@ -14,9 +14,13 @@ import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.TRANSPO
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_STATUS;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_TYPE;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
+import org.ovirt.engine.core.common.businessentities.VDS;
+import org.ovirt.engine.core.common.errors.VdcBLLException;
+import org.ovirt.engine.core.common.errors.VdcBllErrors;
 import org.ovirt.engine.core.common.utils.StringUtil;
 import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.dao.BaseDAODbFacade;
+import org.ovirt.engine.core.dao.VdsDAODbFacadeImpl.VdsRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
@@ -49,21 +53,12 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
 
     private void insertVolumeBricks(GlusterVolumeEntity volume) {
         List<GlusterBrickEntity> bricks = volume.getBricks();
+        updateHostIdsInBricks(volume.getClusterId(), bricks);
         for (GlusterBrickEntity brick : bricks) {
-            insertVolumeBricks(volume, brick);
+            brick.setStatus(BRICK_STATUS.ONLINE);
+            addBrickToVolume(volume.getId(), brick);
         }
     }
-
-    private void insertVolumeBricks(GlusterVolumeEntity volume, GlusterBrickEntity brick) {
-        getCallsHandler().executeModification(
-                "InsertGlusterVolumeBrick",
-                getCustomMapSqlParameterSource()
-                        .addValue("volume_id", volume.getId())
-                        .addValue("host_id", brick.getServerId())
-                        .addValue("brick_dir", brick.getBrickDirectory())
-                        .addValue("status", volume.getStatus()));
-    }
-
 
     private void insertVolumeOptions(GlusterVolumeEntity volume) {
         Collection<GlusterVolumeOption> options = volume.getOptions();
@@ -85,6 +80,38 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
                             volume.getId()).addValue("access_protocol",
                             protocol.ordinal()));
         }
+    }
+
+    private void updateHostIdsInBricks(Guid clusterId, List<GlusterBrickEntity> bricks) {
+        for (GlusterBrickEntity brick : bricks) {
+            // TODO: UI must send server name without spaces
+            String serverName = brick.getServerName().trim();
+
+            VDS host = getVdsForHostName(clusterId, serverName);
+            if (host == null) {
+                host = getVdsForIpAddress(clusterId, serverName);
+                if (host == null) {
+                    throw new VdcBLLException(VdcBllErrors.GLUSTER_BRICK_HOST_NOT_FOUND);
+                }
+            }
+            brick.setServerId(host.getvds_id());
+        }
+    }
+
+    private VDS getVdsForHostName(Guid clusterId, String hostName) {
+        return getCallsHandler().executeRead("GetVdsByHostNameAndVdsGroupId",
+                new VdsRowMapper(),
+                getCustomMapSqlParameterSource()
+                        .addValue("vds_group_id", clusterId)
+                        .addValue("host_name", hostName));
+    }
+
+    private VDS getVdsForIpAddress(Guid clusterId, String ipAddress) {
+        return getCallsHandler().executeRead("GetVdsByIpAddressAndVdsGroupId",
+                new VdsRowMapper(),
+                getCustomMapSqlParameterSource()
+                        .addValue("vds_group_id", clusterId)
+                        .addValue("ip", ipAddress));
     }
 
     @Override
@@ -234,19 +261,31 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
     }
 
     @Override
-    public void addBrickToVolume(GlusterVolumeEntity volume, GlusterBrickEntity brick) {
-        insertVolumeBricks(volume, brick);
+    public void addBrickToVolume(Guid volumeId, GlusterBrickEntity brick) {
+        getCallsHandler().executeModification(
+                "InsertGlusterVolumeBrick",
+                getCustomMapSqlParameterSource()
+                        .addValue("volume_id", volumeId)
+                        .addValue("host_id", brick.getServerId())
+                        .addValue("brick_dir", brick.getBrickDirectory())
+                        .addValue("status", brick.getStatus()));
     }
 
     @Override
-    public void removeBrickFromVolume(Guid volumeId, GlusterBrickEntity brick) {
+    public void removeBricksFromVolume(Guid clusterId, Guid volumeId, List<GlusterBrickEntity> bricks) {
+        updateHostIdsInBricks(clusterId, bricks);
+        for (GlusterBrickEntity brick : bricks) {
+            deleteVolumeBrick(volumeId, brick);
+        }
+    }
+
+    private void deleteVolumeBrick(Guid volumeId, GlusterBrickEntity brick) {
         getCallsHandler().executeModification(
-                "RemoveGlusterVolumeBrick",
+                "DeleteGlusterVolumeBrick",
                 getCustomMapSqlParameterSource()
                         .addValue("volume_id", volumeId)
                         .addValue("host_id", brick.getServerId())
                         .addValue("brick_dir", brick.getBrickDirectory()));
-
     }
 
     private GlusterVolumeOption getVolumeOptionByKey(Guid volumeId, String optionKey) {
@@ -295,5 +334,14 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
                 getCustomMapSqlParameterSource()
                         .addValue("cluster_id", vdsGroupId)
                         .addValue("vol_name", volumeName));
+    }
+
+    @Override
+    public void addBricksToVolume(Guid clusterId, Guid volumeId, List<GlusterBrickEntity> bricks) {
+        updateHostIdsInBricks(clusterId, bricks);
+        for (GlusterBrickEntity brick : bricks) {
+            brick.setStatus(BRICK_STATUS.ONLINE);
+            addBrickToVolume(volumeId, brick);
+        }
     }
 }

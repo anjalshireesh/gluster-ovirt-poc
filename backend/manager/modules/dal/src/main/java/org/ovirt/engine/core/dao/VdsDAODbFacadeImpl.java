@@ -136,7 +136,7 @@ public class VdsDAODbFacadeImpl extends BaseDAODbFacade implements VdsDAO {
                         status.ordinal()));
     }
 
-    static final class VdsRowMapper implements ParameterizedRowMapper<VDS> {
+    public static final class VdsRowMapper implements ParameterizedRowMapper<VDS> {
         @Override
         public VDS mapRow(final ResultSet rs, final int rowNum) throws SQLException {
             final VDS entity = new VDS();

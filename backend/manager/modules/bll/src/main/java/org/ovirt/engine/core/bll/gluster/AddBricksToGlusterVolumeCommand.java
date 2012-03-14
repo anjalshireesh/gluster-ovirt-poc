@@ -37,7 +37,7 @@ public class AddBricksToGlusterVolumeCommand extends GlusterCommandBase<GlusterV
 
                 @Override
                 public Void runInTransaction() {
-                    updateGlusterVolumeBricksInDb(getVdsGroupId(),
+                    addGlusterVolumeBricksInDb(getVdsGroupId(),
                             getParameters().getVolumeName(),
                             getParameters().getBricks());
                     VDSReturnValue returnValue =
@@ -59,12 +59,9 @@ public class AddBricksToGlusterVolumeCommand extends GlusterCommandBase<GlusterV
         }
     }
 
-    private void updateGlusterVolumeBricksInDb(Guid vdsGroupId, String volumeName, List<GlusterBrickEntity> bricks) {
+    private void addGlusterVolumeBricksInDb(Guid vdsGroupId, String volumeName, List<GlusterBrickEntity> bricks) {
         GlusterVolumeEntity volume = DbFacade.getInstance().getGlusterVolumeDAO().getByName(vdsGroupId, volumeName);
-        updateHostIdsInBricks(bricks);
-        for (GlusterBrickEntity brick : bricks) {
-            DbFacade.getInstance().getGlusterVolumeDAO().addBrickToVolume(volume, brick);
-        }
+        DbFacade.getInstance().getGlusterVolumeDAO().addBricksToVolume(volume.getClusterId(), volume.getId(), bricks);
     }
 
 

@@ -78,9 +78,6 @@ public class CreateGlusterVolumeCommand extends GlusterCommandBase<CreateGluster
         // volume fetched from VDSM doesn't contain cluster id GlusterFS is not aware of multiple clusters
         createdVolume.setClusterId(getVdsGroupId());
 
-        // volume fetched from VDSM doesn't contain host id since GlusterFS is not aware of the host id concept
-        updateHostIdsInBricks(createdVolume.getBricks());
-
         DbFacade.getInstance().getGlusterVolumeDAO().save(createdVolume);
     }
 

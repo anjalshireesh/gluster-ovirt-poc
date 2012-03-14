@@ -3,6 +3,9 @@ package org.ovirt.engine.core.dao.gluster;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity.BRICK_STATUS;
@@ -21,7 +24,6 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
     private static final Guid CLUSTER_ID = new Guid("0e57070e-2469-4b38-84a2-f111aaabd49d");
     private VdsStatic host;
     private GlusterVolumeEntity volume;
-
 
     @Override
     public void setUp() throws Exception {
@@ -45,7 +47,7 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
     @Test
     public void testGlusterVolumeStatusChange() throws Exception {
         volume.setStatus(VOLUME_STATUS.OFFLINE);
-        dao.updateVolumeStatus(CLUSTER_ID, "testVol1", VOLUME_STATUS.OFFLINE);
+        dao.updateVolumeStatus(host.getvds_group_id(), "testVol1", VOLUME_STATUS.OFFLINE);
         GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
         assertNotNull(volumeEntity);
         assertEquals(volumeEntity, volume);
@@ -78,7 +80,7 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
     @Test
     public void testAddBricksToGlusterVolume() throws Exception {
         GlusterBrickEntity brick = getGlusterVolumeBrick("/export/testVol2");
-        dao.addBrickToVolume(volume, brick);
+        dao.addBrickToVolume(volume.getId(), brick);
 
         volume.addBrick(brick);
 
@@ -90,9 +92,10 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
     @Test
     public void testRemoveBricksFromGlusterVolume() throws Exception {
         GlusterBrickEntity brick = getGlusterVolumeBrick("/export/testVol2");
-        dao.addBrickToVolume(volume, brick);
-
-        dao.removeBrickFromVolume(volume.getId(), brick);
+        dao.addBrickToVolume(volume.getId(), brick);
+        List<GlusterBrickEntity> bricks = new ArrayList<GlusterBrickEntity>();
+        bricks.add(brick);
+        dao.removeBricksFromVolume(volume.getClusterId(), volume.getId(), bricks);
 
         GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
         assertNotNull(volumeEntity);
@@ -111,7 +114,7 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
 
         GlusterVolumeEntity volume = new GlusterVolumeEntity();
         volume.setName("testVol1");
-        volume.setClusterId(CLUSTER_ID);
+        volume.setClusterId(host.getvds_group_id());
         volume.setId(volumeId);
         volume.setVolumeType(VOLUME_TYPE.DISTRIBUTE);
         volume.setTransportType(TRANSPORT_TYPE.ETHERNET);
