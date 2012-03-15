@@ -14,13 +14,11 @@ import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.TRANSPO
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_STATUS;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeEntity.VOLUME_TYPE;
 import org.ovirt.engine.core.common.businessentities.GlusterVolumeOption;
-import org.ovirt.engine.core.common.businessentities.VDS;
 import org.ovirt.engine.core.common.errors.VdcBLLException;
 import org.ovirt.engine.core.common.errors.VdcBllErrors;
 import org.ovirt.engine.core.common.utils.StringUtil;
 import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.core.dao.BaseDAODbFacade;
-import org.ovirt.engine.core.dao.VdsDAODbFacadeImpl.VdsRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
@@ -55,7 +53,10 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
         List<GlusterBrickEntity> bricks = volume.getBricks();
         updateHostIdsInBricks(volume.getClusterId(), bricks);
         for (GlusterBrickEntity brick : bricks) {
-            brick.setStatus(BRICK_STATUS.ONLINE);
+            if (brick.getStatus() == null) {
+                brick.setStatus((volume.getStatus().equals(VOLUME_STATUS.ONLINE)) ? BRICK_STATUS.ONLINE
+                        : BRICK_STATUS.OFFLINE);
+            }
             addBrickToVolume(volume.getId(), brick);
         }
     }
@@ -84,34 +85,17 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
 
     private void updateHostIdsInBricks(Guid clusterId, List<GlusterBrickEntity> bricks) {
         for (GlusterBrickEntity brick : bricks) {
-            // TODO: UI must send server name without spaces
-            String serverName = brick.getServerName().trim();
-
-            VDS host = getVdsForHostName(clusterId, serverName);
-            if (host == null) {
-                host = getVdsForIpAddress(clusterId, serverName);
-                if (host == null) {
-                    throw new VdcBLLException(VdcBllErrors.GLUSTER_BRICK_HOST_NOT_FOUND);
-                }
+            String hostId = getVdsIdWithQuery(clusterId, brick.getServerName().trim());
+            if (hostId == null) {
+                throw new VdcBLLException(VdcBllErrors.GLUSTER_BRICK_HOST_NOT_FOUND);
             }
-            brick.setServerId(host.getvds_id());
+            brick.setServerId(new Guid(hostId));
         }
     }
 
-    private VDS getVdsForHostName(Guid clusterId, String hostName) {
-        return getCallsHandler().executeRead("GetVdsByHostNameAndVdsGroupId",
-                new VdsRowMapper(),
-                getCustomMapSqlParameterSource()
-                        .addValue("vds_group_id", clusterId)
-                        .addValue("host_name", hostName));
-    }
-
-    private VDS getVdsForIpAddress(Guid clusterId, String ipAddress) {
-        return getCallsHandler().executeRead("GetVdsByIpAddressAndVdsGroupId",
-                new VdsRowMapper(),
-                getCustomMapSqlParameterSource()
-                        .addValue("vds_group_id", clusterId)
-                        .addValue("ip", ipAddress));
+    public String getVdsIdWithQuery(Guid clusterId, String serverName) {
+        return new SimpleJdbcTemplate(jdbcTemplate).queryForObject("SELECT vds_id FROM vds WHERE vds_group_id = '"
+                + clusterId + "' AND host_name = '" + serverName + "' OR ip = '" + serverName + "'", String.class);
     }
 
     @Override

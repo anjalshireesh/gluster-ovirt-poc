@@ -755,36 +755,6 @@ END; $procedure$
 LANGUAGE plpgsql;
 
 
-Create or replace FUNCTION GetVdsByHostNameAndVdsGroupId(v_vds_group_id UUID, v_host_name VARCHAR(255)) RETURNS SETOF vds
-   AS $procedure$
-BEGIN
-BEGIN
-      RETURN QUERY SELECT DISTINCT vds.*
-      FROM vds
-      WHERE vds_group_id = v_vds_group_id
-      AND   host_name = v_host_name;
-   END;
-
-   RETURN;
-END; $procedure$
-LANGUAGE plpgsql;
-
-Create or replace FUNCTION GetVdsByIpAddressAndVdsGroupId(v_vds_group_id UUID, v_ip VARCHAR(40)) RETURNS SETOF vds
-   AS $procedure$
-BEGIN
-BEGIN
-      RETURN QUERY SELECT DISTINCT vds.*
-      FROM vds
-      WHERE vds_group_id = v_vds_group_id
-      AND   ip = v_ip;
-   END;
-
-   RETURN;
-END; $procedure$
-LANGUAGE plpgsql;
-
-
-
 Create or replace FUNCTION GetVdsByVdsGroupId(v_vds_group_id UUID) RETURNS SETOF vds
    AS $procedure$
 BEGIN
