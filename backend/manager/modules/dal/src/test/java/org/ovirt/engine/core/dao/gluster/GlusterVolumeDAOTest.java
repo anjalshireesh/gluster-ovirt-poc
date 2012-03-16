@@ -90,8 +90,8 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
     }
 
     @Test
-    public void testAddBricksToGlusterVolumeWithoutBrickId() throws Exception {
-        GlusterBrickEntity brick = getGlusterVolumeBrick("/export/testVol3", true);
+    public void testAddBricksToGlusterVolumeWithoutServerId() throws Exception {
+        GlusterBrickEntity brick = getGlusterVolumeBrick("/export/testVol3", false);
         dao.addBrickToVolume(volume.getId(), brick);
 
         brick.setServerId(host.getId());
@@ -99,11 +99,7 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
 
         GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
         assertNotNull(volumeEntity);
-        for (GlusterBrickEntity brickEntity : volumeEntity.getBricks()) {
-            if (brickEntity.getBrickDirectory().equals("/export/testVol3")) {
-                assertEquals(brick.getServerId(), brickEntity.getServerId());
-            }
-        }
+        assertEquals(volumeEntity, volume);
     }
 
     @Test
