@@ -30,7 +30,9 @@ public interface GlusterVolumeDAO extends DAO {
 
     public void addBrickToVolume(Guid volumeId, GlusterBrickEntity brick);
 
-    public void removeBrickFromVolume(Guid volumeId, GlusterBrickEntity brick);
+    public void addBricksToVolume(Guid clusterId, Guid volumeId, List<GlusterBrickEntity> bricks);
+
+    public void removeBricksFromVolume(Guid clusterId, Guid volumeId, List<GlusterBrickEntity> bricks);
 
     public void setVolumeOption(Guid volumeId, GlusterVolumeOption option);
 

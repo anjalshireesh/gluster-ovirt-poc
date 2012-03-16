@@ -168,6 +168,14 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
         return status;
     }
 
+    public boolean isOnline() {
+        if (status != null && status == VOLUME_STATUS.ONLINE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public int getReplicaCount() {
         return replicaCount;
     }
