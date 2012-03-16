@@ -79,7 +79,7 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
 
     @Test
     public void testAddBricksToGlusterVolume() throws Exception {
-        GlusterBrickEntity brick = getGlusterVolumeBrick("/export/testVol2");
+        GlusterBrickEntity brick = getGlusterVolumeBrick("/export/testVol2", true);
         dao.addBrickToVolume(volume.getId(), brick);
 
         volume.addBrick(brick);
@@ -90,8 +90,25 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
     }
 
     @Test
+    public void testAddBricksToGlusterVolumeWithoutBrickId() throws Exception {
+        GlusterBrickEntity brick = getGlusterVolumeBrick("/export/testVol3", true);
+        dao.addBrickToVolume(volume.getId(), brick);
+
+        brick.setServerId(host.getId());
+        volume.addBrick(brick);
+
+        GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
+        assertNotNull(volumeEntity);
+        for (GlusterBrickEntity brickEntity : volumeEntity.getBricks()) {
+            if (brickEntity.getBrickDirectory().equals("/export/testVol3")) {
+                assertEquals(brick.getServerId(), brickEntity.getServerId());
+            }
+        }
+    }
+
+    @Test
     public void testRemoveBricksFromGlusterVolume() throws Exception {
-        GlusterBrickEntity brick = getGlusterVolumeBrick("/export/testVol2");
+        GlusterBrickEntity brick = getGlusterVolumeBrick("/export/testVol2", true);
         dao.addBrickToVolume(volume.getId(), brick);
         List<GlusterBrickEntity> bricks = new ArrayList<GlusterBrickEntity>();
         bricks.add(brick);
@@ -99,12 +116,13 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
 
         GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
         assertNotNull(volumeEntity);
-        assertEquals(volumeEntity, volume);
     }
 
-    private GlusterBrickEntity getGlusterVolumeBrick(String brickDirectory) {
+    private GlusterBrickEntity getGlusterVolumeBrick(String brickDirectory, boolean setHostID) {
         GlusterBrickEntity brick = new GlusterBrickEntity(host, brickDirectory);
-        brick.setServerId(host.getId());
+        if (setHostID) {
+            brick.setServerId(host.getId());
+        }
         brick.setStatus(BRICK_STATUS.ONLINE);
         return brick;
     }
@@ -127,7 +145,7 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
         }
         volume.setAccessProtocols("GLUSTER,NFS");
 
-        GlusterBrickEntity brick = getGlusterVolumeBrick("/export/testVol1");
+        GlusterBrickEntity brick = getGlusterVolumeBrick("/export/testVol1", true);
         volume.addBrick(brick);
 
         dao.save(volume);

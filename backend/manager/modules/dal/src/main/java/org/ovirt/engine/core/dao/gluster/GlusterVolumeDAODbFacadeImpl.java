@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity;
 import org.ovirt.engine.core.common.businessentities.GlusterBrickEntity.BRICK_STATUS;
@@ -54,7 +55,7 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
         updateHostIdsInBricks(volume.getClusterId(), bricks);
         for (GlusterBrickEntity brick : bricks) {
             if (brick.getStatus() == null) {
-                brick.setStatus((volume.isOnline()) ? BRICK_STATUS.ONLINE : BRICK_STATUS.OFFLINE);
+                brick.setStatus(volume.isOnline() ? BRICK_STATUS.ONLINE : BRICK_STATUS.OFFLINE);
             }
             addBrickToVolume(volume.getId(), brick);
         }
@@ -84,7 +85,7 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
 
     private void updateHostIdsInBricks(Guid clusterId, List<GlusterBrickEntity> bricks) {
         for (GlusterBrickEntity brick : bricks) {
-            String hostId = getVdsIdByHostNameOrIp(clusterId, brick.getServerName().trim());
+            UUID hostId = getVdsIdByHostNameOrIp(clusterId, brick.getServerName().trim());
             if (hostId == null) {
                 throw new VdcBLLException(VdcBllErrors.GLUSTER_BRICK_HOST_NOT_FOUND);
             }
@@ -92,9 +93,9 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
         }
     }
 
-    private String getVdsIdByHostNameOrIp(Guid clusterId, String serverName) {
+    private UUID getVdsIdByHostNameOrIp(Guid clusterId, String serverName) {
         return new SimpleJdbcTemplate(jdbcTemplate).queryForObject("SELECT vds_id FROM vds WHERE vds_group_id = '"
-                + clusterId + "' AND host_name = '" + serverName + "' OR ip = '" + serverName + "'", String.class);
+                + clusterId + "' AND host_name = '" + serverName + "' OR ip = '" + serverName + "'", UUID.class);
     }
 
     @Override
