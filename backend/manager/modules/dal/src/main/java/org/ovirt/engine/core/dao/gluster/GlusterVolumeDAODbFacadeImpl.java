@@ -2,6 +2,7 @@ package org.ovirt.engine.core.dao.gluster;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -327,5 +328,28 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
             brick.setStatus(BRICK_STATUS.ONLINE);
             addBrickToVolume(volumeId, brick);
         }
+    }
+
+    @Override
+    public void updateBrickToVolume(
+            Guid clusterId,
+            Guid volumeId,
+            GlusterBrickEntity sourceBrick,
+            GlusterBrickEntity targetBrick) {
+        updateHostIdsInBricks(clusterId, prepareGlusterBrickList(sourceBrick));
+        updateHostIdsInBricks(clusterId, prepareGlusterBrickList(targetBrick));
+        getCallsHandler().executeModification("UpdateGlusterVolumeBrick",
+                getCustomMapSqlParameterSource()
+                        .addValue("volume_id", volumeId)
+                        .addValue("host_id", sourceBrick.getServerId())
+                        .addValue("brick_dir", sourceBrick.getBrickDirectory())
+                        .addValue("new_host_id", targetBrick.getServerId())
+                        .addValue("new_brick_dir", targetBrick.getBrickDirectory()));
+    }
+
+    private List<GlusterBrickEntity> prepareGlusterBrickList(GlusterBrickEntity brick) {
+        List<GlusterBrickEntity> bricks = new ArrayList<GlusterBrickEntity>();
+        bricks.add(brick);
+        return bricks;
     }
 }

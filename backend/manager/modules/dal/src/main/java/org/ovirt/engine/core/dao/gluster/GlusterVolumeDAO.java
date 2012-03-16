@@ -34,6 +34,8 @@ public interface GlusterVolumeDAO extends DAO {
 
     public void removeBricksFromVolume(Guid clusterId, Guid volumeId, List<GlusterBrickEntity> bricks);
 
+    public void updateBrickToVolume(Guid clusterId, Guid volumeId, GlusterBrickEntity sourceBrick, GlusterBrickEntity targetBrick);
+
     public void setVolumeOption(Guid volumeId, GlusterVolumeOption option);
 
     public List<GlusterVolumeEntity> getAllWithQuery(String query);
