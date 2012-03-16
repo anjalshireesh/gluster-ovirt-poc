@@ -54,8 +54,7 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
         updateHostIdsInBricks(volume.getClusterId(), bricks);
         for (GlusterBrickEntity brick : bricks) {
             if (brick.getStatus() == null) {
-                brick.setStatus((volume.getStatus().equals(VOLUME_STATUS.ONLINE)) ? BRICK_STATUS.ONLINE
-                        : BRICK_STATUS.OFFLINE);
+                brick.setStatus((volume.isOnline()) ? BRICK_STATUS.ONLINE : BRICK_STATUS.OFFLINE);
             }
             addBrickToVolume(volume.getId(), brick);
         }
@@ -85,7 +84,7 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
 
     private void updateHostIdsInBricks(Guid clusterId, List<GlusterBrickEntity> bricks) {
         for (GlusterBrickEntity brick : bricks) {
-            String hostId = getVdsIdWithQuery(clusterId, brick.getServerName().trim());
+            String hostId = getVdsIdByHostNameOrIp(clusterId, brick.getServerName().trim());
             if (hostId == null) {
                 throw new VdcBLLException(VdcBllErrors.GLUSTER_BRICK_HOST_NOT_FOUND);
             }
@@ -93,7 +92,7 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
         }
     }
 
-    private String getVdsIdWithQuery(Guid clusterId, String serverName) {
+    private String getVdsIdByHostNameOrIp(Guid clusterId, String serverName) {
         return new SimpleJdbcTemplate(jdbcTemplate).queryForObject("SELECT vds_id FROM vds WHERE vds_group_id = '"
                 + clusterId + "' AND host_name = '" + serverName + "' OR ip = '" + serverName + "'", String.class);
     }
