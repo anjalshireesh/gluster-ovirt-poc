@@ -755,9 +755,6 @@ END; $procedure$
 LANGUAGE plpgsql;
 
 
-
-
-
 Create or replace FUNCTION GetVdsByVdsGroupId(v_vds_group_id UUID) RETURNS SETOF vds
    AS $procedure$
 BEGIN
