@@ -2,7 +2,7 @@ package org.ovirt.engine.core.dao.gluster;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -331,25 +331,24 @@ public class GlusterVolumeDAODbFacadeImpl extends BaseDAODbFacade implements
     }
 
     @Override
-    public void updateBrickToVolume(
-            Guid clusterId,
+    public void updateVolumeBrick(
             Guid volumeId,
             GlusterBrickEntity sourceBrick,
             GlusterBrickEntity targetBrick) {
-        updateHostIdsInBricks(clusterId, prepareGlusterBrickList(sourceBrick));
-        updateHostIdsInBricks(clusterId, prepareGlusterBrickList(targetBrick));
+
+        GlusterVolumeEntity volume = getById(volumeId);
+        if (targetBrick.getStatus() == null) {
+            targetBrick.setStatus(volume.isOnline() ? BRICK_STATUS.ONLINE : BRICK_STATUS.OFFLINE);
+        }
+        updateHostIdsInBricks(volume.getClusterId(), Arrays.asList(new GlusterBrickEntity[] {sourceBrick}));
+        updateHostIdsInBricks(volume.getClusterId(), Arrays.asList(new GlusterBrickEntity[] {targetBrick}));
         getCallsHandler().executeModification("UpdateGlusterVolumeBrick",
                 getCustomMapSqlParameterSource()
                         .addValue("volume_id", volumeId)
                         .addValue("host_id", sourceBrick.getServerId())
                         .addValue("brick_dir", sourceBrick.getBrickDirectory())
                         .addValue("new_host_id", targetBrick.getServerId())
-                        .addValue("new_brick_dir", targetBrick.getBrickDirectory()));
-    }
-
-    private List<GlusterBrickEntity> prepareGlusterBrickList(GlusterBrickEntity brick) {
-        List<GlusterBrickEntity> bricks = new ArrayList<GlusterBrickEntity>();
-        bricks.add(brick);
-        return bricks;
+                        .addValue("new_brick_dir", targetBrick.getBrickDirectory())
+                        .addValue("new_status", targetBrick.getStatus()));
     }
 }

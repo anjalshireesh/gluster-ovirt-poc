@@ -59,7 +59,7 @@ public class ReplaceGlusterVolumeBrickCommand extends GlusterCommandBase<Gluster
                 DbFacade.getInstance().getGlusterVolumeDAO().getByName(getVdsGroupId(), volumeName);
         DbFacade.getInstance()
                 .getGlusterVolumeDAO()
-                .updateBrickToVolume(volume.getClusterId(), volume.getId(), sourceBrick, targetBrick);
+                .updateVolumeBrick(volume.getId(), sourceBrick, targetBrick);
     }
 
 
