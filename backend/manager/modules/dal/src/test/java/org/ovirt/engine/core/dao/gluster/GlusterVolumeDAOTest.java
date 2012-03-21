@@ -112,6 +112,20 @@ public class GlusterVolumeDAOTest extends BaseDAOTestCase {
 
         GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
         assertNotNull(volumeEntity);
+        assertEquals(volume, volumeEntity);
+    }
+
+    @Test
+    public void testUpdateGlusterVolumeBrick() throws Exception {
+        GlusterBrickEntity newBrick = getGlusterVolumeBrick("/export/testVol5", true);
+
+        GlusterBrickEntity brick = volume.getBricks().get(0);
+        volume.replaceBrick(brick, newBrick);
+        dao.updateVolumeBrick(volume.getId(), brick, newBrick);
+
+        GlusterVolumeEntity volumeEntity = dao.getById(volume.getId());
+        assertNotNull(volumeEntity);
+        assertEquals(volume, volumeEntity);
     }
 
     private GlusterBrickEntity getGlusterVolumeBrick(String brickDirectory, boolean setHostID) {

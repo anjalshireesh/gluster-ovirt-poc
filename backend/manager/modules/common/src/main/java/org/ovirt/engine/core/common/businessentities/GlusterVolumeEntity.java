@@ -487,4 +487,15 @@ public class GlusterVolumeEntity extends GlusterEntity implements BusinessEntity
     public void setClusterId(Guid clusterId) {
         this.clusterId = clusterId;
     }
+
+    public void replaceBrick(GlusterBrickEntity oldBrick, GlusterBrickEntity newBrick) {
+        for (GlusterBrickEntity brick : getBricks()) {
+            if (oldBrick.getServerId().equals(brick.getServerId())
+                    && oldBrick.getBrickDirectory().equals(brick.getBrickDirectory())) {
+                brick.setServerId(newBrick.getServerId());
+                brick.setBrickDirectory(newBrick.getBrickDirectory());
+                brick.setStatus(newBrick.getStatus());
+            }
+        }
+    }
 }
