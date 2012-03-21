@@ -7,7 +7,6 @@ import org.ovirt.engine.core.utils.ObjectDescriptor;
 import org.ovirt.engine.core.vdsbroker.irsbroker.StatusReturnForXmlRpc;
 
 public final class GlusterTaskStatusReturnForXmlRpc extends StatusReturnForXmlRpc {
-    //private static final String GLUSTER_TASK = "task";
     private static final String TASK_STATE = "rebalance"; //"task_state";
     private static final String TASK_MESSAGE = "message";
 
