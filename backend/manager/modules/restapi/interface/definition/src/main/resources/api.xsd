@@ -170,6 +170,8 @@
 	  <xs:element name="source_brick" type="GlusterBrick" minOccurs="0" />
 	  <xs:element name="target_brick" type="GlusterBrick" minOccurs="0" />
 	  <xs:element name="operation" type="xs:string" minOccurs="0" />
+	  <!--  ... Gluster Volume Rebalance option parameter   -->
+	  <xs:element name="fix_layout_only" type="xs:boolean" minOccurs="0" maxOccurs="1" />
     </xs:sequence>
   </xs:group>
 

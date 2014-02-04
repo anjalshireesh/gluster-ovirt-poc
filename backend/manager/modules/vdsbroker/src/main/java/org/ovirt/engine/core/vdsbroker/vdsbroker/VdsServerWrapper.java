@@ -994,9 +994,9 @@ public class VdsServerWrapper implements IVdsServer {
     }
 
     @Override
-    public StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStart(String volumeName, String mode) {
+    public StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStart(String volumeName, String mode, String force) {
         try {
-            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterVolumeRebalanceStart(volumeName, mode);
+            Map<String, Object> xmlRpcReturnValue = vdsServer.glusterVolumeRebalanceStart(volumeName, mode, force);
             StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
             return wrapper;
         } catch (UndeclaredThrowableException ute) {
@@ -1016,10 +1016,10 @@ public class VdsServerWrapper implements IVdsServer {
     }
 
     @Override
-    public StatusOnlyReturnForXmlRpc glusterVolumeRebalanceStatus(String volumeName) {
+    public GlusterTaskStatusReturnForXmlRpc glusterVolumeRebalanceStatus(String volumeName) {
         try {
             Map<String, Object> xmlRpcReturnValue = vdsServer.glusterVolumeRebalanceStatus(volumeName);
-            StatusOnlyReturnForXmlRpc wrapper = new StatusOnlyReturnForXmlRpc(xmlRpcReturnValue);
+            GlusterTaskStatusReturnForXmlRpc wrapper = new GlusterTaskStatusReturnForXmlRpc(xmlRpcReturnValue);
             return wrapper;
         } catch (UndeclaredThrowableException ute) {
             throw new XmlRpcRunTimeException(ute);

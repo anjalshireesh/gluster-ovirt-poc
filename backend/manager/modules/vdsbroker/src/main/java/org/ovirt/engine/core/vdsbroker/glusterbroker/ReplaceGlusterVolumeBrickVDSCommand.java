@@ -1,6 +1,6 @@
 package org.ovirt.engine.core.vdsbroker.glusterbroker;
 
-import org.ovirt.engine.core.common.constants.GlusterConstants.GLUSTER_TASK_OPERATION;
+import org.ovirt.engine.core.common.businessentities.GlusterTaskOperation;
 import org.ovirt.engine.core.common.glustercommands.ReplaceGlusterVolumeBrickVDSParameters;
 
 public class ReplaceGlusterVolumeBrickVDSCommand extends GlusterBrokerCommand<ReplaceGlusterVolumeBrickVDSParameters> {
@@ -13,7 +13,7 @@ public class ReplaceGlusterVolumeBrickVDSCommand extends GlusterBrokerCommand<Re
     protected void ExecuteVdsBrokerCommand() {
         String sourceBrick = getParameters().getSourceBrick().getQualifiedName();
         String targetBrick = getParameters().getTargetBrick().getQualifiedName();
-        GLUSTER_TASK_OPERATION operation = getParameters().getOperation();
+        GlusterTaskOperation operation = getParameters().getOperation();
 
         switch (operation) {
         case START:
