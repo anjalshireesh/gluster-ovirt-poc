@@ -49,7 +49,7 @@
     <postgresql.version>8.4-701.jdbc4</postgresql.version>
     <dozer.version>5.2.0</dozer.version>
     <cxf.version>2.2.7</cxf.version>
-    <mina-core.version>2.0.1</mina-core.version>
+    <mina-core.version>2.0.22</mina-core.version>
     <sshd-core.version>0.6.0</sshd-core.version>
     <slf4j-jdk14.version>1.5.11</slf4j-jdk14.version>
     <gwt.version>2.2.0</gwt.version>
