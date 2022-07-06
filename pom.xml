@@ -45,7 +45,7 @@
     <jboss.ejb3.core.version>1.1.18</jboss.ejb3.core.version>
     <javax.ejb.api.version>3.0</javax.ejb.api.version>
     <javax.servlet.api.version>2.4</javax.servlet.api.version>
-    <jcraft.jsch.version>0.1.42</jcraft.jsch.version>
+    <jcraft.jsch.version>0.1.54</jcraft.jsch.version>
     <postgresql.version>8.4-701.jdbc4</postgresql.version>
     <dozer.version>5.2.0</dozer.version>
     <cxf.version>2.2.7</cxf.version>
